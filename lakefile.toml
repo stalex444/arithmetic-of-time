@@ -1,0 +1,28 @@
+name = "ArithmeticOfTime"
+defaultTargets = ["Irreducibility", "FieldNorm", "Settling", "SettlingReplica", "ConstantChain", "AlgebraicIntegers", "MechanicalWord"]
+
+[[require]]
+name = "mathlib"
+git = "https://github.com/leanprover-community/mathlib4.git"
+rev = "v4.31.0"
+
+[[lean_lib]]
+name = "Irreducibility"
+
+[[lean_lib]]
+name = "FieldNorm"
+
+[[lean_lib]]
+name = "Settling"
+
+[[lean_lib]]
+name = "SettlingReplica"
+
+[[lean_lib]]
+name = "ConstantChain"
+
+[[lean_lib]]
+name = "AlgebraicIntegers"
+
+[[lean_lib]]
+name = "MechanicalWord"

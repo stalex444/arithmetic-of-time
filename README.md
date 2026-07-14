@@ -1,0 +1,90 @@
+# The Arithmetic of Time
+
+A Lean 4 formalization of the mathematics of time — the individuation of
+moments, an arithmetic arrow of irreversibility, and an aperiodic-but-not-random
+tick.
+
+Everything below is a machine-checked theorem, verified by the Lean 4 kernel
+against Mathlib. The repository studies a small, self-contained *mathematical
+model* of time built from two cubic/quartic units and the geometry of their
+number fields; it makes no empirical claim about physical time (see **Scope**).
+
+## What is proved
+
+1. **A moment is individuated; the arrow is arithmetic.** For the non-real roots
+   `z` of `x³ − x − 1` (with real root `r = ρ`, the plastic number and the
+   smallest Pisot number), the transverse dynamics contracts at an *exact* rate
+   `r·‖z‖² = 1`, so `‖z‖ = r^(−1/2)` — one irreversible step
+   (`Time.tick_contraction`, `Time.norm_z_eq_rpow` in `Settling.lean`). On the
+   ring of integers `ℤ[ρ]` this is sharpened to a **Meyer-type separation
+   inequality** `|σ₁(x)|·‖σ₂(x)‖² ≥ 1` for every nonzero `x`
+   (`Time.meyer_separation`, `Time.meyer_separation_rpow`): distinct arithmetic
+   states can never be confused within a bounded window, and the contraction is
+   never undone. The same theorems are re-proved by an independent second route
+   in `SettlingReplica.lean` (`TimeReplica.meyer_separation`,
+   `TimeReplica.certification_soundness`).
+
+2. **The clock is untunable.** The four algebraic constants
+   `κ = (Q/ρ)²`, `r_in = √3/2`, `χ = Q/ρ`, and `A* = √(2ρ) − √(3/4 − ρ⁻²)`
+   satisfy the *strict* chain `κ < r_in < χ < A*` (`Time.chain_strict` in
+   `ConstantChain.lean`). Both threshold constants are proved **not** to be
+   algebraic integers — `r_in` because `r_in² = 3/4 ∉ ℤ`
+   (`Time.rin_not_isIntegral`), and `A*` via a cubic-field argument with no
+   Galois machinery (`Time.Astar_not_isIntegral`) — while every monomial `ρᵃQᵇ`
+   *is* an algebraic integer (indeed a unit, `Time.rho_norm_one`,
+   `Time.Q_norm_neg_one`). Hence **no monomial `ρᵃQᵇ` can ever equal a
+   threshold**, at any integer exponents (`Time.rin_ne_coupling_zmonomial`,
+   `Time.Astar_ne_coupling_zmonomial` in `AlgebraicIntegers.lean`): the chain can
+   never collapse into an algebraic coincidence.
+
+3. **The tick is aperiodic but not random.** The mechanical (Beatty/Sturmian)
+   word `m(n) = ⌊(n+1)β⌋ − ⌊nβ⌋` of an irrational slope `β ∈ (0,1)` is proved to
+   be **two-valued** (`Time.m_mem`), of **density equal to the slope**
+   (`Time.density_tendsto`, via the exact telescoping `Time.sum_m_eq`),
+   **aperiodic** — it has no period for irrational `β` (`Time.aperiodic`) — and
+   **balanced**: any two windows of equal length have 1-counts differing by at
+   most one (`Time.balanced` in `MechanicalWord.lean`). Balance is the precise
+   "maximally even, not random" property of a Sturmian word.
+
+## Scope
+
+These are machine-checked theorems about a mathematical *model* of time: the
+individuation and irreversibility live in the arithmetic of `ℤ[ρ]`, the untunable
+constants in the geometry of the fields `ℚ(ρ)` and `ℚ(Q)`, and the tick in the
+symbolic dynamics of a mechanical word. Whether this model *describes physical
+time* is a separate, empirical question and is not claimed here; the repository
+asserts only the mathematics that the kernel has checked.
+
+## Build
+
+```
+lake exe cache get   # fetch the prebuilt Mathlib cache
+lake build           # compiles the seven project modules
+```
+
+Toolchain `leanprover/lean4:v4.31.0`, Mathlib `v4.31.0` (pinned in
+`lean-toolchain` and `lake-manifest.json`). The project modules are:
+
+| Module | Content |
+| --- | --- |
+| `Irreducibility.lean` | `x³ − x − 1` and `x⁴ − x − 1` are irreducible over ℚ |
+| `FieldNorm.lean` | field norms `N(ρ) = 1`, `N(Q) = −1` (ρ, Q are units) |
+| `Settling.lean` | contraction rate, Meyer separation, certification soundness |
+| `SettlingReplica.lean` | an independent second formalization of `Settling` |
+| `ConstantChain.lean` | the strict chain `κ < r_in < χ < A*` and its identities |
+| `AlgebraicIntegers.lean` | thresholds are not algebraic integers; no-identity |
+| `MechanicalWord.lean` | the Sturmian word: two-valued, density, aperiodic, balanced |
+
+## Rigor note
+
+Every theorem's axiom dependency is a subset of
+`{propext, Classical.choice, Quot.sound}` — the standard classical foundation of
+Mathlib. There is **no `sorry`**, **no `native_decide`**, and **no custom
+axiom** anywhere in the development; the irrationality of the slope in
+`MechanicalWord` (which lies beyond Mathlib) is carried as an explicit
+hypothesis, never assumed as an axiom. You can reproduce the audit with
+`#print axioms Time.balanced` (and likewise for any theorem above).
+
+## License
+
+MIT — see [`LICENSE`](./LICENSE).
