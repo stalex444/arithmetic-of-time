@@ -1,5 +1,5 @@
 name = "ArithmeticOfTime"
-defaultTargets = ["Irreducibility", "FieldNorm", "Settling", "SettlingReplica", "ConstantChain", "AlgebraicIntegers", "MechanicalWord"]
+defaultTargets = ["Irreducibility", "FieldNorm", "Settling", "SettlingReplica", "ConstantChain", "AlgebraicIntegers", "MechanicalWord", "PisotBoundary"]
 
 [[require]]
 name = "mathlib"
@@ -26,3 +26,6 @@ name = "AlgebraicIntegers"
 
 [[lean_lib]]
 name = "MechanicalWord"
+
+[[lean_lib]]
+name = "PisotBoundary"
