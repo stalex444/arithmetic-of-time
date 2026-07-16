@@ -1,8 +1,8 @@
 # The Arithmetic of Time
 
 A Lean 4 formalization of the mathematics of time — the individuation of
-moments, an arithmetic arrow of irreversibility, and an aperiodic-but-not-random
-tick.
+moments, an arithmetic arrow of irreversibility, an aperiodic-but-not-random
+tick, and the Pisot boundary that separates settling from spiraling.
 
 Everything below is a machine-checked theorem, verified by the Lean 4 kernel
 against Mathlib. The repository studies a small, self-contained *mathematical
@@ -46,20 +46,37 @@ number fields; it makes no empirical claim about physical time (see **Scope**).
    most one (`Time.balanced` in `MechanicalWord.lean`). Balance is the precise
    "maximally even, not random" property of a Sturmian word.
 
+4. **The Pisot boundary — the cubic settles, the quartic spirals.** Directly from
+   the two defining polynomials, every non-real root `z` of `x³ − x − 1` has
+   `‖z‖ < 1` (`Time.cubic_conj_norm_lt_one`) — it *contracts*, so `ρ` is a Pisot
+   number and its arithmetic settles — while every non-real root `w` of
+   `x⁴ − x − 1` has `‖w‖ > 1` (`Time.quartic_conj_norm_gt_one`) — it *expands*, so
+   `Q` is **not** a Pisot number. Together (`Time.pisot_boundary_dichotomy`):
+   `‖z‖ < 1 ∧ 1 < ‖w‖` — the two roots sit on opposite sides of the unit circle.
+   The proof is elementary and self-contained: writing `σ = w + conj w` and
+   `s = w·conj w = ‖w‖²` and reducing modulo the Vieta quadratic `w² = σ·w − s`
+   gives one real identity per polynomial — `s² − σ²·s = 1` (forcing `s > 1`) for
+   the quartic, `s³ + s² = 1` (forcing `s < 1`) for the cubic — one flipped
+   inequality, driven purely by the degree. This is the concrete
+   `settling ⟺ Pisot` fact for the two polynomials; it does **not** prove Siegel's
+   theorem that `ρ` is the *smallest* Pisot number, which needs Pisot theory
+   outside Mathlib.
+
 ## Scope
 
 These are machine-checked theorems about a mathematical *model* of time: the
 individuation and irreversibility live in the arithmetic of `ℤ[ρ]`, the untunable
-constants in the geometry of the fields `ℚ(ρ)` and `ℚ(Q)`, and the tick in the
-symbolic dynamics of a mechanical word. Whether this model *describes physical
-time* is a separate, empirical question and is not claimed here; the repository
-asserts only the mathematics that the kernel has checked.
+constants in the geometry of the fields `ℚ(ρ)` and `ℚ(Q)`, the tick in the
+symbolic dynamics of a mechanical word, and the settle/spiral dichotomy in the
+moduli of the roots. Whether this model *describes physical time* is a separate,
+empirical question and is not claimed here; the repository asserts only the
+mathematics that the kernel has checked.
 
 ## Build
 
 ```
 lake exe cache get   # fetch the prebuilt Mathlib cache
-lake build           # compiles the seven project modules
+lake build           # compiles the eight project modules
 ```
 
 Toolchain `leanprover/lean4:v4.31.0`, Mathlib `v4.31.0` (pinned in
@@ -74,6 +91,7 @@ Toolchain `leanprover/lean4:v4.31.0`, Mathlib `v4.31.0` (pinned in
 | `ConstantChain.lean` | the strict chain `κ < r_in < χ < A*` and its identities |
 | `AlgebraicIntegers.lean` | thresholds are not algebraic integers; no-identity |
 | `MechanicalWord.lean` | the Sturmian word: two-valued, density, aperiodic, balanced |
+| `PisotBoundary.lean` | the settle/spiral dichotomy: non-real roots of `x³−x−1` have `‖·‖<1`, of `x⁴−x−1` have `‖·‖>1` |
 
 ## Rigor note
 
