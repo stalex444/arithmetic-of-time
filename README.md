@@ -95,6 +95,15 @@ Toolchain `leanprover/lean4:v4.31.0`, Mathlib `v4.31.0` (pinned in
 | `MechanicalWord.lean` | the Sturmian word: two-valued, density, aperiodic, balanced |
 | `PisotBoundary.lean` | the settle/spiral dichotomy: non-real roots of `x³−x−1` have `‖·‖<1`, of `x⁴−x−1` have `‖·‖>1` |
 
+## Paper
+
+[`paper/`](./paper) holds the LaTeX source of the companion paper, *The
+Arithmetic of Time*, which states exactly what this repository proves at its
+honest tier — kernel-verified results with their Lean declaration names,
+classical results cited, the diffraction picture labeled computed — and closes
+with a list of natural formalization targets (the Sturmian converse, Pisot's
+theorem, Siegel minimality).
+
 ## Numerical companion: diffraction
 
 [`diffraction/`](./diffraction) pictures the *spectral* face of the mechanical
