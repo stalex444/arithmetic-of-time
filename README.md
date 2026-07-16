@@ -5,9 +5,11 @@ moments, an arithmetic arrow of irreversibility, an aperiodic-but-not-random
 tick, and the Pisot boundary that separates settling from spiraling.
 
 Everything below is a machine-checked theorem, verified by the Lean 4 kernel
-against Mathlib. The repository studies a small, self-contained *mathematical
-model* of time built from two cubic/quartic units and the geometry of their
-number fields; it makes no empirical claim about physical time (see **Scope**).
+against Mathlib — with one clearly-marked exception, the numerical companion in
+[`diffraction/`](./diffraction). The repository studies a small, self-contained
+*mathematical model* of time built from two cubic/quartic units and the
+geometry of their number fields; it makes no empirical claim about physical
+time (see **Scope**).
 
 ## What is proved
 
@@ -92,6 +94,16 @@ Toolchain `leanprover/lean4:v4.31.0`, Mathlib `v4.31.0` (pinned in
 | `AlgebraicIntegers.lean` | thresholds are not algebraic integers; no-identity |
 | `MechanicalWord.lean` | the Sturmian word: two-valued, density, aperiodic, balanced |
 | `PisotBoundary.lean` | the settle/spiral dichotomy: non-real roots of `x³−x−1` have `‖·‖<1`, of `x⁴−x−1` have `‖·‖>1` |
+
+## Numerical companion: diffraction
+
+[`diffraction/`](./diffraction) pictures the *spectral* face of the mechanical
+word: laid out as positions and diffracted, it shows sharp Bragg peaks at the
+incommensurate module `m + nβ` — quasicrystalline order — with the
+crystal-forbidden peak growing `∝ N` while a Poisson gas of the same density
+stays flat. That folder is **computation, not proof**; the underlying
+pure-point property is a theorem of the model-set literature (Hof 1995;
+Baake–Grimm 2013), cited there.
 
 ## Rigor note
 
