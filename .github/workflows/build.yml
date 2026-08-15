@@ -1,0 +1,41 @@
+name: Build and audit
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    name: lake build + axiom audit
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # elan at the pinned toolchain (lean-toolchain), prebuilt Mathlib cache,
+      # then `lake build` of all ten modules — the kernel check.
+      - name: Build Lean project
+        uses: leanprover/lean-action@v1
+        with:
+          build: true
+          test: false
+          lint: false
+          use-mathlib-cache: true
+
+      # A green build certifies compilation only. This step certifies the
+      # README's Rigor note: every theorem/lemma in the repository depends on
+      # axioms within {propext, Classical.choice, Quot.sound}; no sorry, no
+      # native_decide, no custom axiom. It enumerates declarations from the
+      # sources, prints axioms for each, and fails on any violation or any
+      # coverage gap between declared and reported.
+      - name: Axiom audit (Rigor note)
+        run: python3 scripts/check_axioms.py
