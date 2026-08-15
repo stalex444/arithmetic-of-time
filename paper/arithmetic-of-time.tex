@@ -480,6 +480,99 @@ In \texttt{Time.aperiodic} the irrationality of the slope is an explicit hypothe
 Theorems~\ref{thm:balanced} and~\ref{thm:aperiodic} are the forward half of the classical characterization of Sturmian words. By a theorem of Morse and Hedlund \cite{morsehedlund1940} (see also \cite[Ch.~2]{lothaire2002}), an infinite binary word is Sturmian --- equivalently, a mechanical word $n \mapsto \lfloor (n+1)\beta + x \rfloor - \lfloor n\beta + x \rfloor$ of irrational slope $\beta$ and some intercept $x$; equivalently, a word of factor complexity $n + 1$ --- if and only if it is aperiodic and balanced. Thus for irrational $0 < \beta < 1$, Theorems~\ref{thm:twovalued}, \ref{thm:balanced} and~\ref{thm:aperiodic} say precisely that the tick word is Sturmian; and conversely, by Morse--Hedlund, \emph{every} aperiodic balanced binary word arises mechanically from an irrational slope. That converse is classical and is cited here, not formalized: the repository proves the four properties of $m$ directly from the floor bracket and contains no part of the Morse--Hedlund equivalence. Formalizing the converse is listed among the open items in Section~\ref{sec:frontier}. Sturmian words are also exactly the one-dimensional model sets in the sense of aperiodic order \cite{baakegrimm2013}, the point of view taken up when we turn to diffraction.
 \end{remark}
 
+\section{The settled word is handed: chirality of the Padovan language}
+\label{sec:chirality}
+
+The tick word of Section~\ref{sec:word} is binary. The settled structure of the cubic has a
+richer, three-letter description: the \emph{Padovan substitution}
+\[
+  s \colon a \mapsto b, \qquad b \mapsto c, \qquad c \mapsto ab,
+\]
+whose incidence matrix has characteristic polynomial $x^{3} - x - 1$ (named for orientation;
+the fact is not used in the proofs). Iterating $s$ from a single letter grows the settled
+word of the cubic place. This section certifies, in the kernel, that the resulting factor
+language is \emph{chiral}: it reads differently backwards, by theorem rather than by
+inspection of finitely many cases. All results are in \texttt{Chirality.lean} (namespace
+\texttt{Time.Padovan}).
+
+\begin{theorem}[the invariant]\label{thm:invariant}
+In every iterate $S^{[n+1]}[x]$ --- any seed letter $x$, any $n$ --- every occurrence of $a$
+is immediately followed by $b$ \textup{(\texttt{Time.Padovan.every\_a\_followed\_by\_b})}.
+\end{theorem}
+
+The engine is one observation: $a$ is produced only inside the block $s(c) = ab$, where $b$
+follows it within the block, and no block ends in $a$, so concatenation creates no violation
+(\texttt{good\_append}, \texttt{good\_S}, \texttt{good\_iter}). Two consequences follow
+without enumeration.
+
+\begin{theorem}[chirality witness pair]\label{thm:chirality}
+The word $ca$ is a factor of an iterate \textup{(}it occurs in $S^{[5]}[a]$;
+\texttt{Time.Padovan.ca\_factor}\textup{)}, while $ac$ is a factor of \emph{no} iterate from
+\emph{any} seed \textup{(\texttt{Time.Padovan.ac\_not\_factor})}. Hence the factor language
+is not closed under reversal \textup{(\texttt{Time.Padovan.chirality})}.
+\end{theorem}
+
+\begin{theorem}[no long palindromes]\label{thm:nopalindrome}
+No iterate $S^{[n]}[a]$ has a palindromic factor of length $\ge 4$
+\textup{(\texttt{Time.Padovan.no\_long\_palindromic\_factor})}.
+\end{theorem}
+
+The proof of Theorem~\ref{thm:nopalindrome} runs through an explicit finite certificate:
+every factor of length $\le 5$ of every iterate lies in a $57$-word list \texttt{F5}
+(\texttt{Time.Padovan.factors\_complete}, via the window lemma
+\texttt{Time.Padovan.infix\_window}: a factor of $S(w)$ of length $L$ is contained in the
+image of a factor of $w$ of length $\le L$, because blocks are nonempty), and \texttt{F5}
+contains no palindrome of length $4$ or $5$ (\texttt{F5\_no\_palindrome}, by
+\texttt{decide}); a palindrome of length $\ge 4$ contains a palindromic factor of length $4$
+or $5$ (\texttt{palindrome\_has\_small\_core}). The short palindromic factors that do occur
+can be read off the same certificate. Completeness is proved for seed $a$; the invariant and
+the $ac$-avoidance cover every seed. We claim the kernel verification and the explicit
+certificate; the phenomenon type --- substitution languages that fail reversal-closure ---
+is known, with published examples \cite[Ex.~2]{baakeroberts2018} \cite[Ex.~5]{balkova2010},
+and palindrome \emph{finiteness} follows in one line from non-reversal-closure for uniformly
+recurrent words by a published criterion \cite[Thm.~2]{balkova2010}. Reflection asymmetry
+for this substitution's tiling space was found independently, by a different method
+(asymptotic composants), in G\"ahler \cite{gahler2026}; the definitive prior study of this
+substitution's Rauzy fractal \cite{mercat2020} is silent on symmetry. What is claimed as
+new here is the machine-checked proof and the certificate, not the phenomenon.
+
+We emphasize the scope: these are statements about the factor \emph{language}. Whether the
+associated subshift admits a \emph{reversor} --- a homeomorphism conjugating the shift to
+its inverse, the reversing-symmetry question of \cite{baakeroberts2018} --- is a strictly
+stronger, conjugacy-level question, and language chirality alone does not decide it (there
+are reversible shifts with non-reversal-closed languages \cite[Ex.~2]{baakeroberts2018}).
+No conjugacy-level claim is made in this repository.
+
+\subsection{The marked origin of the tick word}
+\label{sec:origin}
+
+Returning to the binary tick word, extend it to integer indices:
+$sZ_\beta(n) = \lfloor (n+1)\beta \rfloor - \lfloor n\beta \rfloor$ for $n \in \mathbb{Z}$
+(\texttt{Time.sZ} in \texttt{OriginDefect.lean}; \texttt{Time.sZ\_natCast} ties it to
+\texttt{Time.m}). The word then satisfies an exact reflection identity about the origin,
+\[
+  sZ_\beta(-n-1) \;=\; sZ_\beta(n),
+\]
+valid whenever $n\beta$ and $(n+1)\beta$ are not integers
+(\texttt{Time.sZ\_reflect}; for irrational $\beta$ this is every $n \notin \{0,-1\}$,
+\texttt{Time.sZ\_reflect\_irrational}; an unconditional form via ceilings is
+\texttt{Time.sZ\_reflect\_eq\_ceil}). At the origin itself --- the unique lattice hit
+$0 \cdot \beta \in \mathbb{Z}$ --- the word carries a computable defect:
+\[
+  (sZ_\beta(-1),\, sZ_\beta(0)) = (1, 0) \qquad \text{for } 0 < \beta < 1
+\]
+(\texttt{Time.origin\_defect}). The reflection identity is the finitary, kernel-checked
+face of a structure known at the level of symbolic dynamics: for irrational slope, the two
+one-sided words at intercept zero form the distinguished asymptotic pair of the Sturmian
+system, each member palindromic away from the marked positions, and reversal of the marked
+orbit lands on the other member of the pair --- a characterization theorem of
+Barbieri--Labb\'e--Starosta \cite{barbieri2021}, proved there for all irrational slopes;
+hull-level reversibility of Sturmian shifts is Theorem~2 of \cite{baakeroberts2018}. Our
+statements are elementary and self-contained; the citations locate them in the published
+theory. The origin --- and with it the handedness of the \emph{marked} orbit, against the
+achirality of its hull --- is where the model's asymmetry of time resides (see
+\textbf{Scope} in the repository README).
+
 \section{An untunable chain of constants}\label{sec:chain}
 
 The threshold analysis of the model turns on four constants built from the two roots. Two of them are monomials in $\rho$ and $Q$; the other two are thresholds involving square roots. This section proves, first, that the four line up in a strict chain, and second, that the chain is rigid in a precise arithmetic sense: no monomial $\rho^a Q^b$ with integer exponents $a, b$ can equal either threshold, so the strict inequalities can never degenerate into equalities under any retuning of exponents.
@@ -779,11 +872,31 @@ M.~Baake and U.~Grimm,
 Encyclopedia of Mathematics and its Applications \textbf{149},
 Cambridge University Press, Cambridge, 2013.
 
+\bibitem{baakeroberts2018}
+M.~Baake, J.~A.~G. Roberts, R.~Yassawi,
+\emph{Reversing and extended symmetries of shift spaces},
+Discrete Contin. Dyn. Syst. A \textbf{38} (2018), 835--866.
+
+\bibitem{balkova2010}
+L.~Balkov\'a, E.~Pelantov\'a, \v{S}.~Starosta,
+\emph{Sturmian jungle (or garden?) on multiliteral alphabets},
+RAIRO Theor. Inform. Appl. \textbf{44} (2010), 443--470.
+
+\bibitem{barbieri2021}
+S.~Barbieri, S.~Labb\'e, \v{S}.~Starosta,
+\emph{A characterization of Sturmian sequences by indistinguishable asymptotic pairs},
+European J. Combin. \textbf{95} (2021), 103318.
+
 \bibitem{bertin1992}
 M.-J. Bertin, A.~Decomps-Guilloux, M.~Grandet-Hugot,
 M.~Pathiaux-Delefosse, and J.-P. Schreiber,
 \emph{Pisot and Salem Numbers},
 Birkh\"auser, Basel, 1992.
+
+\bibitem{gahler2026}
+F.~G\"ahler,
+\emph{Dynamical invariants from asymptotic composants},
+arXiv:2602.18501 (2026).
 
 \bibitem{hof1995}
 A.~Hof,
@@ -795,6 +908,11 @@ M.~Lothaire,
 \emph{Algebraic Combinatorics on Words},
 Encyclopedia of Mathematics and its Applications \textbf{90},
 Cambridge University Press, Cambridge, 2002.
+
+\bibitem{mercat2020}
+P.~Mercat,
+\emph{Rauzy fractal of the smallest substitution associated with the smallest Pisot number},
+Experiment. Math. \textbf{29} (2020), 163--182.
 
 \bibitem{morsehedlund1940}
 M.~Morse and G.~A. Hedlund,

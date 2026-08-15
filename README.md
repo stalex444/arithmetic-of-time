@@ -2,14 +2,14 @@
 
 A Lean 4 formalization of the mathematics of time — the individuation of
 moments, an arithmetic arrow of irreversibility, an aperiodic-but-not-random
-tick, and the Pisot boundary that separates settling from spiraling.
+tick, the handedness of the settled history, and the Pisot boundary that
+separates settling from spiraling.
 
 Everything below is a machine-checked theorem, verified by the Lean 4 kernel
 against Mathlib — with one clearly-marked exception, the numerical companion in
-[`diffraction/`](./diffraction). The repository studies a small, self-contained
-*mathematical model* of time built from two cubic/quartic units and the
-geometry of their number fields; it makes no empirical claim about physical
-time (see **Scope**).
+[`diffraction/`](./diffraction). The repository's claim is stated in **Scope**,
+and it is an identity, not an analogy: this arithmetic is not proposed as a
+model of time. It is proposed as what time is.
 
 ## What is proved
 
@@ -64,21 +64,64 @@ time (see **Scope**).
    theorem that `ρ` is the *smallest* Pisot number, which needs Pisot theory
    outside Mathlib.
 
-## Scope
+5. **The settled history is handed.** For the Padovan substitution
+   `s : a ↦ b, b ↦ c, c ↦ ab` (incidence matrix of characteristic polynomial
+   `x³ − x − 1`), every occurrence of `a` in any iterate from any seed is
+   immediately followed by `b` (`Time.Padovan.every_a_followed_by_b` in
+   `Chirality.lean`); consequently `ca` is a factor of the language while `ac`
+   is a factor of **no** iterate from **any** seed — proved from the invariant,
+   with no enumeration (`Time.Padovan.chirality`). Read backwards, the settled
+   word is provably a different object. Moreover the language contains **no
+   palindromic factor of length ≥ 4**, unconditionally
+   (`Time.Padovan.no_long_palindromic_factor`): every factor of length ≤ 5 lies
+   in an explicit 57-word certificate (`Time.Padovan.factors_complete`), and
+   that list contains no palindrome of length 4 or 5; the short palindromic
+   factors that do occur can be read off the same certificate. Reflection
+   asymmetry for this substitution's tiling space was found independently, by a
+   different method, in Gähler (2026) — see the paper's citations.
 
-These are machine-checked theorems about a mathematical *model* of time: the
-individuation and irreversibility live in the arithmetic of `ℤ[ρ]`, the untunable
-constants in the geometry of the fields `ℚ(ρ)` and `ℚ(Q)`, the tick in the
-symbolic dynamics of a mechanical word, and the settle/spiral dichotomy in the
-moduli of the roots. Whether this model *describes physical time* is a separate,
-empirical question and is not claimed here; the repository asserts only the
-mathematics that the kernel has checked.
+6. **The marked origin.** Extending the mechanical word to integer indices,
+   `sZ β n = ⌊(n+1)β⌋ − ⌊nβ⌋`, the word satisfies the exact reflection identity
+   `sZ β (−n−1) = sZ β n` away from the integer-crossing indices
+   (`Time.sZ_reflect` in `OriginDefect.lean`, with the unconditional ceiling
+   form `Time.sZ_reflect_eq_ceil`), and carries a computable defect at the
+   origin: `(sZ β (−1), sZ β 0) = (1, 0)` for `0 < β < 1`
+   (`Time.origin_defect`). The origin — the unique lattice hit `0·β ∈ ℤ` — is
+   marked in the word itself; `Time.sZ_natCast` ties the extension back to the
+   `ℕ`-indexed word of `MechanicalWord.lean`.
+
+## Scope: the claim
+
+The position taken here is that **time is this arithmetic** — an identity, in
+the same grammar as "heat is molecular motion," and earned the same way: by
+coverage. The temporal invariants are, one by one, theorems of a single
+structure. The tick is multiplication by a unit, and its contraction rate is
+exact (`Time.tick_contraction`). The tick never repeats (the rotation is
+irrational, `Time.aperiodic`), yet is never random (the word is balanced,
+`Time.balanced`). And the settled history is *handed*: read backwards, it is
+provably a different object — not by convention, but by theorem
+(`Chirality.lean`). On this reading the history is one completed object; the
+asymmetry of time is a property of the whole; and nothing needs to orient a
+flow, because nothing flows — the "now" is where an observer sits in the
+structure, with records on one side (the marked origin of
+`OriginDefect.lean`).
+
+Two kinds of statement appear in this repository, and the boundary between
+them is kept explicit. **Theorems**: every mathematical claim in the Lean
+modules compiles in the kernel; nothing rests on trust. **The
+identification**: that physical time is this structure — rather than merely
+being described by it — is an identification, the same kind of statement as
+"the metric tensor is spacetime geometry." No experiment distinguishes an
+exact description from an identity, so this is not a claim any theorem could
+settle; it is validated the way every physical identification is validated,
+through the measured consequences of the framework it belongs to (see [`paper/`](./paper) and the companion deposits, e.g. doi:10.5281/zenodo.20417378). The mathematics stands regardless. The claim is which
+thing it is.
 
 ## Build
 
 ```
 lake exe cache get   # fetch the prebuilt Mathlib cache
-lake build           # compiles the eight project modules
+lake build           # compiles the ten project modules
 ```
 
 Toolchain `leanprover/lean4:v4.31.0`, Mathlib `v4.31.0` (pinned in
@@ -94,6 +137,8 @@ Toolchain `leanprover/lean4:v4.31.0`, Mathlib `v4.31.0` (pinned in
 | `AlgebraicIntegers.lean` | thresholds are not algebraic integers; no-identity |
 | `MechanicalWord.lean` | the Sturmian word: two-valued, density, aperiodic, balanced |
 | `PisotBoundary.lean` | the settle/spiral dichotomy: non-real roots of `x³−x−1` have `‖·‖<1`, of `x⁴−x−1` have `‖·‖>1` |
+| `Chirality.lean` | the Padovan factor language is chiral: `ca` occurs, `ac` never; no palindromic factor of length ≥ 4 |
+| `OriginDefect.lean` | the ℤ-indexed mechanical word: exact reflection identity off the lattice hits, and the marked origin defect `(1, 0)` |
 
 ## Paper
 
