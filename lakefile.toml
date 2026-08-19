@@ -1,5 +1,5 @@
 name = "ArithmeticOfTime"
-defaultTargets = ["Irreducibility", "FieldNorm", "Settling", "SettlingReplica", "ConstantChain", "AlgebraicIntegers", "MechanicalWord", "PisotBoundary", "Chirality", "OriginDefect"]
+defaultTargets = ["Challenge", "Solution", "Irreducibility", "FieldNorm", "Settling", "SettlingReplica", "ConstantChain", "AlgebraicIntegers", "MechanicalWord", "PisotBoundary", "Chirality", "OriginDefect"]
 
 [[require]]
 name = "mathlib"
@@ -35,3 +35,9 @@ name = "Chirality"
 
 [[lean_lib]]
 name = "OriginDefect"
+
+[[lean_lib]]
+name = "Challenge"
+
+[[lean_lib]]
+name = "Solution"

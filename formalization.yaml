@@ -1,0 +1,201 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/mathlib-initiative/formalization.yaml/main/schema/formalization.schema.json
+version: "v0.4"
+
+project:
+  name: "The Arithmetic of Time: the Pisot boundary of xⁿ = x + 1 and the mechanical tick word"
+  description: >-
+    Kernel-checked results in two groups. (1) The Pisot boundary of the
+    trinomial family: every non-real root of x³ = x + 1 lies strictly inside
+    the complex unit circle and every non-real root of x⁴ = x + 1 strictly
+    outside it, proved for the two concrete polynomials by an elementary
+    reduction modulo the Vieta quadratic of the conjugate pair, with no
+    root-finding and no general Pisot machinery. (2) The mechanical (Sturmian)
+    tick word tick β n = ⌊(n+1)β⌋ − ⌊nβ⌋: two-valued for 0 < β < 1, of Cesàro
+    density exactly β, aperiodic for irrational β (irrationality carried as an
+    explicit hypothesis), and balanced — any two equal-length windows have
+    1-counts differing by at most one.
+  authors:
+    - "Stephanie Alexander"
+  license: "MIT"
+  responsible_maintainers:
+    - "Stephanie Alexander"
+
+classification:
+  arxiv: ["math.NT", "math.DS"]
+  msc2020: ["11R06", "68R15", "37B10", "11J71"]
+
+sources:
+  - title: "Folklore: the plastic number (real root of x³ = x + 1) is a Pisot number; the real root of x⁴ = x + 1 is not"
+    type: "folklore"
+    relationship: "independently-proves"
+    note: >-
+      The moduli facts are classical. This project supplies a self-contained
+      elementary proof for the two concrete polynomials: reducing the defining
+      equation modulo the Vieta quadratic of a non-real root and its conjugate
+      yields one real identity per polynomial (s³ + s² = 1 for the cubic,
+      s² − σ²s = 1 for the quartic, s the squared modulus), forcing s < 1 and
+      s > 1 respectively. No claim of novelty for the facts; the packaged
+      dichotomy and its elementary proof are this project's.
+    license: "unknown"
+    author_endorsement: "n/a"
+  - title: "Symbolic Dynamics II. Sturmian Trajectories"
+    authors:
+      - "Marston Morse"
+      - "Gustav A. Hedlund"
+    id: "Amer. J. Math. 62 (1940), 1–42. doi:10.2307/2371431"
+    type: "article"
+    location: "https://doi.org/10.2307/2371431"
+    relationship: "independently-proves"
+    note: >-
+      The two-valuedness, balance, and aperiodicity of mechanical words belong
+      to the classical Sturmian circle of results originating here. This
+      project proves them independently, from first principles, for the
+      floor-difference word, with its own proofs (telescoping to the
+      cumulative floor; a fractional-part Archimedean argument for
+      aperiodicity).
+    license: "unknown"
+    author_endorsement: "n/a"
+  - title: "Algebraic Combinatorics on Words"
+    authors:
+      - "M. Lothaire"
+    id: "Cambridge University Press, 2002. ISBN 978-0521812207"
+    type: "book"
+    location: "https://doi.org/10.1017/CBO9781107326019"
+    relationship: "background"
+    license: "unknown"
+    author_endorsement: "n/a"
+  - title: "Algebraic integers whose conjugates lie in the unit circle"
+    authors:
+      - "Carl Ludwig Siegel"
+    id: "Duke Math. J. 11 (1944), 597–602"
+    type: "article"
+    location: "https://doi.org/10.1215/S0012-7094-44-01152-X"
+    relationship: "background"
+    license: "unknown"
+    author_endorsement: "n/a"
+  - title: "On the irreducibility of certain trinomials"
+    authors:
+      - "Ernst S. Selmer"
+    id: "Math. Scand. 4 (1956), 287–302"
+    type: "article"
+    location: "https://doi.org/10.7146/math.scand.a-10478"
+    relationship: "background"
+    license: "unknown"
+    author_endorsement: "n/a"
+
+related_formalizations: []
+
+status:
+  scope: >-
+    Formalized: the two root-modulus inequalities and their conjunction
+    (pisot_boundary_dichotomy) for the concrete polynomials x³ = x + 1 and
+    x⁴ = x + 1; and the four word theorems (two-valued, density, aperiodic,
+    balanced) for the floor-difference word of an arbitrary real slope, with
+    the stated hypotheses (0 < β < 1 where used; Irrational β for
+    aperiodicity). Not formalized: that the plastic number is the smallest
+    Pisot number (Siegel minimality); general Pisot theory; the Sturmian
+    complexity converse; the irrationality of any specific slope. The
+    Challenge states results for the two named polynomials only and claims
+    nothing about the wider family.
+  sorry_count: 0
+  sorry_in_definitions: 0
+  axioms: []
+
+automation:
+  methods:
+    - method: "agent"
+      models: ["Anthropic Claude (Opus/Sonnet-class, 2026)"]
+      framework: "Claude Code"
+      tool_setup: >-
+        AI-assisted proof drafting, refactoring, and error-loop iteration in
+        Claude Code against lake build; a CI axiom audit
+        (scripts/check_axioms.py, one #print axioms per declaration) runs on
+        every push and fails on any axiom outside the standard three, any
+        sorry, or any native_decide.
+      cost:
+        wall_time: "several weeks of part-time sessions across the development"
+        spend_usd: "subscription-based"
+        hardware: "local machine"
+      prompting_notes: >-
+        Theorem-by-theorem sessions; statements fixed by the author first,
+        proofs iterated against the compiler; an independent second
+        formalization of the settling module (SettlingReplica) was produced
+        as a replication check.
+    - method: "manual"
+      models: []
+      framework: "n/a"
+      tool_setup: >-
+        Author-directed statement design, mathematical review, and acceptance
+        of every theorem; all statements audited by the author against their
+        informal descriptions.
+      cost:
+        wall_time: "included in the sessions above"
+        spend_usd: "not tracked"
+        hardware: "local machine"
+      prompting_notes: "n/a"
+  spend_usd: "subscription-based"
+  notes: >-
+    Human-directed, machine-verified workflow: the author fixes statements and
+    reviews all mathematics; AI assistance drafts and repairs proofs; the Lean
+    kernel is the acceptance criterion, enforced in CI with a per-declaration
+    axiom audit.
+
+fidelity:
+  divergences: >-
+    None known. Aperiodicity is stated for an arbitrary irrational slope
+    supplied as a hypothesis; the Challenge asserts no specific number's
+    irrationality.
+
+review:
+  status: "self-assessed"
+  reviewers:
+    - "Stephanie Alexander"
+  notes: >-
+    Statements audited by the author against the informal claims; the settling
+    module carries an independent second formalization in the same repository
+    (SettlingReplica) as a replication check; CI reruns the full build and the
+    per-declaration axiom audit on every push.
+
+alignment:
+  namespace: "ArithmeticOfTime"
+  statements:
+    - source: "Folklore Pisot boundary (cubic side)"
+      lean: "ArithmeticOfTime.cubic_conj_norm_lt_one"
+      module: "Solution"
+      status: "proved"
+      note: "Every non-real root of x³ = x + 1 has norm < 1."
+    - source: "Folklore Pisot boundary (quartic side)"
+      lean: "ArithmeticOfTime.quartic_conj_norm_gt_one"
+      module: "Solution"
+      status: "proved"
+      note: "Every non-real root of x⁴ = x + 1 has norm > 1."
+    - source: "Folklore Pisot boundary (dichotomy)"
+      lean: "ArithmeticOfTime.pisot_boundary_dichotomy"
+      module: "Solution"
+      status: "proved"
+      note: "Conjunction of the two inequalities: the cubic settles, the quartic spirals."
+    - source: "Morse–Hedlund 1940 (Sturmian circle: two-valuedness)"
+      lean: "ArithmeticOfTime.tick_two_valued"
+      module: "Solution"
+      status: "proved"
+      note: "tick β n ∈ {0, 1} for 0 < β < 1."
+    - source: "Classical (Beatty/Sturmian density)"
+      lean: "ArithmeticOfTime.tick_density"
+      module: "Solution"
+      status: "proved"
+      note: "Cesàro mean of the word converges to β, by squeeze on ⌊Nβ⌋/N."
+    - source: "Morse–Hedlund 1940 (aperiodicity of Sturmian words)"
+      lean: "ArithmeticOfTime.tick_aperiodic"
+      module: "Solution"
+      status: "proved"
+      note: "No period for irrational slope; irrationality is an explicit hypothesis."
+    - source: "Morse–Hedlund 1940 (balance)"
+      lean: "ArithmeticOfTime.tick_balanced"
+      module: "Solution"
+      status: "proved"
+      note: "Equal-length windows differ by at most one in their 1-counts."
+
+acknowledgements: >-
+  Built on Mathlib and the Lean 4 toolchain; thanks to the leanprover
+  community. Developed with AI assistance (Anthropic Claude, in Claude Code)
+  under the author's direction. Dedicated to the memory of David N. Schramm.

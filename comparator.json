@@ -1,0 +1,16 @@
+{
+  "challenge_module": "Challenge",
+  "solution_module": "Solution",
+  "theorem_names": [
+    "ArithmeticOfTime.cubic_conj_norm_lt_one",
+    "ArithmeticOfTime.quartic_conj_norm_gt_one",
+    "ArithmeticOfTime.pisot_boundary_dichotomy",
+    "ArithmeticOfTime.tick_two_valued",
+    "ArithmeticOfTime.tick_density",
+    "ArithmeticOfTime.tick_aperiodic",
+    "ArithmeticOfTime.tick_balanced"
+  ],
+  "definition_names": ["ArithmeticOfTime.tick"],
+  "permitted_axioms": ["propext", "Quot.sound", "Classical.choice"],
+  "enable_nanoda": true
+}
