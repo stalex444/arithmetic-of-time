@@ -2,18 +2,28 @@
 version: "v0.4"
 
 project:
-  name: "The Arithmetic of Time: the Pisot boundary of xⁿ = x + 1 and the mechanical tick word"
+  name: "The Arithmetic of Time: root-modulus dichotomy, the mechanical tick word, Padovan chirality, and Meyer separation"
   description: >-
-    Kernel-checked results in two groups. (1) The Pisot boundary of the
-    trinomial family: every non-real root of x³ = x + 1 lies strictly inside
-    the complex unit circle and every non-real root of x⁴ = x + 1 strictly
-    outside it, proved for the two concrete polynomials by an elementary
-    reduction modulo the Vieta quadratic of the conjugate pair, with no
-    root-finding and no general Pisot machinery. (2) The mechanical (Sturmian)
-    tick word tick β n = ⌊(n+1)β⌋ − ⌊nβ⌋: two-valued for 0 < β < 1, of Cesàro
-    density exactly β, aperiodic for irrational β (irrationality carried as an
-    explicit hypothesis), and balanced — any two equal-length windows have
-    1-counts differing by at most one.
+    Kernel-checked results in four groups. (1) Root-modulus dichotomy: every
+    non-real root of x³ = x + 1 lies strictly inside the complex unit circle
+    and every non-real root of x⁴ = x + 1 strictly outside it, proved by an
+    elementary reduction modulo the Vieta quadratic of the conjugate pair
+    (classically, with irreducibility and the real root exceeding one, these
+    are the Pisot/non-Pisot readings; that consequence is prose, outside the
+    compared statements). (2) The mechanical (Sturmian) tick word
+    tick β n = ⌊(n+1)β⌋ − ⌊nβ⌋: two-valued for 0 < β < 1; Cesàro density
+    exactly β for every real slope; aperiodic for irrational β (irrationality
+    an explicit hypothesis); and, for every real slope, equal-length window
+    sums differ by at most one — the Sturmian 1-count balance when 0 < β < 1.
+    (3) Chirality of the Padovan substitution (0 ↦ 1, 1 ↦ 2, 2 ↦ 01 on
+    Fin 3): in every iterate from any seed, the letter 0 is immediately
+    followed by 1; the word 20 ("ca") is a factor of an iterate while its
+    reversal 02 ("ac") is a factor of no iterate from any seed — the factor
+    language is chiral; and no factor of length ≥ 4 of any iterate from the
+    seed 0 is a palindrome. (4) Meyer separation on the cubic lattice: for a
+    real root r and non-real root z of x³ = x + 1 and any nonzero integer
+    triple (a, b, c), |a + br + cr²| · ‖a + bz + cz²‖² ≥ 1 — lattice points
+    are never simultaneously small at both places.
   authors:
     - "Stephanie Alexander"
   license: "MIT"
@@ -83,20 +93,50 @@ sources:
     license: "unknown"
     author_endorsement: "n/a"
 
+  - title: "Reflection asymmetry in one-dimensional substitution tilings (reflection asymmetry of the Padovan substitution reported computationally)"
+    authors:
+      - "Franz Gähler"
+    id: "arXiv:2602.18501"
+    type: "article"
+    location: "https://arxiv.org/abs/2602.18501"
+    relationship: "independently-proves"
+    note: >-
+      Gähler's preprint reports the reflection asymmetry of the Padovan
+      substitution's tiling space by computational methods. The chirality
+      results here (the invariant, the ca/ac witness pair, and the
+      palindrome-free window certificate) were developed independently and
+      give kernel-checked proofs at the factor-language level.
+    license: "unknown"
+    author_endorsement: "not-contacted"
+  - title: "Folklore: norm-form integrality (a nonzero algebraic integer has |N(x)| ≥ 1)"
+    type: "folklore"
+    relationship: "background"
+    note: >-
+      The Meyer-separation inequality is the norm-form integrality of ℤ[ρ]
+      read at the two archimedean places; the packaged two-place inequality
+      and its kernel proof are this project's.
+    license: "unknown"
+    author_endorsement: "n/a"
+
 related_formalizations: []
 
 status:
   scope: >-
-    Formalized: the two root-modulus inequalities and their conjunction
-    (pisot_boundary_dichotomy) for the concrete polynomials x³ = x + 1 and
-    x⁴ = x + 1; and the four word theorems (two-valued, density, aperiodic,
-    balanced) for the floor-difference word of an arbitrary real slope, with
-    the stated hypotheses (0 < β < 1 where used; Irrational β for
-    aperiodicity). Not formalized: that the plastic number is the smallest
-    Pisot number (Siegel minimality); general Pisot theory; the Sturmian
-    complexity converse; the irrationality of any specific slope. The
-    Challenge states results for the two named polynomials only and claims
-    nothing about the wider family.
+    Formalized: the two root-modulus inequalities and their conjunction for
+    the concrete polynomials x³ = x + 1 and x⁴ = x + 1 (statements about
+    non-real roots only — no real root, minimal polynomial, or Pisot
+    predicate appears in the compared declarations; the classical Pisot
+    reading is prose); the four word theorems for the floor-difference word
+    (the balance theorem holds for every real slope as a window-sum bound;
+    its 1-count reading needs 0 < β < 1); the Padovan chirality package on
+    the Fin 3 alphabet (the a-forces-b invariant and the ca/ac chirality
+    over every seed; the palindrome-freeness for the seed a only —
+    primitivity, which would transfer it to any seed, is not formalized);
+    and the Meyer separation inequality with both roots supplied as
+    hypotheses. Not formalized: Siegel minimality of the plastic number;
+    general Pisot theory; the Sturmian complexity converse; the
+    irrationality of any specific slope; tiling-space-level statements of
+    the reflection asymmetry (the results here are factor-language-level).
   sorry_count: 0
   sorry_in_definitions: 0
   axioms: []
@@ -193,7 +233,30 @@ alignment:
       lean: "ArithmeticOfTime.tick_balanced"
       module: "Solution"
       status: "proved"
-      note: "Equal-length windows differ by at most one in their 1-counts."
+      note: >-
+        For every real slope, equal-length window sums differ by at most one;
+        under 0 < β < 1 the word is {0,1}-valued and this is the 1-count
+        balance.
+    - source: "This work; asymmetry reported computationally in Gähler arXiv:2602.18501"
+      lean: "ArithmeticOfTime.padovan_a_forces_b"
+      module: "Solution"
+      status: "proved"
+      note: "The invariant: in every iterate from any seed, 0 is immediately followed by 1."
+    - source: "This work; asymmetry reported computationally in Gähler arXiv:2602.18501"
+      lean: "ArithmeticOfTime.padovan_chirality"
+      module: "Solution"
+      status: "proved"
+      note: "20 is a factor of an iterate; 02 is a factor of no iterate from any seed."
+    - source: "This work"
+      lean: "ArithmeticOfTime.padovan_no_long_palindrome"
+      module: "Solution"
+      status: "proved"
+      note: "No palindromic factor of length ≥ 4 in any iterate from the seed 0, via a complete length-≤5 window certificate."
+    - source: "Norm-form integrality (folklore), packaged at the two places"
+      lean: "ArithmeticOfTime.meyer_separation"
+      module: "Solution"
+      status: "proved"
+      note: "1 ≤ |a + br + cr²| · ‖a + bz + cz²‖² for nonzero integer triples."
 
 acknowledgements: >-
   Built on Mathlib and the Lean 4 toolchain; thanks to the leanprover

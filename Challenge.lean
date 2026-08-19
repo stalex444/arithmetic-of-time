@@ -6,18 +6,23 @@ import Mathlib
 This module is the small, trusted surface to audit. It states two groups of
 results, with `sorry` placeholders; the proved versions are in `Solution.lean`.
 
-**Group 1 — the Pisot boundary of the trinomial family.** Every non-real root
-of `x³ = x + 1` lies strictly inside the complex unit circle, and every
-non-real root of `x⁴ = x + 1` lies strictly outside it. Consequently the real
-root of the cubic (the plastic number) is a Pisot number, while the real root
-of the quartic is not: between degrees three and four the family's conjugate
-dynamics switches from contraction to expansion. The dichotomy is stated for
-the two concrete polynomials; no general Pisot theory is claimed.
+**Group 1 — root-modulus dichotomy for the two trinomials.** Every non-real
+root of `x³ = x + 1` lies strictly inside the complex unit circle, and every
+non-real root of `x⁴ = x + 1` lies strictly outside it. The compared
+statements are exactly these inequalities about non-real roots — no real
+root, minimal polynomial, or Pisot predicate appears in them. (Classically,
+combined with irreducibility and the fact that each polynomial has a real
+root exceeding one — for the quartic, the positive one of its two real
+roots — the inequalities yield the usual reading: the plastic number is a
+Pisot number and the quartic's positive root is not. That consequence is
+prose, outside the compared statements.)
 
 **Group 2 — the mechanical (Sturmian) tick word.** For a slope `β`, define
 `tick β n = ⌊(n+1)β⌋ − ⌊nβ⌋`. For `0 < β < 1` the word is two-valued; its
-Cesàro density is exactly `β`; for irrational `β` it has no period; and any
-two windows of equal length carry 1-counts differing by at most one (balance).
+Cesàro density is exactly `β` (any real slope); for irrational `β` it has no
+period; and — for every real slope — any two equal-length windows have sums
+differing by at most one. When `0 < β < 1`, so that the word is `{0,1}`-valued,
+that window-sum bound is precisely the Sturmian 1-count balance property.
 Irrationality of the slope enters as an explicit hypothesis, never an axiom.
 -/
 
@@ -25,21 +30,23 @@ namespace ArithmeticOfTime
 
 /-! ## Group 1 — the Pisot boundary -/
 
-/-- Every non-real root `z` of `x³ = x + 1` has `‖z‖ < 1`: the conjugate mode
-of the plastic number contracts, so the cubic's real root is a Pisot number. -/
+/-- Every non-real root `z` of `x³ = x + 1` has `‖z‖ < 1`. (With
+irreducibility and the real root exceeding one — classical facts outside this
+statement — this is the Pisot property of the plastic number.) -/
 theorem cubic_conj_norm_lt_one (z : ℂ) (hz : z ^ 3 = z + 1) (him : z.im ≠ 0) :
     ‖z‖ < 1 := by
   sorry
 
-/-- Every non-real root `w` of `x⁴ = x + 1` has `‖w‖ > 1`: the conjugate mode
-of the quartic's real root expands, so that root is not a Pisot number. -/
+/-- Every non-real root `w` of `x⁴ = x + 1` has `‖w‖ > 1`. (Classically this
+denies the Pisot property to the quartic's positive real root; that reading
+lies outside this statement.) -/
 theorem quartic_conj_norm_gt_one (w : ℂ) (hw : w ^ 4 = w + 1) (him : w.im ≠ 0) :
     1 < ‖w‖ := by
   sorry
 
-/-- **The Pisot boundary dichotomy.** The cubic settles and the quartic
-spirals: for any non-real roots `z` of `x³ = x + 1` and `w` of `x⁴ = x + 1`,
-`‖z‖ < 1 ∧ 1 < ‖w‖`. One flipped inequality, driven purely by the degree. -/
+/-- **The root-modulus dichotomy.** For any non-real roots `z` of
+`x³ = x + 1` and `w` of `x⁴ = x + 1`: `‖z‖ < 1 ∧ 1 < ‖w‖`. One flipped
+inequality, driven purely by the degree. -/
 theorem pisot_boundary_dichotomy
     (z : ℂ) (hz : z ^ 3 = z + 1) (hzim : z.im ≠ 0)
     (w : ℂ) (hw : w ^ 4 = w + 1) (hwim : w.im ≠ 0) :
@@ -70,10 +77,64 @@ theorem tick_aperiodic (β : ℝ) (hβ : Irrational β) :
     ¬ ∃ p : ℕ, 0 < p ∧ ∀ n : ℕ, tick β (n + p) = tick β n := by
   sorry
 
-/-- **Balanced.** Any two windows of equal length have 1-counts differing by
-at most one — the Sturmian balance property: even, never random. -/
+/-- **Balanced (window-sum form).** For every real slope, any two windows of
+equal length have sums differing by at most one. When `0 < β < 1` the word is
+`{0,1}`-valued (`tick_two_valued`) and this is the Sturmian 1-count balance:
+even, never random. -/
 theorem tick_balanced (β : ℝ) (L i j : ℕ) :
     |(∑ k ∈ Finset.range L, tick β (i + k)) - (∑ k ∈ Finset.range L, tick β (j + k))| ≤ 1 := by
+  sorry
+
+/-! ## Group 3 — chirality of the Padovan substitution
+
+The substitution is stated over the alphabet `Fin 3`, with the letters
+`0, 1, 2` standing for `a, b, c`. Its incidence matrix has characteristic
+polynomial `x³ − x − 1`; that orientation fact is not used or compared. -/
+
+/-- The Padovan substitution: `0 ↦ [1]`, `1 ↦ [2]`, `2 ↦ [0, 1]`
+(that is, `a ↦ b`, `b ↦ c`, `c ↦ ab`). -/
+def s : Fin 3 → List (Fin 3)
+  | 0 => [1]
+  | 1 => [2]
+  | 2 => [0, 1]
+
+/-- Letterwise application of the substitution to a word: the concatenation
+of the image blocks. -/
+def S (w : List (Fin 3)) : List (Fin 3) := (w.map s).flatten
+
+/-- **The invariant.** In every iterate `S^[n+1] [x]`, from any seed letter,
+every occurrence of the letter `0` (that is, `a`) is immediately followed by
+the letter `1` (that is, `b`). -/
+theorem padovan_a_forces_b (n : ℕ) (x : Fin 3) (i : ℕ)
+    (h : (S^[n + 1] [x])[i]? = some 0) :
+    (S^[n + 1] [x])[i + 1]? = some 1 := by
+  sorry
+
+/-- **Chirality.** The word `ca` (here `[2, 0]`) IS a factor of an iterate,
+while its reversal `ac` (here `[0, 2]`) is a factor of NO iterate from ANY
+seed: the factor language of the substitution reads differently backwards. -/
+theorem padovan_chirality (n : ℕ) (x : Fin 3) :
+    ([2, 0] <:+: S^[5] [0]) ∧ ¬ [0, 2] <:+: S^[n] [x] := by
+  sorry
+
+/-- **No long palindromic factor.** No factor of length ≥ 4 of any iterate
+from the seed `a` (here `0`) is a palindrome. -/
+theorem padovan_no_long_palindrome (n : ℕ) (u : List (Fin 3))
+    (hu : u <:+: S^[n] [0]) (hlen : 4 ≤ u.length) : ¬ u.Palindrome := by
+  sorry
+
+/-! ## Group 4 — Meyer separation on the cubic lattice -/
+
+/-- **Meyer separation.** Let `r` be a real root and `z` a non-real root of
+`x³ = x + 1`. For every nonzero integer coordinate triple `p = (p₁, p₂, p₃)`,
+the real-embedding size times the squared complex-embedding size of
+`p₁ + p₂ρ + p₃ρ²` is at least `1`:
+distinct lattice points are never simultaneously small at both places. -/
+theorem meyer_separation (r : ℝ) (hr : r ^ 3 = r + 1)
+    (z : ℂ) (hz : z ^ 3 = z + 1) (him : z.im ≠ 0)
+    (p : ℤ × ℤ × ℤ) (hp : p ≠ 0) :
+    1 ≤ |(p.1 : ℝ) + (p.2.1 : ℝ) * r + (p.2.2 : ℝ) * r ^ 2| *
+        ‖(p.1 : ℂ) + (p.2.1 : ℂ) * z + (p.2.2 : ℂ) * z ^ 2‖ ^ 2 := by
   sorry
 
 end ArithmeticOfTime
