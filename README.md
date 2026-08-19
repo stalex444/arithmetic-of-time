@@ -66,11 +66,12 @@ model of time. It is proposed as what time is.
 
 5. **The settled history is handed.** For the Padovan substitution
    `s : a ↦ b, b ↦ c, c ↦ ab` (incidence matrix of characteristic polynomial
-   `x³ − x − 1`), every occurrence of `a` in any iterate from any seed is
-   immediately followed by `b` (`Time.Padovan.every_a_followed_by_b` in
-   `Chirality.lean`); consequently `ca` is a factor of the language while `ac`
-   is a factor of **no** iterate from **any** seed — proved from the invariant,
-   with no enumeration (`Time.Padovan.chirality`). Read backwards, the settled
+   `x³ − x − 1`), every occurrence of `a` in any positive iterate
+   `S^[n+1] [x]`, from any seed, is immediately followed by `b`
+   (`Time.Padovan.every_a_followed_by_b` in `Chirality.lean`); consequently
+   `ca` is a factor of an iterate (`S^[5] [a] = cab`) while `ac` is a factor
+   of **no** iterate from **any** seed — the `ac` direction proved from the
+   invariant, with no enumeration (`Time.Padovan.chirality`). Read backwards, the settled
    word is provably a different object. Moreover **no factor of length ≥ 4 of
    any iterate `S^[n]`, from any seed and at any iterate (including `n = 0`),
    is a palindrome** (`ArithmeticOfTime.padovan_no_long_palindrome` in
@@ -80,7 +81,8 @@ model of time. It is proposed as what time is.
    (`Time.Padovan.factors_complete`), and that list contains no palindrome of
    length 4 or 5 — and every other seed reduces to the seed-`a` case by the
    index shift `S [a] = [b]`, `S [b] = [c]`; the short palindromic factors
-   that do occur can be read off the same certificate. These are statements
+   all lie in the same certificate (which factors actually occur is checked
+   outside the kernel and is not needed by any theorem). These are statements
    about factors of the iterates `S^[n] [x]`, not about an abstract subshift. Reflection
    asymmetry for this substitution's tiling space was found independently, by a
    different method, in Gähler (2026) — see the paper's citations.
@@ -169,7 +171,9 @@ Baake–Grimm 2013), cited there.
 Every theorem's axiom dependency is a subset of
 `{propext, Classical.choice, Quot.sound}` — the standard classical foundation of
 Mathlib. There is **no `sorry`**, **no `native_decide`**, and **no custom
-axiom** anywhere in the development; the irrationality of the slope in
+axiom** anywhere in the proved development (`Challenge.lean` states the
+compared theorems with `sorry` placeholders, by the registry's challenge
+format; `Solution.lean` proves them all); the irrationality of the slope in
 `MechanicalWord` (which lies beyond Mathlib) is carried as an explicit
 hypothesis, never assumed as an axiom. You can reproduce the audit with
 `#print axioms Time.balanced` (and likewise for any theorem above).

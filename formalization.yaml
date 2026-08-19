@@ -39,7 +39,7 @@ sources:
     relationship: "background"
     license: "unknown"
     author_endorsement: "n/a"
-  - title: "Reflection asymmetry in one-dimensional substitution tilings (reflection asymmetry of the Padovan substitution reported computationally)"
+  - title: "Dynamical Invariants from Asymptotic Composants"
     authors:
       - "Franz Gähler"
     id: "arXiv:2602.18501"
@@ -47,11 +47,13 @@ sources:
     location: "https://arxiv.org/abs/2602.18501"
     relationship: "adapts"
     note: >-
-      Gähler's preprint reports the reflection asymmetry of the Padovan
-      substitution's tiling space by computational methods. The chirality
-      results here (the invariant, the ca/ac witness pair, and the
-      palindrome-free window certificate) were developed independently and
-      give kernel-checked proofs at the factor-language level.
+      Gähler establishes the reflection asymmetry of plastic-number
+      substitution tiling spaces computationally; the Padovan rule appears,
+      up to letter renaming and reflection, as the class-7 representative in
+      his Table 2. The entry here gives a kernel-checked factor-language
+      counterpart of that asymmetry, by a different and enumeration-free
+      method (the successor invariant), together with the palindrome-free
+      window certificate.
     license: "unknown"
     author_endorsement: "not-contacted"
 

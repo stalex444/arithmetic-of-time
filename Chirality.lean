@@ -208,8 +208,9 @@ theorem good_getElem : ∀ {w : List Letter}, good w = true →
       simpa using hres
 
 /-- **EVERY `a` IS FOLLOWED BY `b`** — the headline index form, for every
-iterate `S^[n+1] [x]`, every seed letter, every position. In particular no
-iterate ends in `a`, and neither `aa` nor `ac` ever occurs. -/
+positive iterate `S^[n+1] [x]`, every seed letter, every position. In
+particular no image word `S w` ends in `a`, and neither `aa` nor `ac` ever
+occurs in a positive iterate. -/
 theorem every_a_followed_by_b (n : ℕ) (x : Letter) (i : ℕ)
     (h : (S^[n + 1] [x])[i]? = some Letter.a) :
     (S^[n + 1] [x])[i + 1]? = some Letter.b :=
