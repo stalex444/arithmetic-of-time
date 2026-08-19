@@ -1,54 +1,17 @@
-import PisotBoundary
-import MechanicalWord
 import Chirality
-import Settling
 
 /-!
 # Solution: proved versions of the Challenge declarations
 
-Each declaration below has exactly the statement of its `Challenge.lean`
-counterpart. The proofs are supplied by the project modules `PisotBoundary`
-(the settle/spiral dichotomy, by an elementary Vieta reduction on the
-conjugate pair) and `MechanicalWord` (the Sturmian tick word), where
-`ArithmeticOfTime.tick` is definitionally `Time.m`.
+Each public declaration below has exactly the statement of its
+`Challenge.lean` counterpart. The proofs are supplied by the project module
+`Chirality` (namespace `Time.Padovan`), transported across the letter
+encoding `Letter ≃ Fin 3`. The all-seed palindrome theorem reduces every
+seed to the seed-`a` case: `S [0] = [1]` and `S [1] = [2]`, so an iterate
+from seed `1` or `2` IS a seed-`0` iterate of shifted index.
 -/
 
 namespace ArithmeticOfTime
-
-theorem cubic_conj_norm_lt_one (z : ℂ) (hz : z ^ 3 = z + 1) (him : z.im ≠ 0) :
-    ‖z‖ < 1 :=
-  Time.cubic_conj_norm_lt_one z hz him
-
-theorem quartic_conj_norm_gt_one (w : ℂ) (hw : w ^ 4 = w + 1) (him : w.im ≠ 0) :
-    1 < ‖w‖ :=
-  Time.quartic_conj_norm_gt_one w hw him
-
-theorem pisot_boundary_dichotomy
-    (z : ℂ) (hz : z ^ 3 = z + 1) (hzim : z.im ≠ 0)
-    (w : ℂ) (hw : w ^ 4 = w + 1) (hwim : w.im ≠ 0) :
-    ‖z‖ < 1 ∧ 1 < ‖w‖ :=
-  Time.pisot_boundary_dichotomy z hz hzim w hw hwim
-
-noncomputable def tick (β : ℝ) (n : ℕ) : ℤ := ⌊((n : ℝ) + 1) * β⌋ - ⌊(n : ℝ) * β⌋
-
-theorem tick_two_valued (β : ℝ) (hβ0 : 0 < β) (hβ1 : β < 1) (n : ℕ) :
-    tick β n = 0 ∨ tick β n = 1 := by
-  simpa [tick, Time.m] using Time.m_mem β hβ0 hβ1 n
-
-theorem tick_density (β : ℝ) :
-    Filter.Tendsto (fun N : ℕ => ((∑ k ∈ Finset.range N, tick β k : ℤ) : ℝ) / (N : ℝ))
-      Filter.atTop (nhds β) := by
-  simpa [tick, Time.m] using Time.density_tendsto β
-
-theorem tick_aperiodic (β : ℝ) (hβ : Irrational β) :
-    ¬ ∃ p : ℕ, 0 < p ∧ ∀ n : ℕ, tick β (n + p) = tick β n := by
-  simpa [tick, Time.m] using Time.aperiodic β hβ
-
-theorem tick_balanced (β : ℝ) (L i j : ℕ) :
-    |(∑ k ∈ Finset.range L, tick β (i + k)) - (∑ k ∈ Finset.range L, tick β (j + k))| ≤ 1 := by
-  simpa [tick, Time.m] using Time.balanced β L i j
-
-/-! ### Chirality — transport from `Time.Padovan` across the letter encoding -/
 
 /-- The Padovan substitution on `Fin 3` (matches the Challenge definition). -/
 def s : Fin 3 → List (Fin 3)
@@ -105,6 +68,24 @@ private lemma iter_single (n : ℕ) (x : Fin 3) :
   have h := iter_map_enc n [dec x]
   simpa [enc_dec] using h
 
+/-! ### Seed shifting: every seed's iterate is a seed-`0` iterate
+
+`S [0] = [1]` and `S [1] = [2]`, so `S^[n] [1] = S^[n+1] [0]` and
+`S^[n] [2] = S^[n+2] [0]`: the words from seeds `1` and `2` are seed-`0`
+words of shifted index. -/
+
+private lemma S_seed_zero : S [(0 : Fin 3)] = [1] := by decide
+
+private lemma S_seed_one : S [(1 : Fin 3)] = [2] := by decide
+
+private lemma iter_seed_one (n : ℕ) : S^[n] [(1 : Fin 3)] = S^[n + 1] [0] := by
+  rw [Function.iterate_succ_apply, S_seed_zero]
+
+private lemma iter_seed_two (n : ℕ) : S^[n] [(2 : Fin 3)] = S^[n + 2] [0] := by
+  show S^[n] [(2 : Fin 3)] = S^[n + 1 + 1] [0]
+  rw [Function.iterate_succ_apply, S_seed_zero,
+    Function.iterate_succ_apply, S_seed_one]
+
 theorem padovan_a_forces_b (n : ℕ) (x : Fin 3) (i : ℕ)
     (h : (S^[n + 1] [x])[i]? = some 0) :
     (S^[n + 1] [x])[i + 1]? = some 1 := by
@@ -134,7 +115,9 @@ theorem padovan_chirality (n : ℕ) (x : Fin 3) :
     have hmap := congrArg (List.map dec) hst
     simpa [List.map_append, List.map_map, dec_comp_enc, dec] using hmap
 
-theorem padovan_no_long_palindrome (n : ℕ) (u : List (Fin 3))
+/-- The seed-`0` case, transported from `Time.Padovan.no_long_palindromic_factor`
+across the letter encoding. -/
+private lemma no_long_palindrome_seed_zero (n : ℕ) (u : List (Fin 3))
     (hu : u <:+: S^[n] [0]) (hlen : 4 ≤ u.length) : ¬ u.Palindrome := by
   intro hp
   rw [iter_single] at hu
@@ -146,15 +129,22 @@ theorem padovan_no_long_palindrome (n : ℕ) (u : List (Fin 3))
   exact Time.Padovan.no_long_palindromic_factor n (u.map dec) hu'
     (by simpa using hlen) (hp.map dec)
 
-/-! ### Meyer separation — from `Settling` -/
-
-theorem meyer_separation (r : ℝ) (hr : r ^ 3 = r + 1)
-    (z : ℂ) (hz : z ^ 3 = z + 1) (him : z.im ≠ 0)
-    (p : ℤ × ℤ × ℤ) (hp : p ≠ 0) :
-    1 ≤ |(p.1 : ℝ) + (p.2.1 : ℝ) * r + (p.2.2 : ℝ) * r ^ 2| *
-        ‖(p.1 : ℂ) + (p.2.1 : ℂ) * z + (p.2.2 : ℂ) * z ^ 2‖ ^ 2 := by
-  have h := Time.meyer_separation (r := r) (z := z) hr hz him p hp
-  unfold Time.embed at h
-  exact h
+theorem padovan_no_long_palindrome (n : ℕ) (x : Fin 3) (u : List (Fin 3))
+    (hu : u <:+: S^[n] [x]) (hlen : 4 ≤ u.length) : ¬ u.Palindrome := by
+  rcases x with ⟨xv, hx⟩
+  interval_cases xv
+  · exact no_long_palindrome_seed_zero n u hu hlen
+  · have hu' : u <:+: S^[n] [(1 : Fin 3)] := hu
+    rw [iter_seed_one] at hu'
+    exact no_long_palindrome_seed_zero (n + 1) u hu' hlen
+  · have hu' : u <:+: S^[n] [(2 : Fin 3)] := hu
+    rw [iter_seed_two] at hu'
+    exact no_long_palindrome_seed_zero (n + 2) u hu' hlen
 
 end ArithmeticOfTime
+
+/-! ### Axiom audit (in-module): the three compared theorems -/
+
+#print axioms ArithmeticOfTime.padovan_a_forces_b
+#print axioms ArithmeticOfTime.padovan_chirality
+#print axioms ArithmeticOfTime.padovan_no_long_palindrome

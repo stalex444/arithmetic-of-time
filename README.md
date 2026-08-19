@@ -71,12 +71,17 @@ model of time. It is proposed as what time is.
    `Chirality.lean`); consequently `ca` is a factor of the language while `ac`
    is a factor of **no** iterate from **any** seed — proved from the invariant,
    with no enumeration (`Time.Padovan.chirality`). Read backwards, the settled
-   word is provably a different object. Moreover the language contains **no
-   palindromic factor of length ≥ 4**, unconditionally
-   (`Time.Padovan.no_long_palindromic_factor`): every factor of length ≤ 5 lies
-   in an explicit 57-word certificate (`Time.Padovan.factors_complete`), and
-   that list contains no palindrome of length 4 or 5; the short palindromic
-   factors that do occur can be read off the same certificate. Reflection
+   word is provably a different object. Moreover **no factor of length ≥ 4 of
+   any iterate `S^[n]`, from any seed and at any iterate (including `n = 0`),
+   is a palindrome** (`ArithmeticOfTime.padovan_no_long_palindrome` in
+   `Solution.lean`): for the seed `a` this is
+   `Time.Padovan.no_long_palindromic_factor` — every factor of length ≤ 5 of a
+   seed-`a` iterate lies in an explicit 57-word certificate
+   (`Time.Padovan.factors_complete`), and that list contains no palindrome of
+   length 4 or 5 — and every other seed reduces to the seed-`a` case by the
+   index shift `S [a] = [b]`, `S [b] = [c]`; the short palindromic factors
+   that do occur can be read off the same certificate. These are statements
+   about factors of the iterates `S^[n] [x]`, not about an abstract subshift. Reflection
    asymmetry for this substitution's tiling space was found independently, by a
    different method, in Gähler (2026) — see the paper's citations.
 
@@ -137,7 +142,7 @@ Toolchain `leanprover/lean4:v4.31.0`, Mathlib `v4.31.0` (pinned in
 | `AlgebraicIntegers.lean` | thresholds are not algebraic integers; no-identity |
 | `MechanicalWord.lean` | the Sturmian word: two-valued, density, aperiodic, balanced |
 | `PisotBoundary.lean` | the settle/spiral dichotomy: non-real roots of `x³−x−1` have `‖·‖<1`, of `x⁴−x−1` have `‖·‖>1` |
-| `Chirality.lean` | the Padovan factor language is chiral: `ca` occurs, `ac` never; no palindromic factor of length ≥ 4 |
+| `Chirality.lean` | the Padovan factor language is chiral: `ca` occurs, `ac` never; no palindromic factor of length ≥ 4 in any iterate from the seed `a` (extended to every seed and every iterate in `Solution.lean`) |
 | `OriginDefect.lean` | the ℤ-indexed mechanical word: exact reflection identity off the lattice hits, and the marked origin defect `(1, 0)` |
 
 ## Paper

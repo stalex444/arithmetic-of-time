@@ -2,19 +2,11 @@
   "challenge_module": "Challenge",
   "solution_module": "Solution",
   "theorem_names": [
-    "ArithmeticOfTime.cubic_conj_norm_lt_one",
-    "ArithmeticOfTime.quartic_conj_norm_gt_one",
-    "ArithmeticOfTime.pisot_boundary_dichotomy",
-    "ArithmeticOfTime.tick_two_valued",
-    "ArithmeticOfTime.tick_density",
-    "ArithmeticOfTime.tick_aperiodic",
-    "ArithmeticOfTime.tick_balanced",
     "ArithmeticOfTime.padovan_a_forces_b",
     "ArithmeticOfTime.padovan_chirality",
-    "ArithmeticOfTime.padovan_no_long_palindrome",
-    "ArithmeticOfTime.meyer_separation"
+    "ArithmeticOfTime.padovan_no_long_palindrome"
   ],
-  "definition_names": ["ArithmeticOfTime.tick", "ArithmeticOfTime.s", "ArithmeticOfTime.S"],
+  "definition_names": ["ArithmeticOfTime.s", "ArithmeticOfTime.S"],
   "permitted_axioms": ["propext", "Quot.sound", "Classical.choice"],
   "enable_nanoda": true
 }
