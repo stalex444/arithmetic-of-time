@@ -1,6 +1,10 @@
 \documentclass[11pt]{amsart}
 \usepackage{amsmath,amssymb,amsthm}
 \usepackage{graphicx}
+\usepackage{longtable}
+% Allow line breaks after underscores in long Lean declaration names.
+\AtBeginDocument{\DeclareRobustCommand{\_}{\textunderscore\allowbreak}}
+\setlength{\emergencystretch}{3em}
 \usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
 
 \theoremstyle{plain}
@@ -13,45 +17,63 @@
 \theoremstyle{remark}
 \newtheorem{remark}[theorem]{Remark}
 
+% ---------------------------------------------------------------------------
+% The Lean/Mathlib pin of the version-2 repository.
+% Version 1 (c48eb12) was at Lean v4.31.0 / Mathlib v4.31.0; version 2 moved.
+\newcommand{\leanpin}{Lean~4 (v4.35.0-rc2) against Mathlib}
+\newcommand{\leanpinlong}{\texttt{leanprover/lean4:v4.35.0-rc2} with Mathlib pinned at
+commit \texttt{065356127b1dc0016f66b7283ce0ce2c4055aa55}}
+% ---------------------------------------------------------------------------
+
 \title{The Arithmetic of Time}
 \author{Stephanie Alexander}
 \email{salexander442@gmail.com}
-\date{\today}
+\date{18 October 2026 (version 2; version 1: 15 August 2026)}
 
 \begin{document}
 
 
 \begin{abstract}
-We present a small, self-contained mathematical model of time, formalized in Lean 4 against Mathlib v4.31.0 in the public repository \texttt{github.com/stalex444/arithmetic-of-time}. The model is built from two polynomials: $x^3 - x - 1$, whose real root $\rho \approx 1.324718$ is the plastic number, and $x^4 - x - 1$, whose real root is $Q \approx 1.220744$. Four groups of kernel-verified theorems are proved. (1) Settling: the non-real roots $z$ of $x^3 - x - 1$ contract at the exact rate $\rho \lVert z \rVert^2 = 1$, and on the ring $\mathbb{Z}[\rho]$ this sharpens to a Meyer-type separation inequality $\lvert \sigma_1(x) \rvert \cdot \lVert \sigma_2(x) \rVert^2 \ge 1$ for every nonzero $x$ (\texttt{Time.meyer\_separation}). (2) A boundary dichotomy: every non-real root of the cubic lies strictly inside the unit circle and every non-real root of the quartic strictly outside (\texttt{Time.pisot\_boundary\_dichotomy}), each by a single elementary Vieta reduction; thus $\rho$ is a Pisot number and $Q$ is not. (3) The mechanical word $m(n) = \lfloor (n+1)\beta \rfloor - \lfloor n\beta \rfloor$ of an irrational slope $\beta \in (0,1)$ is two-valued, of density $\beta$, aperiodic, and balanced (\texttt{Time.balanced}). (4) An untunable chain: the constants $\kappa = (Q/\rho)^2$, $r_{\mathrm{in}} = \sqrt{3}/2$, $\chi = Q/\rho$, and $A^* = \sqrt{2\rho} - \sqrt{3/4 - \rho^{-2}}$ satisfy the strict chain $\kappa < r_{\mathrm{in}} < \chi < A^*$ (\texttt{Time.chain\_strict}); the two thresholds are provably not algebraic integers while every monomial $\rho^a Q^b$ is an algebraic unit, so no such monomial can equal a threshold at any integer exponents. Every theorem depends only on the axioms \texttt{propext}, \texttt{Classical.choice}, and \texttt{Quot.sound}, with no \texttt{sorry} and no \texttt{native\_decide}. A numerical companion computes the quasicrystalline diffraction of the mechanical word; the underlying pure-point theorem is cited, not formalized. The paper is a theorem-level study of a mathematical model; no empirical claim about physical time is made.
+The fundamental laws are, to an excellent approximation, time-symmetric, yet the world runs one way. We present a small, self-contained mathematical model of time, formalized in \leanpin{} in the public repository \texttt{github.com/stalex444/arithmetic-of-time}. The model is built from two polynomials: $x^3 - x - 1$, whose real root $\rho \approx 1.324718$ is the plastic number, and $x^4 - x - 1$, whose real root is $Q \approx 1.220744$. Five groups of kernel-verified theorems are proved. (1) Settling: the non-real roots $z$ of $x^3 - x - 1$ contract at the exact rate $\rho \lVert z \rVert^2 = 1$, and on the ring $\mathbb{Z}[\rho]$ this sharpens to a Meyer-type separation inequality $\lvert \sigma_1(x) \rvert \cdot \lVert \sigma_2(x) \rVert^2 \ge 1$ for every nonzero $x$ (\texttt{Time.meyer\_separation}). (2) A boundary dichotomy: every non-real root of the cubic lies strictly inside the unit circle and every non-real root of the quartic strictly outside (\texttt{Time.pisot\_boundary\_dichotomy}), each by a single elementary Vieta reduction; thus $\rho$ is a Pisot number and $Q$ is not. (3) The mechanical word $m(n) = \lfloor (n+1)\beta \rfloor - \lfloor n\beta \rfloor$ of an irrational slope $\beta \in (0,1)$ is two-valued, of density $\beta$, aperiodic, and balanced (\texttt{Time.balanced}). (4) An untunable chain: the constants $\kappa = (Q/\rho)^2$, $r_{\mathrm{in}} = \sqrt{3}/2$, $\chi = Q/\rho$, and $A^* = \sqrt{2\rho} - \sqrt{3/4 - \rho^{-2}}$ satisfy the strict chain $\kappa < r_{\mathrm{in}} < \chi < A^*$ (\texttt{Time.chain\_strict}); the two thresholds are provably not algebraic integers while every monomial $\rho^a Q^b$ is an algebraic unit, so no such monomial can equal a threshold at any integer exponents. (5) Chirality: the Padovan substitution $a \mapsto b$, $b \mapsto c$, $c \mapsto ab$ has a factor language that is not closed under reversal: $ca$ occurs, and $ac$ occurs from no seed (\texttt{ArithmeticOfTime.padovan\_chirality}); and every factor of length at least $4$ of its seed-$a$ language has its reversal absent, with $4$ exact (\texttt{PDT.Padovan.exact\_orientation\_threshold\_four}). On at most three letters the rule is forced: if a real eigenvalue $\theta > 1$ of a substitution's incidence matrix is a Pisot number, then $\rho \le \theta$, with equality exactly for the Padovan substitution and its mirror $c \mapsto ba$, up to renaming the letters, and both are chiral (\texttt{ArithmeticOfTime.padovan\_minimal\_unique}, \texttt{ArithmeticOfTime.padovan\_rules\_chiral}). The substitution's matrix fixes both the scale $\rho$ and the decay rate $\tfrac12 \log \rho$, and the direction costs exactly one bit more; a twelve-letter substitution realizing $\rho Q$, at the least size any integer matrix with that eigenvalue allows and following Lind's construction, is chiral as well; and the Padovan history embeds as a future-directed timelike path in the $(3,1)$ trace geometry of the quartic field, ordered alike by every future-directed observer. Every theorem depends only on the axioms \texttt{propext}, \texttt{Classical.choice}, and \texttt{Quot.sound}, with no \texttt{sorry} in any proof and no \texttt{native\_decide}. A numerical companion computes the quasicrystalline diffraction of the mechanical word; the underlying pure-point theorem is cited, not formalized.  We identify this arithmetic with time: the history is one completed object, and its direction is its handedness; the identification is stated at its tier, with each component at its own.
 \end{abstract}
 \maketitle
 
 \section{Introduction}\label{sec:intro}
 
+The physics of time has a standard puzzle and a standard answer. The fundamental dynamical laws are, to an excellent approximation, the same whichever way time is run, yet the world runs one way. The usual answer puts the arrow not in the laws but in a boundary condition: the universe began in a state of extraordinarily low entropy, and everything one-way that we observe is the long relaxation away from it. Albert named this assumption the Past Hypothesis \cite{albert2000}; Penrose made vivid how special the required initial state must be \cite{penrose1979}; Price and Carroll made the question of where the arrow comes from the organizing question of the subject \cite{price1996,carroll2010}. The hypothesis is itself contested \cite{earman2006}, and there are published accounts that do without a special initial state \cite{carrollchen2004,barbour2014} or that find an arrow in geometry rather than in entropy \cite{castagnino2003}. This paper gives a different kind of answer. The model studied here is built from the plastic number $\rho \approx 1.3247$, the real root of $x^3 = x + 1$, and its laws are time-symmetric too: its single step, multiplication by $\rho$ on $\mathbb{Z}[\rho]$, is invertible over the integers and conserves the field norm exactly (Section~\ref{sec:settling}). But the history it produces, the word grown from one letter by the rule $a \mapsto b$, $b \mapsto c$, $c \mapsto ab$, is provably one-way: read backwards it is a different object, since $ca$ occurs in it and $ac$ never does, from any starting letter (Section~\ref{sec:chirality}). The input this costs is a single bit, the order of $a$ and $b$ in $c \mapsto ab$; the rule's matrix already fixes the rate of the accompanying contraction, $\tfrac12 \log \rho$ (Section~\ref{sec:cost}); and every stretch of four letters already fixes which way the history runs (Section~\ref{sec:threshold}). What remains is still the selection of one object over its mirror image, and in that sense it has the shape of the Past Hypothesis. It is unlike it in content: the object selected is constructed, carries no parameters, and is asymmetric by theorem rather than improbable by measure.
+
+The second point concerns relativity. In March 1955, writing to Michele Besso's son and sister shortly after Besso's death, Einstein wrote that the separation of past, present and future has only the meaning of an illusion, albeit a stubborn one \cite{einstein1955}.\footnote{``\dots die Scheidung zwischen Vergangenheit, Gegenwart und Zukunft nur die Bedeutung einer wenn auch hartn\"ackigen Illusion.'' The English in the text is our translation.} The letter is often read as an endorsement of the block universe, in which past and future events are as real as present ones. That relativity \emph{implies} such a picture is an argument, not a theorem: Rietdijk and Putnam argued for it \cite{rietdijk1966,putnam1967} and Stein answered them \cite{stein1968}; see \cite{savitt2021}. What relativity does supply, invariantly, is a split. Which distant events count as simultaneous depends on the observer; the order of events along a timelike history does not \cite{zeeman1964}, \cite[Ch.~6]{hawkingellis1973}. Section~\ref{sec:lorentz} shows that the chiral history of this paper has exactly that split. The quartic field $\mathbb{Q}(Q)$, where $Q \approx 1.2207$ is the positive real root of $x^4 = x + 1$, carries a natural quadratic form, the trace form $\operatorname{Tr}(xy)$, and its signature is Lorentzian, $(3,1)$. The history built from the cubic runs as a future-directed timelike path in that geometry, and the clock of \emph{every} future-directed observer increases along it. Observers may disagree about simultaneity; all of them read the history in the same order, with $ca$ and never $ac$.  That this arithmetic \emph{is} time is the paper's identification, earned by coverage: the $(3,1)$ trace form of the quartic is the signature of the history's geometry (Section~\ref{sec:lorentz}), the tick word at slope $\beta$ is its clock (Remark~\ref{rem:beta}), and its direction is its handedness (Sections~\ref{sec:chirality}--\ref{sec:cost}). The whole history already exists as one completed object, nothing in it flows, and what is experienced as forward motion is its handedness --- the direction in which the history is the substitution's own language rather than its mirror's. The identification carries the evidential status of the ontology of any physical theory: each component keeps its own tier (Appendix~\ref{app:tiers}), it draws no laboratory prediction of its own, and its exposed surface is the one it inherits from its components.
+
+The idea behind this paper came from chirality elsewhere in nature. The weak interaction is handed in its \emph{law}: it acts only on left-handed fermions (and right-handed antifermions), a fact established within two years of the proposal that parity might fail \cite{leeyang1956} \cite{wu1957,garwin1957,goldhaber1958} and built into the $V{-}A$ theory \cite{feynmangellmann1958,sudarshanmarshak1958}. Living matter is handed in its \emph{outcome}: proteins are built from L-amino acids and nucleic acids from D-sugars, although the underlying chemistry treats the two mirror forms alike \cite{blackmond2019}.\footnote{The labels D and L name configurations, not directions of optical rotation. Parity violation separates the two mirror forms only by a very small energy difference, and whether the weak interaction seeds the biological preference is an open question \cite{blackmond2019,sallembien2022}; mechanisms that amplify a small initial excess are known \cite{frank1953,soai1995}.} If matter is handed at both of these levels, it is natural to ask whether time is handed in the same way. In the arithmetic studied here it is: time is handed in its \emph{realized history}, while the laws stay symmetric. The analogy is closer than it may look. Parity and time reversal are different symmetries \cite{barron1986}, but for a one-dimensional word, reflecting the line and reading the word backwards are the same operation, so at the level of the word, chirality \emph{is} asymmetry under time reversal --- reversal of the word, which is a different involution from inverting the tick (Section~\ref{sec:cost}).\footnote{The weak interaction does violate time-reversal symmetry (indirectly, through CP violation and CPT \cite{christenson1964}; directly \cite{babar2012}), though, in Callender's words, these violations ``don't appear to be responsible for thermodynamic behavior'' \cite{callender2026}; the time-symmetry asserted here is that of the model's own laws.}
+
 Consider four structural demands one might place on a mathematical carrier of time.
 \begin{enumerate}
 \item[(i)] \emph{Individuation}: states settle onto a discrete record, and distinct states are never confused.
-\item[(ii)] \emph{Irreversibility}: each step is an exact one-way contraction, never undone.
+
+\item[(ii)] \emph{Irreversibility}: the settled history is one-way: read backwards, it is provably a different object.
+
 \item[(iii)] \emph{Aperiodicity}: the process never repeats.
 \item[(iv)] \emph{Non-randomness}: the succession of steps is maximally even rather than stochastic.
 \end{enumerate}
-This paper exhibits a concrete arithmetic structure meeting all four demands, with every claim machine-checked or explicitly labeled as cited or computed. One convention is fixed here, once: the word \emph{time} and its cognates in this paper (\emph{moment}, \emph{tick}, \emph{arrow}) are names for the mathematical objects defined below, and carry no content beyond those definitions.
+This paper exhibits a concrete arithmetic structure meeting all four demands, with every claim machine-checked or explicitly labeled as  cited, computed, or the identification.{} One convention is fixed here, once: the word \emph{time} and its cognates in this paper (\emph{moment}, \emph{tick}, \emph{arrow})  are names for the mathematical objects defined below; their identification with time is stated once, at the end of the second paragraph of this introduction.
 
-The structure is built from two polynomials: $x^3 - x - 1$, whose real root $\rho \approx 1.324718$ is the plastic number \cite{aarts2001} and, by a classical theorem of Siegel \cite{siegel1944}, the smallest Pisot number; and $x^4 - x - 1$, whose real root is $Q \approx 1.220744$. All results are formalized in Lean 4 against Mathlib v4.31.0 in the public repository \texttt{github.com/stalex444/arithmetic-of-time}; throughout, \emph{kernel-verified} means proved there and checked by the Lean kernel, \emph{classical} or \emph{cited} means a literature theorem not formalized here, and \emph{computed} means numerical evidence from the repository's \texttt{diffraction/} folder. The results fall into four groups.
+The structure is built from two polynomials: $x^3 - x - 1$, whose real root $\rho \approx 1.324718$ is the plastic number \cite{aarts2001} and, by a classical theorem of Siegel \cite{siegel1944}, the smallest Pisot number; and $x^4 - x - 1$, whose real root is $Q \approx 1.220744$. All results are formalized in \leanpin{} in the public repository \texttt{github.com/stalex444/arithmetic-of-time}, or, where a registered entry or another public repository is named at the point of use, there; throughout, \emph{kernel-verified} means proved there and checked by the Lean kernel, \emph{classical} or \emph{cited} means a literature theorem not formalized here, and \emph{computed} means numerical evidence from the repository's \texttt{diffraction/} folder or an explicitly described finite computation. The results fall into five groups.
 
-\emph{Settling and Meyer separation} (demands (i) and (ii)). For the non-real roots $z$ of $x^3 - x - 1$, the transverse dynamics contracts at an \emph{exact} rate: $\rho \lVert z \rVert^2 = 1$, so $\lVert z \rVert = \rho^{-1/2}$ --- one irreversible step (\texttt{Time.tick\_contraction}, \texttt{Time.norm\_z\_eq\_rpow}). On the ring of integers $\mathbb{Z}[\rho]$ this sharpens to a Meyer-type separation inequality: writing $\sigma_1$ for the real and $\sigma_2$ for the complex embedding of $\mathbb{Q}(\rho)$, every nonzero $x \in \mathbb{Z}[\rho]$ satisfies $\lvert \sigma_1(x) \rvert \cdot \lVert \sigma_2(x) \rVert^2 \ge 1$ (\texttt{Time.meyer\_separation}, \texttt{Time.meyer\_separation\_rpow}). Distinct arithmetic states can never be confused within a bounded window, and the contraction is never undone. The same theorems are re-proved by an independent second formalization (\texttt{TimeReplica.meyer\_separation}, \texttt{TimeReplica.certification\_soundness}).
+\emph{Settling and Meyer separation} (demand (i)). For the non-real roots $z$ of $x^3 - x - 1$, the transverse dynamics contracts at an \emph{exact} rate: $\rho \lVert z \rVert^2 = 1$, so $\lVert z \rVert = \rho^{-1/2}$ --- one exact step (\texttt{Time.tick\_contraction}, \texttt{Time.norm\_z\_eq\_rpow}). On the ring of integers $\mathbb{Z}[\rho]$ this sharpens to a Meyer-type separation inequality: writing $\sigma_1$ for the real and $\sigma_2$ for the complex embedding of $\mathbb{Q}(\rho)$, every nonzero $x \in \mathbb{Z}[\rho]$ satisfies $\lvert \sigma_1(x) \rvert \cdot \lVert \sigma_2(x) \rVert^2 \ge 1$ (\texttt{Time.meyer\_separation}, \texttt{Time.meyer\_separation\_rpow}). Distinct arithmetic states can never be confused within a bounded window. The same theorems are re-proved by an independent second formalization (\texttt{TimeReplica.meyer\_separation}, \texttt{TimeReplica.certification\_soundness}).
 
-\emph{The Pisot boundary: the cubic settles, the quartic spirals.} Directly from the two defining polynomials, every non-real root $z$ of $x^3 - x - 1$ satisfies $\lVert z \rVert < 1$ (\texttt{Time.cubic\_conj\_norm\_lt\_one}), while every non-real root $w$ of $x^4 - x - 1$ satisfies $\lVert w \rVert > 1$ (\texttt{Time.quartic\_conj\_norm\_gt\_one}); together, $\lVert z \rVert < 1 \wedge 1 < \lVert w \rVert$ (\texttt{Time.pisot\_boundary\_dichotomy}). So $\rho$ is a Pisot number and $Q$ is not \cite{bertin1992}. The proof is elementary and self-contained: writing $\sigma = w + \overline{w}$ and $s = w \overline{w} = \lVert w \rVert^2$ and reducing modulo the Vieta quadratic $w^2 = \sigma w - s$ yields one real identity per polynomial --- $s^3 + s^2 = 1$ for the cubic, forcing $s < 1$, and $s^2 - \sigma^2 s = 1$ for the quartic, forcing $s > 1$ --- one flipped inequality, driven purely by the degree. We are explicit about the tier boundary: this is the concrete settle/spiral dichotomy for these two polynomials; Siegel's theorem that $\rho$ is the \emph{smallest} Pisot number remains classical \cite{siegel1944}, as the required Pisot theory lies outside Mathlib.
+\emph{The Pisot boundary: the cubic settles, the quartic spirals.} Directly from the two defining polynomials, every non-real root $z$ of $x^3 - x - 1$ satisfies $\lVert z \rVert < 1$ (\texttt{Time.cubic\_conj\_norm\_lt\_one}), while every non-real root $w$ of $x^4 - x - 1$ satisfies $\lVert w \rVert > 1$ (\texttt{Time.quartic\_conj\_norm\_gt\_one}); together, $\lVert z \rVert < 1 \wedge 1 < \lVert w \rVert$ (\texttt{Time.pisot\_boundary\_dichotomy}). So $\rho$ is a Pisot number and $Q$ is not \cite{bertin1992}. The proof is elementary and self-contained: writing $\sigma = w + \overline{w}$ and $s = w \overline{w} = \lVert w \rVert^2$ and reducing modulo the Vieta quadratic $w^2 = \sigma w - s$ yields one real identity per polynomial --- $s^3 + s^2 = 1$ for the cubic, forcing $s < 1$, and $s^2 - \sigma^2 s = 1$ for the quartic, forcing $s > 1$ --- one flipped inequality, driven purely by the degree. We are explicit about the tier boundary: this is the concrete settle/spiral dichotomy for these two polynomials; Siegel's theorem that $\rho$ is the \emph{smallest} Pisot number remains classical \cite{siegel1944}, as the required Pisot theory lies outside Mathlib; its restriction to Pisot numbers of degree at most $3$ is kernel-verified (Section~\ref{sec:unique}).
 
-\emph{The tick: aperiodic but not random} (demands (iii) and (iv)). For irrational $\beta \in (0,1)$, the mechanical word $m(n) = \lfloor (n+1)\beta \rfloor - \lfloor n\beta \rfloor$ --- a Sturmian object in the tradition of Morse and Hedlund \cite{morsehedlund1940,lothaire2002} --- is kernel-verified to be \emph{two-valued} (\texttt{Time.m\_mem}), of \emph{density} equal to the slope (\texttt{Time.density\_tendsto}, via the exact telescoping identity \texttt{Time.sum\_m\_eq}), \emph{aperiodic} (\texttt{Time.aperiodic}), and \emph{balanced}: the 1-counts of any two windows of equal length differ by at most one (\texttt{Time.balanced}). Balance is the precise ``maximally even, not random'' property of a Sturmian word. The irrationality of the slope, which lies beyond Mathlib, is carried as an explicit hypothesis throughout, never assumed as an axiom.
+\emph{The tick: aperiodic but not random} (demands (iii) and (iv)). For irrational $\beta \in (0,1)$, the mechanical word $m(n) = \lfloor (n+1)\beta \rfloor - \lfloor n\beta \rfloor$ --- a Sturmian object in the tradition of Morse and Hedlund \cite{morsehedlund1940,lothaire2002} --- is kernel-verified to be \emph{two-valued} (\texttt{Time.m\_mem}), of \emph{density} equal to the slope (\texttt{Time.density\_tendsto}, via the exact telescoping identity \texttt{Time.sum\_m\_eq}), \emph{aperiodic} (\texttt{Time.aperiodic}), and \emph{balanced}: the 1-counts of any two windows of equal length differ by at most one (\texttt{Time.balanced}). Balance is the precise ``maximally even, not random'' property of a Sturmian word. The irrationality of the slope, which lies beyond Mathlib, is carried as an explicit hypothesis throughout, never assumed as an axiom; for the slope $\beta$ distinguished by this paper it is proved (\texttt{Time.beta\_irrational}, Remark~\ref{rem:irrational-hyp}).
 
 \emph{The untunable constant chain.} The four algebraic constants $\kappa = (Q/\rho)^2$, $r_{\mathrm{in}} = \sqrt{3}/2$, $\chi = Q/\rho$, and $A^* = \sqrt{2\rho} - \sqrt{3/4 - \rho^{-2}}$ satisfy the \emph{strict} chain $\kappa < r_{\mathrm{in}} < \chi < A^*$ (\texttt{Time.chain\_strict}). Both threshold constants are proved \emph{not} to be algebraic integers --- $r_{\mathrm{in}}$ because $r_{\mathrm{in}}^2 = 3/4 \notin \mathbb{Z}$ (\texttt{Time.rin\_not\_isIntegral}), and $A^*$ by a cubic-field argument using no Galois machinery (\texttt{Time.Astar\_not\_isIntegral}) --- while every monomial $\rho^a Q^b$ \emph{is} an algebraic integer, indeed a unit (\texttt{Time.rho\_norm\_one}, \texttt{Time.Q\_norm\_neg\_one}). Hence no monomial $\rho^a Q^b$ can ever equal a threshold, at any integer exponents (\texttt{Time.rin\_ne\_coupling\_zmonomial}, \texttt{Time.Astar\_ne\_coupling\_zmonomial}): the chain can never collapse into an algebraic coincidence.
 
-The four groups also have a \emph{spectral} face, at a different tier. Laid out as positions and diffracted, the mechanical word shows sharp Bragg peaks supported on the incommensurate module $m + n\beta$ --- quasicrystalline order --- with a crystallographically forbidden peak growing proportionally to $N$ while a Poisson point set of the same density stays flat. That companion is \emph{computed}, not proved; the underlying pure-point diffraction property is a theorem of the model-set literature \cite{hof1995,schlottmann2000,baakegrimm2013} and is cited, never presented as formalized.
+\emph{The settled word is handed} (demand (ii)). The Padovan substitution $a \mapsto b$, $b \mapsto c$, $c \mapsto ab$, whose incidence matrix has characteristic polynomial $x^3 - x - 1$, generates a factor language that reads differently backwards: $ca$ occurs (in $S^{[5]}[a]$, hence from every seed, since $S^{[n]}[b] = S^{[n+1]}[a]$ and $S^{[n]}[c] = S^{[n+2]}[a]$) and $ac$ occurs from no seed (\texttt{ArithmeticOfTime.padovan\_chirality}), and no factor of length $4$ or more is a palindrome (\texttt{ArithmeticOfTime.padovan\_no\_long\_palindrome}). More is true: every factor of length at least $4$ has its reversal absent from the language, and $4$ is exact, because the palindrome $aba$ occurs (\texttt{PDT.Padovan.exact\_orientation\_threshold\_four}). We then ask four questions of this handedness. Is the rule itself forced? On at most three letters, yes, up to mirror image: the least Pisot eigenvalue an incidence matrix can have there is $\rho$, only $s$ and its mirror $c \mapsto ba$ attain it, and both are chiral (Section~\ref{sec:unique}). What does it cost? One bit: the rule's matrix fixes the scale and the decay rate, and only the order of $a$ and $b$ in $c \mapsto ab$ is left (Section~\ref{sec:cost}). Does it survive at the scale $\rho Q$, where the cubic and quartic arithmetic meet? Yes: a twelve-letter substitution realizing $\rho Q$ at its minimal size is chiral as well (Section~\ref{sec:rhoQ}). And is it compatible with relativity? The chiral history runs as a future-directed timelike path in the Lorentzian trace geometry of the quartic field, and every future-directed observer orders it the same way (Section~\ref{sec:lorentz}).
 
-\emph{Scope.} These are theorems about a mathematical \emph{model} of time: individuation and irreversibility live in the arithmetic of $\mathbb{Z}[\rho]$, the untunable constants in the geometry of the fields $\mathbb{Q}(\rho)$ and $\mathbb{Q}(Q)$, the tick in the symbolic dynamics of a mechanical word, and the settle/spiral dichotomy in the moduli of the roots. Whether this model describes physical time is a separate, empirical question that this paper does not ask and does not answer; we assert only the mathematics that the kernel has checked, at the tier at which it was checked. Every kernel-verified theorem's axiom dependencies form a subset of $\{\texttt{propext}, \texttt{Classical.choice}, \texttt{Quot.sound}\}$ --- the standard classical foundation of Mathlib --- with no \texttt{sorry}, no \texttt{native\_decide}, and no custom axiom anywhere in the development (audit in Section~\ref{sec:formalization}).
+These groups also have a \emph{spectral} face, at a different tier. Laid out as positions and diffracted, the mechanical word shows sharp Bragg peaks supported on the incommensurate module $m + n\beta$ --- quasicrystalline order --- with a crystallographically forbidden peak growing proportionally to $N$ while a Poisson point set of the same density stays flat. That companion is \emph{computed}, not proved; the underlying pure-point diffraction property is a theorem of the model-set literature \cite{hof1995,schlottmann2000,baakegrimm2013} and is cited, never presented as formalized.
 
-The paper proceeds as follows. Section~\ref{sec:setup} fixes notation and establishes the ground facts: irreducibility of the two polynomials and the norm computations exhibiting $\rho$ and $Q$ as units. Section~\ref{sec:settling} proves the exact contraction identity and the Meyer separation inequality. Section~\ref{sec:boundary} proves the Pisot-boundary dichotomy. Section~\ref{sec:word} develops the mechanical word: two-valuedness, density, aperiodicity, balance. Section~\ref{sec:chain} proves the strict constant chain and the no-identity theorems that make it untunable. Section~\ref{sec:spectral} presents the computed diffraction companion. Section~\ref{sec:frontier} records what is \emph{not} proved --- the frontier of the formalization. Section~\ref{sec:formalization} describes the Lean development and the axiom audit.
+\emph{Scope.} These are theorems about a mathematical \emph{model} of time: individuation lives in the arithmetic of $\mathbb{Z}[\rho]$, the direction in the handedness of the settled word, the untunable constants in the geometry of the fields $\mathbb{Q}(\rho)$ and $\mathbb{Q}(Q)$, the tick in the symbolic dynamics of a mechanical word, and the settle/spiral dichotomy in the moduli of the roots.  Beyond the identification stated above, we assert only the mathematics that the kernel has checked, at the tier at which it was checked.{} Every kernel-verified theorem's axiom dependencies form a subset of $\{\texttt{propext}, \texttt{Classical.choice}, \texttt{Quot.sound}\}$ --- the standard classical foundation of Mathlib --- with no \texttt{sorry} in any proof (the registry's statement file \texttt{Challenge.lean} carries \texttt{sorry} placeholders by format), no \texttt{native\_decide}, and no custom axiom anywhere in the development (audit in Section~\ref{sec:formalization}).
+
+The paper proceeds as follows. Section~\ref{sec:setup} fixes notation and establishes the ground facts: irreducibility of the two polynomials and the norm computations exhibiting $\rho$ and $Q$ as units. Section~\ref{sec:settling} proves the exact contraction identity and the Meyer separation inequality. Section~\ref{sec:boundary} proves the Pisot-boundary dichotomy. Section~\ref{sec:chain} proves the strict constant chain and the no-identity theorems that make it untunable. Section~\ref{sec:word} develops the mechanical word: two-valuedness, density, aperiodicity, balance. Section~\ref{sec:spectral} presents the computed diffraction companion. Section~\ref{sec:unique} proves that on at most three letters the Padovan substitution and its mirror are the only rules whose incidence matrix has the least Pisot eigenvalue, and that both are chiral. Section~\ref{sec:chirality} proves that the Padovan language is chiral, locates the handedness of the tick word at its marked origin, and establishes the exact orientation threshold. Section~\ref{sec:cost} shows that the rate of the arrow is forced and its direction costs one bit. Section~\ref{sec:rhoQ} constructs the twelve-letter substitution for $\rho Q$ and proves it chiral. Section~\ref{sec:lorentz} places the chiral history in Lorentzian signature. Section~\ref{sec:frontier} records what is \emph{not} proved --- the frontier of the formalization. Section~\ref{sec:formalization} describes the Lean development and the axiom audit. Appendix~\ref{app:tiers} gives the tier of every claim, Appendix~\ref{app:decls} lists the declarations cited, and Appendix~\ref{app:provenance} records provenance.
 
 \section{Setup: two polynomials and their arithmetic}\label{sec:setup}
 
@@ -59,7 +81,7 @@ Fix once and for all the two polynomials
 \begin{equation}\label{eq:polys}
   f_{\rho}(x) = x^3 - x - 1, \qquad f_{Q}(x) = x^4 - x - 1 .
 \end{equation}
-We write $\rho \approx 1.324718$ for the real root of $f_{\rho}$ --- the plastic number \cite{aarts2001}, the smallest Pisot number \cite{siegel1944,bertin1992} --- and $Q \approx 1.220744$ for the unique positive real root of $f_{Q}$. Uniqueness in both cases is elementary and is recorded in Remark~\ref{rem:signatures} below. Everything in this paper is arithmetic of these two algebraic units; from Section~\ref{sec:settling} onward, almost exclusively of the cubic one.
+We write $\rho \approx 1.324718$ for the real root of $f_{\rho}$ --- the plastic number \cite{aarts2001}, the smallest Pisot number \cite{siegel1944,bertin1992} --- and $Q \approx 1.220744$ for the unique positive real root of $f_{Q}$. Uniqueness in both cases is elementary and is recorded in Remark~\ref{rem:signatures} below. Everything in this paper is arithmetic of these two algebraic units; from Section~\ref{sec:settling} onward, almost exclusively of the cubic one, until Sections~\ref{sec:rhoQ}--\ref{sec:lorentz}, where the two are combined.
 
 \begin{theorem}[irreducibility]\label{thm:irred}
 The polynomials $x^3 - x - 1$ and $x^4 - x - 1$ are irreducible in $\mathbb{Q}[x]$ \textup{(\texttt{Time.cubicQ\_irreducible}, \texttt{Time.quarticQ\_irreducible})}.
@@ -110,10 +132,12 @@ $\rho(\rho^2 - 1) = \rho^3 - \rho = 1$ and $Q(Q^3 - 1) = Q^4 - Q = 1$, directly 
 where $z$ denotes a non-real root of $f_{\rho}$. The choice within the conjugate pair is immaterial: every statement below is invariant under $z \mapsto \bar z$.
 
 (ii) \emph{Quartic.} Descartes' rule of signs applied to $f_{Q}(x)$ and to $f_{Q}(-x) = x^4 + x - 1$ gives exactly one positive and exactly one negative real root (elementary; not formalized): $Q$ and a second real root $Q'$, with $Q \in (1.22,\, 1.23)$ and $Q' \in (-0.73,\, -0.72)$ by exact rational sign evaluations of $f_Q$ at the endpoints. The remaining two roots form a conjugate pair $w, \bar w$; the signature of $K_{Q}$ is $(2,1)$.
+
+(iii) \emph{Two meanings of ``signature''.} Above, signature means the number-field signature $(r_1, r_2)$, the numbers of real embeddings and of conjugate pairs of complex ones. Sections~\ref{sec:rhoQ}--\ref{sec:lorentz} also use the signature of the trace form $(x, y) \mapsto \operatorname{Tr}(xy)$, a quadratic form over $\mathbb{Q}$: it is $(2,1)$ for $\mathbb{Q}[x]/(x^3 - x - 1)$, $(3,1)$ for $\mathbb{Q}[x]/(x^4 - x - 1)$, and $(7,5)$ for their tensor compositum, all three kernel-verified in a registered entry \cite{palomar-trace} (\texttt{TraceForms.sigPos\_cubic}, \texttt{TraceForms.sigNeg\_cubic}, \texttt{TraceForms.sigPos\_quartic}, \texttt{TraceForms.sigNeg\_quartic}, \texttt{TraceForms.sigPos\_compositum}, \texttt{TraceForms.sigNeg\_compositum}).
 \end{remark}
 
 \begin{remark}[Pisot on the cubic side only]\label{rem:pisot}
-Theorem~\ref{thm:contraction} below gives, kernel-verified, $\lVert z \rVert = \rho^{-1/2} < 1$: both non-real conjugates of $\rho$ lie strictly inside the unit circle, so $\rho$ is a Pisot number --- the smallest one, by a classical theorem of Siegel \cite{siegel1944} (cited, not formalized; see also \cite{bertin1992}). The quartic unit behaves differently. The product of the four roots of $f_Q$ is its constant term, $Q \cdot Q' \cdot \lVert w \rVert^2 = -1$, so $\lVert w \rVert^2 = (Q\,|Q'|)^{-1} \ge (1.23 \cdot 0.73)^{-1} > 1$ by the brackets of Remark~\ref{rem:signatures} (elementary; not formalized); numerically $\lVert w \rVert \approx 1.063$. Thus $Q$ is \emph{not} Pisot, and the separation mechanism of Section~\ref{sec:settling}, which needs every conjugate other than the distinguished real one to contract, exists only on the cubic side.
+Theorem~\ref{thm:contraction} below gives, kernel-verified, $\lVert z \rVert = \rho^{-1/2} < 1$: both non-real conjugates of $\rho$ lie strictly inside the unit circle, so $\rho$ is a Pisot number --- the smallest one, by a classical theorem of Siegel \cite{siegel1944} (cited, not formalized in general; its restriction to degree at most $3$ is kernel-verified in Section~\ref{sec:unique}; see also \cite{bertin1992}). The quartic unit behaves differently. The product of the four roots of $f_Q$ is its constant term, $Q \cdot Q' \cdot \lVert w \rVert^2 = -1$, so $\lVert w \rVert^2 = (Q\,|Q'|)^{-1} \ge (1.23 \cdot 0.73)^{-1} > 1$ by the brackets of Remark~\ref{rem:signatures} (elementary; not formalized); numerically $\lVert w \rVert \approx 1.063$. Thus $Q$ is \emph{not} Pisot, and the separation mechanism of Section~\ref{sec:settling}, which needs every conjugate other than the distinguished real one to contract, exists only on the cubic side.\footnote{For the quartic, the same single-window rule fails: the window contains points of $\mathbb{Z}[Q]$ whose transverse images are nonzero and arbitrarily close to $0$ (\texttt{ChiralPadovanHistories.quartic\_record\_obstruction}, \cite{palomar-cph}). Windowing \emph{both} real embeddings of $\mathbb{Q}(Q)$ restores a separation floor; that result is not part of this paper's formal perimeter.}
 \end{remark}
 
 We now fix the notation used throughout the rest of the paper. We work in the order $\mathbb{Z}[\rho] \subset K_{\rho}$ with power basis $(1, \rho, \rho^2)$, identifying $x = a + b\rho + c\rho^2$ with its coordinate triple $(a,b,c) \in \mathbb{Z}^3$, and we write
@@ -180,7 +204,7 @@ Under \eqref{eq:rootpair}, $\lVert z \rVert < 1$ \textup{(\texttt{Time.norm\_z\_
 $\lVert z \rVert^2 = r^{-1} < 1$ since $r > 1$.
 \end{proof}
 
-Theorem~\ref{thm:contraction} is Theorem~\ref{thm:norms} made metric: the norm of $\rho$ is its product over the three embeddings, $N_{K_{\rho}/\mathbb{Q}}(\rho) = \rho \cdot z \cdot \bar z = \rho \lVert z \rVert^2 = 1$. Each tick therefore scales the transverse plane by the \emph{exact} factor $\rho^{-1/2}$ --- not asymptotically and not up to a bounded error --- and after $n$ ticks by exactly $\rho^{-n/2}$, since $\sigma_2(\rho^n x) = z^n \sigma_2(x)$ \textup{(\texttt{Time.embed\_tick\_iter})}. Because $\rho$ is a unit (Proposition~\ref{prop:units}), the tick is moreover a bijection of $\mathbb{Z}[\rho]$: the contraction is never undone and never blurred by iteration.
+Theorem~\ref{thm:contraction} is Theorem~\ref{thm:norms} made metric: the norm of $\rho$ is its product over the three embeddings, $N_{K_{\rho}/\mathbb{Q}}(\rho) = \rho \cdot z \cdot \bar z = \rho \lVert z \rVert^2 = 1$. Each tick therefore scales the transverse plane by the \emph{exact} factor $\rho^{-1/2}$ --- not asymptotically and not up to a bounded error --- and after $n$ ticks by exactly $\rho^{-n/2}$, since $\sigma_2(\rho^n x) = z^n \sigma_2(x)$ \textup{(\texttt{Time.embed\_tick\_iter})}. Because $\rho$ is a unit (Proposition~\ref{prop:units}), the tick is moreover a bijection of $\mathbb{Z}[\rho]$ that conserves the field norm exactly (\texttt{PDT.NormFloor.N\_tick}): the contraction is never blurred by iteration, and because its inverse is equally exact, the direction of time does not reside here (Section~\ref{sec:chirality}).
 
 \begin{theorem}[Meyer separation]\label{thm:meyer}
 Let $r \in \mathbb{R}$ and $z \in \mathbb{C}$ satisfy \eqref{eq:rootpair}, and let $p = (a,b,c) \in \mathbb{Z}^3$ be nonzero --- equivalently, by Lemma~\ref{lem:faithful}, let $x = a + b\rho + c\rho^2$ be a nonzero element of $\mathbb{Z}[\rho]$. Write $x_1 = a + br + cr^2 \in \mathbb{R}$ and $x_2 = a + bz + cz^2 \in \mathbb{C}$. Then
@@ -215,7 +239,15 @@ Apply Theorem~\ref{thm:meyer} to a difference: if $x \ne y$ in $\mathbb{Z}[\rho]
 \[
   \lVert \sigma_2(x) - \sigma_2(y) \rVert \ \ge\ H^{-1/2} .
 \]
-Distinct points of $\mathbb{Z}[\rho]$ whose $\sigma_1$-coordinates lie within a common window of width $H$ keep transverse distance at least $H^{-1/2}$: within any bounded window, distinct integral states are never confused. This is the uniform-discreteness inequality underlying cut-and-project (model) sets built from Pisot units \cite{hof1995,schlottmann2000,baakegrimm2013}, here in completely explicit form with constant $1$. The window hypothesis is essential and is carried explicitly through the formalization, because no unwindowed statement is true: the full image $\sigma_2(\mathbb{Z}[\rho])$ is dense in $\mathbb{C}$ (elementary; not formalized: its closure is a closed subgroup of $\mathbb{C}$ containing the nonzero elements $z^n = \sigma_2(\rho^n) \to 0$, so it is non-discrete; and if all its sufficiently small elements lay on one line through $0$, then $z^n$ and $z^{n+1} = z \cdot z^n$ would eventually both do so, forcing $z \in \mathbb{R}$). Theorem~\ref{thm:contraction} complements the separation: the tick scales all transverse distances by exactly $\rho^{-1/2}$, so the contraction, once effected, is exact and never undone. The combined use of the two inequalities --- a transverse reading certified within half the windowed separation retains the same nearest point of $\sigma_2(\mathbb{Z}[\rho])$ within the window after arbitrarily many ticks --- is the subject of the next section.
+Distinct points of $\mathbb{Z}[\rho]$ whose $\sigma_1$-coordinates lie within a common window of width $H$ keep transverse distance at least $H^{-1/2}$: within any bounded window, distinct integral states are never confused. This is the uniform-discreteness inequality underlying cut-and-project (model) sets built from Pisot units \cite{hof1995,schlottmann2000,baakegrimm2013}, here in completely explicit form with constant $1$. The window hypothesis is essential and is carried explicitly through the formalization, because no unwindowed statement is true: the full image $\sigma_2(\mathbb{Z}[\rho])$ is dense in $\mathbb{C}$ (elementary; not formalized: its closure is a closed subgroup of $\mathbb{C}$ containing the nonzero elements $z^n = \sigma_2(\rho^n) \to 0$, so it is non-discrete; and if all its sufficiently small elements lay on one line through $0$, then $z^n$ and $z^{n+1} = z \cdot z^n$ would eventually both do so, forcing $z \in \mathbb{R}$). Theorem~\ref{thm:contraction} complements the separation: the tick scales all transverse distances by exactly $\rho^{-1/2}$, so the contraction, once effected, is exact. The combined use of the two inequalities --- a transverse reading certified within half the windowed separation retains the same nearest point of $\sigma_2(\mathbb{Z}[\rho])$ within the window after arbitrarily many ticks --- is the subject of the next remark.
+\end{remark}
+
+\begin{remark}[certification soundness]\label{rem:certification}
+Let $(r, z)$ satisfy \eqref{eq:rootpair}, let $H > 0$, let $w \in \mathbb{C}$ and $\ell \in \mathbb{Z}^3$ with $\lVert w - \sigma_2(\ell) \rVert < \tfrac12 H^{-1/2}$. Then for every $n$ and every $\ell' \ne \mathtt{tick}^n(\ell)$ whose real image lies in the window, $\lvert \sigma_1(\ell') - r^n \sigma_1(\ell) \rvert \le H$,
+\[
+  \lVert z^n w - z^n \sigma_2(\ell) \rVert \ <\ \lVert z^n w - \sigma_2(\ell') \rVert
+\]
+\textup{(\texttt{Time.certification\_soundness}; independently \texttt{TimeReplica.certification\_soundness})}. Kernel-verified. In words: a reading certified within half the windowed separation of Remark~\ref{rem:sober} is carried by the tick to a reading whose nearest windowed lattice point is still the image of the original one, after any number of ticks. The proof combines Corollary~\ref{cor:strict} ($\lVert z^n \rVert \le 1$) with Theorem~\ref{thm:meyer} applied to $\ell' - \mathtt{tick}^n(\ell)$.
 \end{remark}
 
 \section{The Pisot boundary: the cubic settles, the quartic spirals}\label{sec:boundary}
@@ -320,9 +352,9 @@ exactly, and $\sigma = -1/s = -\rho$, as the vanishing $x^2$-coefficient (the ro
 equivalently $\lVert w \rVert^2 = 1 / (Q\, \lvert r \rvert)$, where $r = -0.7244\ldots$ is the second real root of $x^4 - x - 1$, because the product of the four roots equals $-1$. These identifications use knowledge of the real roots and are stated here in prose only; the kernel-verified statements are independent of them.
 \end{remark}
 
-The passage from Theorem~\ref{thm:dichotomy} to the Pisot conclusion requires three pieces of classical bookkeeping. They are elementary; we prove them in prose and have \emph{not} formalized them --- the kernel-verified statements above are deliberately independent of them.
+The passage from Theorem~\ref{thm:dichotomy} to the Pisot conclusion requires three pieces of classical bookkeeping. They are elementary. Item (i) is Theorem~\ref{thm:irred}, which is kernel-verified; items (ii)--(iii) we prove in prose and have \emph{not} formalized --- the kernel-verified statements above are deliberately independent of them.
 
-\begin{proposition}[classical bookkeeping; not formalized]\label{prop:boundary-bookkeeping}
+\begin{proposition}[classical bookkeeping; (ii)--(iii) not formalized]\label{prop:boundary-bookkeeping}
 \begin{enumerate}
 \item[(i)] $x^3 - x - 1$ and $x^4 - x - 1$ are irreducible over $\mathbb{Q}$.
 \item[(ii)] $x^3 - x - 1$ has exactly one real root, $\rho = 1.3247\ldots \in (1, 2)$; its remaining roots form a non-real conjugate pair $\{z, \overline{z}\}$.
@@ -354,7 +386,98 @@ The names in the section title record what the dichotomy does to powers. Let $t_
 the powers of $\rho$ settle onto the integers at geometric speed. The power sums of the roots of $x^4 - x - 1$ are integers for the same reason, but the contribution of the non-real pair is $w^n + \overline{w}^n = 2 \lVert w \rVert^n \cos(n \arg w)$ --- a rotating term of expanding modulus. By the classical characterization of Pisot numbers, an algebraic integer $\theta > 1$ satisfies $\operatorname{dist}(\theta^n, \mathbb{Z}) \to 0$ if and only if $\theta$ is Pisot \cite{bertin1992}; with Corollary~\ref{cor:boundary-pisot} this gives $\operatorname{dist}(Q^n, \mathbb{Z}) \not\to 0$. The powers of $Q$ spiral instead of settling. Everything in this remark is elementary prose or cited; none of it is formalized here.
 \end{remark}
 
-One classical theorem remains deliberately outside the formal perimeter. Siegel \cite{siegel1944} proved that $\rho$ --- the plastic number \cite{aarts2001} --- is the \emph{smallest} Pisot number. We cite this and have not formalized it: minimality quantifies over the set of all Pisot numbers and is of a different character from the per-root inequalities proved above. Nothing downstream depends on it --- later sections invoke only Theorem~\ref{thm:dichotomy} --- and its formalization is discussed with the rest of the frontier in Section~\ref{sec:frontier}.
+One classical theorem remains deliberately outside the formal perimeter. Siegel \cite{siegel1944} proved that $\rho$ --- the plastic number \cite{aarts2001} --- is the \emph{smallest} Pisot number. We cite this and have not formalized it in general: minimality quantifies over the set of all Pisot numbers and is of a different character from the per-root inequalities proved above. Nothing downstream depends on it in general --- later sections invoke only Theorem~\ref{thm:dichotomy} and, in Section~\ref{sec:unique}, its restriction to degree at most $3$ --- and its formalization is discussed with the rest of the frontier in Section~\ref{sec:frontier}. A neighbouring extremal property is now formalized: among monic irreducible integer polynomials of degree $3$, resp.\ $4$, with Mahler measure greater than $1$, the polynomials $x^3 - x - 1$ and $x^4 - x - 1$ have the least Mahler measure (\texttt{MahlerWindow.cubic\_min}, \texttt{MahlerWindow.quartic\_min}; registered entry \cite{palomar-mahler}). This is minimality of the measure in each degree, not uniqueness and not Siegel's theorem; and the measure of the quartic is not $Q$ but $\psi \approx 1.380278$, the real root greater than $1$ of $x^4 - x^3 - 1$ (\texttt{MahlerWindow.quartic\_exact}), since the Mahler measure of $x^4 - x - 1$ is $Q \lVert w \rVert^2$. With the least measure in degree $2$ from the same entry, which exceeds $\rho$, these minima do give Siegel's theorem in degree at most $3$, because a Pisot number is the Mahler measure of its own minimal polynomial (\texttt{Time.Clock.mahler\_eq\_of\_pisot}); that restriction is proved in Section~\ref{sec:unique}.
+
+\section{An untunable chain of constants}\label{sec:chain}
+
+The threshold analysis of the model turns on four constants built from the two roots. Two of them are monomials in $\rho$ and $Q$; the other two are thresholds involving square roots. This section proves, first, that the four line up in a strict chain, and second, that the chain is rigid in a precise arithmetic sense: no monomial $\rho^a Q^b$ with integer exponents $a, b$ can equal either threshold, so the strict inequalities can never degenerate into equalities under any retuning of exponents.
+
+\begin{definition}\label{def:chain-constants}
+With $\rho$ the real root of $x^3 - x - 1$ and $Q$ the positive real root of $x^4 - x - 1$, set
+\[
+\chi = \frac{Q}{\rho}, \qquad
+\kappa = \chi^2 = \Bigl(\frac{Q}{\rho}\Bigr)^{2}, \qquad
+r_{\mathrm{in}} = \frac{\sqrt{3}}{2}, \qquad
+A^{*} = \sqrt{2\rho} - \sqrt{\tfrac{3}{4} - \rho^{-2}}.
+\]
+\end{definition}
+
+Numerically $\kappa \approx 0.84919$, $r_{\mathrm{in}} \approx 0.86603$, $\chi \approx 0.92151$,\footnote{The quotient $\chi = Q/\rho$ is not the product $\rho Q$ of Section~\ref{sec:rhoQ}.} and $A^{*} \approx 1.20326$; these approximations are quoted for orientation only --- every proof below uses the exact defining equations and kernel-verified rational brackets. The constant $r_{\mathrm{in}}$ is the in-radius of the Voronoi cell of the unit $1$ of $\mathbb{Z}[\rho]$ in the trace gauge fixed earlier, and $A^{*}$ is the ambiguity threshold. The inner radicand of $A^{*}$ is genuinely positive: $3/4 - \rho^{-2} > 0$, equivalently $3\rho^2 > 4$ (kernel-verified, \texttt{Time.radicand\_pos}), so $A^{*}$ is a difference of square roots of positive quantities and not an artifact of a convention for square roots of negative numbers.
+
+\begin{theorem}[the strict chain]\label{thm:chain-strict}
+$\kappa < r_{\mathrm{in}} < \chi < A^{*}$ \textup{(\texttt{Time.chain\_strict})}.
+\end{theorem}
+
+\begin{proof}[Proof sketch]
+The kernel proof never compares square roots directly. Rational brackets $1.32 < \rho < 1.33$ and $1.22 < Q < 1.23$ are first established by sign evaluation of the defining polynomials at rational points (\texttt{Time.root\_cubic\_bounds}, \texttt{Time.root\_quartic\_bounds}). Each link is then squared against explicit positivity of both sides and reduced, via the defining equations, to a polynomial inequality that follows from the brackets: $\kappa < r_{\mathrm{in}}$ is equivalent to $4(Q+1) < 3\rho^4$; $r_{\mathrm{in}} < \chi$ is equivalent to $3\rho^2 < 4Q^2$; and $\chi < A^{*}$ follows from the rational cut $\chi < 0.94 < 1.18 < A^{*}$, the last inequality via $\sqrt{2\rho} > 1.62$ and $\sqrt{3/4 - \rho^{-2}} < 0.44$.
+\end{proof}
+
+\begin{remark}\label{rem:house-style}
+The margins are not generous --- $r_{\mathrm{in}} - \kappa \approx 0.0168$ and $\chi - r_{\mathrm{in}} \approx 0.0555$ --- so strictness is a theorem, not an inspection. As throughout, the kernel statements quantify over every real $r$ with $r^3 = r + 1$ and $r > 0$, and every real $q$ with $q^4 = q + 1$ and $q > 0$; since each equation has exactly one positive real solution, these hypotheses pin $r = \rho$ and $q = Q$, and the quantified form is formally stronger than a statement about the fixed roots.
+\end{remark}
+
+A strict inequality between fixed real numbers is, by itself, a fact about those numbers alone. The force of Theorem~\ref{thm:chain-strict} lies in a second, structural statement. The two middle quantities are themselves members of the doubly indexed family $\rho^a Q^b$: indeed $\chi = \rho^{-1} Q$ and $\kappa = \rho^{-2} Q^2$. One may therefore ask whether the chain is an accident of these particular exponents --- whether some other member of the family lands exactly on a threshold. It never does, at any integer exponents whatsoever, because the family and the thresholds are separated by an arithmetic dichotomy: every monomial is an algebraic integer, indeed a unit, while neither threshold is an algebraic integer at all.
+
+\begin{proposition}[monomials are unit algebraic integers]\label{prop:unit-monomials}
+\leavevmode
+\begin{enumerate}
+\item $\rho$ and $Q$ are algebraic integers, witnessed by the monic polynomials $X^3 - X - 1$ and $X^4 - X - 1$ \textup{(\texttt{Time.rho\_isIntegral}, \texttt{Time.Q\_isIntegral})}.
+\item $\rho^{-1} = \rho^2 - 1$ and $Q^{-1} = Q^3 - 1$, so both inverses are algebraic integers as well; consequently $\rho^a Q^b$ is an algebraic integer for all $a, b \in \mathbb{Z}$ \textup{(\texttt{Time.zpow\_zmul\_isIntegral})}.
+\item The field norms are $N_{\mathbb{Q}(\rho)/\mathbb{Q}}(\rho) = 1$ and $N_{\mathbb{Q}(Q)/\mathbb{Q}}(Q) = -1$, so $\rho$ and $Q$ are units in the rings of integers of their cubic and quartic fields \textup{(\texttt{Time.rho\_norm\_one}, \texttt{Time.Q\_norm\_neg\_one}, formalized for the canonical root of the defining polynomial in its abstract field $\mathbb{Q}[X]/(f)$)}.
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+(1) is the definition of an algebraic integer applied to the monic defining polynomials. For (2), the defining equations give $\rho(\rho^2 - 1) = \rho^3 - \rho = 1$ and $Q(Q^3 - 1) = Q^4 - Q = 1$, so each inverse is a polynomial in the root; the ring of algebraic integers is closed under sums, differences, products, and powers. For (3), the norm of a generator is $(-1)^{\deg f} f(0)$ for its monic minimal polynomial $f$, giving $(-1)^3 \cdot (-1) = 1$ for the cubic and $(-1)^4 \cdot (-1) = -1$ for the quartic. For general background on norms and units in the number rings attached to such roots see \cite{bertin1992}.
+\end{proof}
+
+\begin{proposition}[the lower threshold is not an algebraic integer]\label{prop:rin-not-integral}
+$r_{\mathrm{in}} = \sqrt{3}/2$ is not an algebraic integer \textup{(\texttt{Time.rin\_not\_isIntegral})}.
+\end{proposition}
+
+\begin{proof}
+If $r_{\mathrm{in}}$ were an algebraic integer, so would be its square $r_{\mathrm{in}}^2 = 3/4$. But a rational number that is integral over $\mathbb{Z}$ lies in $\mathbb{Z}$, since $\mathbb{Z}$ is integrally closed in its fraction field, and $3/4 \notin \mathbb{Z}$.
+\end{proof}
+
+\begin{theorem}[the upper threshold is not an algebraic integer]\label{thm:astar-not-integral}
+$A^{*} = \sqrt{2\rho} - \sqrt{3/4 - \rho^{-2}}$ is not an algebraic integer \textup{(\texttt{Time.Astar\_not\_isIntegral})}.
+\end{theorem}
+
+\begin{proof}
+Three steps; the point of the route is that no Galois machinery is needed --- only the integral closedness of $\mathbb{Z}$ and one degree count.
+
+\emph{Step 1: $s = \sqrt{2\rho}$ is an algebraic integer.} From $\rho^3 = \rho + 1$ we get $s^6 = (2\rho)^3 = 8\rho^3 = 8\rho + 8 = 4s^2 + 8$, so $s$ is a root of the monic integer polynomial $X^6 - 4X^2 - 8$ \textup{(\texttt{Time.sqrt\_two\_mul\_isIntegral})}.
+
+\emph{Step 2: reduction to the radicand.} Suppose $A^{*}$ were an algebraic integer. Then $\sqrt{3/4 - \rho^{-2}} = s - A^{*}$ would be a difference of algebraic integers, hence an algebraic integer, and so would be its square
+\[
+v \;=\; \tfrac{3}{4} - \rho^{-2} \;=\; \rho^2 - \rho - \tfrac{1}{4},
+\]
+where the second expression uses $\rho^{-2} = -\rho^2 + \rho + 1$, itself a consequence of $\rho^{-1} = \rho^2 - 1$ and the defining equation.
+
+\emph{Step 3: $v$ is not an algebraic integer} \textup{(\texttt{Time.radicand\_not\_isIntegral})}. Clearly $v \in \mathbb{Q}(\rho)$; conversely $\rho = (3 - 4v)/(4v + 1)$, the denominator $4v + 1 = 4\rho(\rho - 1)$ being nonzero, so $\mathbb{Q}(v) = \mathbb{Q}(\rho)$ and $v$ has degree $3$ over $\mathbb{Q}$. A direct computation from $\rho^3 = \rho + 1$ shows that $v$ is a root of the monic cubic
+\[
+X^3 - \tfrac{5}{4} X^2 + \tfrac{35}{16} X - \tfrac{23}{64},
+\]
+which by the degree count is its minimal polynomial over $\mathbb{Q}$. If $v$ were integral over $\mathbb{Z}$, then, $\mathbb{Z}$ being integrally closed, its minimal polynomial over $\mathbb{Q}$ would have integer coefficients; the coefficient $-5/4$ of $X^2$ is not an integer. This contradiction completes the proof.
+\end{proof}
+
+\begin{theorem}[no monomial meets either threshold]\label{thm:no-identity}
+For all $a, b \in \mathbb{Z}$,
+\[
+\rho^a Q^b \neq r_{\mathrm{in}}
+\qquad \text{and} \qquad
+\rho^a Q^b \neq A^{*}
+\]
+\textup{(\texttt{Time.rin\_ne\_coupling\_zmonomial}, \texttt{Time.Astar\_ne\_coupling\_zmonomial})}.
+\end{theorem}
+
+\begin{proof}
+By Proposition~\ref{prop:unit-monomials} every $\rho^a Q^b$ is an algebraic integer; by Proposition~\ref{prop:rin-not-integral} and Theorem~\ref{thm:astar-not-integral} neither threshold is. An algebraic integer cannot equal a number that is not one.
+\end{proof}
+
+\begin{remark}[the precise sense of ``untunable'']\label{rem:untunable}
+Theorems~\ref{thm:chain-strict} and~\ref{thm:no-identity} together say the following. The chain $\kappa < r_{\mathrm{in}} < \chi < A^{*}$ is strict at the exponents at which the model presents it, and it cannot be made to collapse at any others: equality between a monomial $\rho^a Q^b$ and a threshold fails at every pair $(a,b) \in \mathbb{Z}^2$. The separation is thus a dichotomy of arithmetic type --- unit monomials on one side, non-integers on the other --- rather than an inequality won by a numerical margin, and it is stable under every integer retuning of the exponents; the chain cannot collapse into an algebraic coincidence. Two sober qualifications are in order. First, the theorem forbids equality, not proximity: nothing here bounds how closely monomials may approach the thresholds. Second, the formalized statements concern the monomials $\rho^a Q^b$; the same dichotomy in fact excludes every element of the ring $\mathbb{Z}[\rho, Q]$, since that ring consists of algebraic integers, but this wider statement is classical and immediate rather than formalized in the accompanying repository.
+\end{remark}
 
 \section{The tick word: mechanical words are two-valued, dense, aperiodic, and balanced}
 \label{sec:word}
@@ -473,195 +596,19 @@ By the Archimedean property there is an $M$ with $M\varphi > 1$: a contradiction
 \end{proof}
 
 \begin{remark}[the irrationality hypothesis]\label{rem:irrational-hyp}
-In \texttt{Time.aperiodic} the irrationality of the slope is an explicit hypothesis of the kernel-verified statement --- it is carried, never proved. All four theorems of this section quantify over an abstract slope $\beta$, so they attach to any particular slope the moment its scope facts ($0 < \beta < 1$ for Theorem~\ref{thm:twovalued}; irrationality for Theorem~\ref{thm:aperiodic}) are supplied from outside. For a concrete slope presented as a ratio of logarithms of multiplicatively independent algebraic numbers, irrationality is classical --- it follows, for instance, from Baker's theorem on linear forms in logarithms --- but no such result is available in Mathlib, and the accompanying repository does not discharge it. Instantiating Theorem~\ref{thm:aperiodic} at the slope distinguished by this paper is therefore an open item of the formalization, recorded in Section~\ref{sec:frontier}.
+In \texttt{Time.aperiodic} the irrationality of the slope is an explicit hypothesis of the kernel-verified statement --- it is carried, never proved. All four theorems of this section quantify over an abstract slope $\beta$, so they attach to any particular slope the moment its scope facts ($0 < \beta < 1$ for Theorem~\ref{thm:twovalued}; irrationality for Theorem~\ref{thm:aperiodic}) are supplied from outside. For a concrete slope presented as a ratio of logarithms of multiplicatively independent algebraic numbers, irrationality is classical --- it follows, for instance, from Baker's theorem on linear forms in logarithms --- but no such result is available in Mathlib. For the slope distinguished by this paper (Remark~\ref{rem:beta}) the version-2 repository discharges it without one: $\beta$ is irrational (\texttt{Time.beta\_irrational}), proved in the multiplicative form $\lVert w \rVert^{2n} \ne \rho^{k}$ for all $k$ and all $n \ge 1$ (\texttt{Time.normSq\_pow\_ne\_rho\_pow}). The argument sends $\rho$ to a non-real conjugate by a field embedding, which turns a putative equality into a product of three squared moduli of roots of $x^4 - x - 1$ equal to $1$, and explicit bounds on the real roots exclude every such product; no Galois group is computed and no transcendence theory is used. Theorem~\ref{thm:aperiodic} therefore holds at $\beta$. That $0 < \beta < 1$, the hypothesis of Theorem~\ref{thm:twovalued}, is computed and not kernel-verified.
+\end{remark}
+
+\begin{remark}[the distinguished slope]\label{rem:beta}
+The slope distinguished by this paper is
+\[
+  \beta \;=\; \frac{\log \lVert w \rVert}{\tfrac12 \log \rho} \;=\; \frac{\log(\psi/Q)}{\log \rho} \;=\; 0.4367860016\ldots,
+\]
+where $w$ is a non-real root of $x^4 - x - 1$ (Theorem~\ref{thm:quartic-outside}) and $\psi$ is the Mahler measure of $x^4 - x - 1$ (Section~\ref{sec:boundary}); the two forms agree because $\psi = Q \lVert w \rVert^2$. In words, $\beta$ is the rate at which the quartic's non-real pair expands, measured in units of the rate at which the cubic's contracts (Theorem~\ref{thm:contraction}). The digits are computed.  Taking the tick word at this slope as the model's clock is part of the identification stated in Section~\ref{sec:intro}.{} The slope is a ratio of two magnitudes, and inverting the tick changes the sign of both logarithms; so $\beta$ is unchanged by tick inversion and carries no direction. The direction of the model is located elsewhere (Section~\ref{sec:chirality}).
 \end{remark}
 
 \begin{remark}[Sturmian context; classical, not formalized]\label{rem:sturmian}
-Theorems~\ref{thm:balanced} and~\ref{thm:aperiodic} are the forward half of the classical characterization of Sturmian words. By a theorem of Morse and Hedlund \cite{morsehedlund1940} (see also \cite[Ch.~2]{lothaire2002}), an infinite binary word is Sturmian --- equivalently, a mechanical word $n \mapsto \lfloor (n+1)\beta + x \rfloor - \lfloor n\beta + x \rfloor$ of irrational slope $\beta$ and some intercept $x$; equivalently, a word of factor complexity $n + 1$ --- if and only if it is aperiodic and balanced. Thus for irrational $0 < \beta < 1$, Theorems~\ref{thm:twovalued}, \ref{thm:balanced} and~\ref{thm:aperiodic} say precisely that the tick word is Sturmian; and conversely, by Morse--Hedlund, \emph{every} aperiodic balanced binary word arises mechanically from an irrational slope. That converse is classical and is cited here, not formalized: the repository proves the four properties of $m$ directly from the floor bracket and contains no part of the Morse--Hedlund equivalence. Formalizing the converse is listed among the open items in Section~\ref{sec:frontier}. Sturmian words are also exactly the one-dimensional model sets in the sense of aperiodic order \cite{baakegrimm2013}, the point of view taken up when we turn to diffraction.
-\end{remark}
-
-\section{The settled word is handed: chirality of the Padovan language}
-\label{sec:chirality}
-
-The tick word of Section~\ref{sec:word} is binary. The settled structure of the cubic has a
-richer, three-letter description: the \emph{Padovan substitution}
-\[
-  s \colon a \mapsto b, \qquad b \mapsto c, \qquad c \mapsto ab,
-\]
-whose incidence matrix has characteristic polynomial $x^{3} - x - 1$ (named for orientation;
-the fact is not used in the proofs). Iterating $s$ from a single letter grows the settled
-word of the cubic place. This section certifies, in the kernel, that the resulting factor
-language is \emph{chiral}: it reads differently backwards, by theorem rather than by
-inspection of finitely many cases. All results are in \texttt{Chirality.lean} (namespace
-\texttt{Time.Padovan}).
-
-\begin{theorem}[the invariant]\label{thm:invariant}
-In every iterate $S^{[n+1]}[x]$ --- any seed letter $x$, any $n$ --- every occurrence of $a$
-is immediately followed by $b$ \textup{(\texttt{Time.Padovan.every\_a\_followed\_by\_b})}.
-\end{theorem}
-
-The engine is one observation: $a$ is produced only inside the block $s(c) = ab$, where $b$
-follows it within the block, and no block ends in $a$, so concatenation creates no violation
-(\texttt{good\_append}, \texttt{good\_S}, \texttt{good\_iter}). Two consequences follow
-without enumeration.
-
-\begin{theorem}[chirality witness pair]\label{thm:chirality}
-The word $ca$ is a factor of an iterate \textup{(}it occurs in $S^{[5]}[a]$;
-\texttt{Time.Padovan.ca\_factor}\textup{)}, while $ac$ is a factor of \emph{no} iterate from
-\emph{any} seed \textup{(\texttt{Time.Padovan.ac\_not\_factor})}. Hence the factor language
-is not closed under reversal \textup{(\texttt{Time.Padovan.chirality})}.
-\end{theorem}
-
-\begin{theorem}[no long palindromes]\label{thm:nopalindrome}
-No iterate $S^{[n]}[a]$ has a palindromic factor of length $\ge 4$
-\textup{(\texttt{Time.Padovan.no\_long\_palindromic\_factor})}.
-\end{theorem}
-
-The proof of Theorem~\ref{thm:nopalindrome} runs through an explicit finite certificate:
-every factor of length $\le 5$ of every iterate lies in a $57$-word list \texttt{F5}
-(\texttt{Time.Padovan.factors\_complete}, via the window lemma
-\texttt{Time.Padovan.infix\_window}: a factor of $S(w)$ of length $L$ is contained in the
-image of a factor of $w$ of length $\le L$, because blocks are nonempty), and \texttt{F5}
-contains no palindrome of length $4$ or $5$ (\texttt{F5\_no\_palindrome}, by
-\texttt{decide}); a palindrome of length $\ge 4$ contains a palindromic factor of length $4$
-or $5$ (\texttt{palindrome\_has\_small\_core}). The short palindromic factors that do occur
-can be read off the same certificate. Completeness is proved for seed $a$; the invariant and
-the $ac$-avoidance cover every seed. We claim the kernel verification and the explicit
-certificate; the phenomenon type --- substitution languages that fail reversal-closure ---
-is known, with published examples \cite[Ex.~2]{baakeroberts2018} \cite[Ex.~5]{balkova2010},
-and palindrome \emph{finiteness} follows in one line from non-reversal-closure for uniformly
-recurrent words by a published criterion \cite[Thm.~2]{balkova2010}. Reflection asymmetry
-for this substitution's tiling space was found independently, by a different method
-(asymptotic composants), in G\"ahler \cite{gahler2026}; the definitive prior study of this
-substitution's Rauzy fractal \cite{mercat2020} is silent on symmetry. What is claimed as
-new here is the machine-checked proof and the certificate, not the phenomenon.
-
-We emphasize the scope: these are statements about the factor \emph{language}. Whether the
-associated subshift admits a \emph{reversor} --- a homeomorphism conjugating the shift to
-its inverse, the reversing-symmetry question of \cite{baakeroberts2018} --- is a strictly
-stronger, conjugacy-level question, and language chirality alone does not decide it (there
-are reversible shifts with non-reversal-closed languages \cite[Ex.~2]{baakeroberts2018}).
-No conjugacy-level claim is made in this repository.
-
-\subsection{The marked origin of the tick word}
-\label{sec:origin}
-
-Returning to the binary tick word, extend it to integer indices:
-$sZ_\beta(n) = \lfloor (n+1)\beta \rfloor - \lfloor n\beta \rfloor$ for $n \in \mathbb{Z}$
-(\texttt{Time.sZ} in \texttt{OriginDefect.lean}; \texttt{Time.sZ\_natCast} ties it to
-\texttt{Time.m}). The word then satisfies an exact reflection identity about the origin,
-\[
-  sZ_\beta(-n-1) \;=\; sZ_\beta(n),
-\]
-valid whenever $n\beta$ and $(n+1)\beta$ are not integers
-(\texttt{Time.sZ\_reflect}; for irrational $\beta$ this is every $n \notin \{0,-1\}$,
-\texttt{Time.sZ\_reflect\_irrational}; an unconditional form via ceilings is
-\texttt{Time.sZ\_reflect\_eq\_ceil}). At the origin itself --- the unique lattice hit
-$0 \cdot \beta \in \mathbb{Z}$ --- the word carries a computable defect:
-\[
-  (sZ_\beta(-1),\, sZ_\beta(0)) = (1, 0) \qquad \text{for } 0 < \beta < 1
-\]
-(\texttt{Time.origin\_defect}). The reflection identity is the finitary, kernel-checked
-face of a structure known at the level of symbolic dynamics: for irrational slope, the two
-one-sided words at intercept zero form the distinguished asymptotic pair of the Sturmian
-system, each member palindromic away from the marked positions, and reversal of the marked
-orbit lands on the other member of the pair --- a characterization theorem of
-Barbieri--Labb\'e--Starosta \cite{barbieri2021}, proved there for all irrational slopes;
-hull-level reversibility of Sturmian shifts is Theorem~2 of \cite{baakeroberts2018}. Our
-statements are elementary and self-contained; the citations locate them in the published
-theory. The origin --- and with it the handedness of the \emph{marked} orbit, against the
-achirality of its hull --- is where the model's asymmetry of time resides (see
-\textbf{Scope} in the repository README).
-
-\section{An untunable chain of constants}\label{sec:chain}
-
-The threshold analysis of the model turns on four constants built from the two roots. Two of them are monomials in $\rho$ and $Q$; the other two are thresholds involving square roots. This section proves, first, that the four line up in a strict chain, and second, that the chain is rigid in a precise arithmetic sense: no monomial $\rho^a Q^b$ with integer exponents $a, b$ can equal either threshold, so the strict inequalities can never degenerate into equalities under any retuning of exponents.
-
-\begin{definition}\label{def:chain-constants}
-With $\rho$ the real root of $x^3 - x - 1$ and $Q$ the positive real root of $x^4 - x - 1$, set
-\[
-\chi = \frac{Q}{\rho}, \qquad
-\kappa = \chi^2 = \Bigl(\frac{Q}{\rho}\Bigr)^{2}, \qquad
-r_{\mathrm{in}} = \frac{\sqrt{3}}{2}, \qquad
-A^{*} = \sqrt{2\rho} - \sqrt{\tfrac{3}{4} - \rho^{-2}}.
-\]
-\end{definition}
-
-Numerically $\kappa \approx 0.84919$, $r_{\mathrm{in}} \approx 0.86603$, $\chi \approx 0.92151$, and $A^{*} \approx 1.20326$; these approximations are quoted for orientation only --- every proof below uses the exact defining equations and kernel-verified rational brackets. The constant $r_{\mathrm{in}}$ is the in-radius of the Voronoi cell of the unit $1$ of $\mathbb{Z}[\rho]$ in the trace gauge fixed earlier, and $A^{*}$ is the ambiguity threshold. The inner radicand of $A^{*}$ is genuinely positive: $3/4 - \rho^{-2} > 0$, equivalently $3\rho^2 > 4$ (kernel-verified, \texttt{Time.radicand\_pos}), so $A^{*}$ is a difference of square roots of positive quantities and not an artifact of a convention for square roots of negative numbers.
-
-\begin{theorem}[the strict chain]\label{thm:chain-strict}
-$\kappa < r_{\mathrm{in}} < \chi < A^{*}$ \textup{(\texttt{Time.chain\_strict})}.
-\end{theorem}
-
-\begin{proof}[Proof sketch]
-The kernel proof never compares square roots directly. Rational brackets $1.32 < \rho < 1.33$ and $1.22 < Q < 1.23$ are first established by sign evaluation of the defining polynomials at rational points (\texttt{Time.root\_cubic\_bounds}, \texttt{Time.root\_quartic\_bounds}). Each link is then squared against explicit positivity of both sides and reduced, via the defining equations, to a polynomial inequality that follows from the brackets: $\kappa < r_{\mathrm{in}}$ is equivalent to $4(Q+1) < 3\rho^4$; $r_{\mathrm{in}} < \chi$ is equivalent to $3\rho^2 < 4Q^2$; and $\chi < A^{*}$ follows from the rational cut $\chi < 0.94 < 1.18 < A^{*}$, the last inequality via $\sqrt{2\rho} > 1.62$ and $\sqrt{3/4 - \rho^{-2}} < 0.44$.
-\end{proof}
-
-\begin{remark}\label{rem:house-style}
-The margins are not generous --- $r_{\mathrm{in}} - \kappa \approx 0.0168$ and $\chi - r_{\mathrm{in}} \approx 0.0555$ --- so strictness is a theorem, not an inspection. As throughout, the kernel statements quantify over every real $r$ with $r^3 = r + 1$ and $r > 0$, and every real $q$ with $q^4 = q + 1$ and $q > 0$; since each equation has exactly one positive real solution, these hypotheses pin $r = \rho$ and $q = Q$, and the quantified form is formally stronger than a statement about the fixed roots.
-\end{remark}
-
-A strict inequality between fixed real numbers is, by itself, a fact about those numbers alone. The force of Theorem~\ref{thm:chain-strict} lies in a second, structural statement. The two middle quantities are themselves members of the doubly indexed family $\rho^a Q^b$: indeed $\chi = \rho^{-1} Q$ and $\kappa = \rho^{-2} Q^2$. One may therefore ask whether the chain is an accident of these particular exponents --- whether some other member of the family lands exactly on a threshold. It never does, at any integer exponents whatsoever, because the family and the thresholds are separated by an arithmetic dichotomy: every monomial is an algebraic integer, indeed a unit, while neither threshold is an algebraic integer at all.
-
-\begin{proposition}[monomials are unit algebraic integers]\label{prop:unit-monomials}
-\leavevmode
-\begin{enumerate}
-\item $\rho$ and $Q$ are algebraic integers, witnessed by the monic polynomials $X^3 - X - 1$ and $X^4 - X - 1$ \textup{(\texttt{Time.rho\_isIntegral}, \texttt{Time.Q\_isIntegral})}.
-\item $\rho^{-1} = \rho^2 - 1$ and $Q^{-1} = Q^3 - 1$, so both inverses are algebraic integers as well; consequently $\rho^a Q^b$ is an algebraic integer for all $a, b \in \mathbb{Z}$ \textup{(\texttt{Time.zpow\_zmul\_isIntegral})}.
-\item The field norms are $N_{\mathbb{Q}(\rho)/\mathbb{Q}}(\rho) = 1$ and $N_{\mathbb{Q}(Q)/\mathbb{Q}}(Q) = -1$, so $\rho$ and $Q$ are units in the rings of integers of their cubic and quartic fields \textup{(\texttt{Time.rho\_norm\_one}, \texttt{Time.Q\_norm\_neg\_one}, formalized for the canonical root of the defining polynomial in its abstract field $\mathbb{Q}[X]/(f)$)}.
-\end{enumerate}
-\end{proposition}
-
-\begin{proof}
-(1) is the definition of an algebraic integer applied to the monic defining polynomials. For (2), the defining equations give $\rho(\rho^2 - 1) = \rho^3 - \rho = 1$ and $Q(Q^3 - 1) = Q^4 - Q = 1$, so each inverse is a polynomial in the root; the ring of algebraic integers is closed under sums, differences, products, and powers. For (3), the norm of a generator is $(-1)^{\deg f} f(0)$ for its monic minimal polynomial $f$, giving $(-1)^3 \cdot (-1) = 1$ for the cubic and $(-1)^4 \cdot (-1) = -1$ for the quartic. For general background on norms and units in the number rings attached to such roots see \cite{bertin1992}.
-\end{proof}
-
-\begin{proposition}[the lower threshold is not an algebraic integer]\label{prop:rin-not-integral}
-$r_{\mathrm{in}} = \sqrt{3}/2$ is not an algebraic integer \textup{(\texttt{Time.rin\_not\_isIntegral})}.
-\end{proposition}
-
-\begin{proof}
-If $r_{\mathrm{in}}$ were an algebraic integer, so would be its square $r_{\mathrm{in}}^2 = 3/4$. But a rational number that is integral over $\mathbb{Z}$ lies in $\mathbb{Z}$, since $\mathbb{Z}$ is integrally closed in its fraction field, and $3/4 \notin \mathbb{Z}$.
-\end{proof}
-
-\begin{theorem}[the upper threshold is not an algebraic integer]\label{thm:astar-not-integral}
-$A^{*} = \sqrt{2\rho} - \sqrt{3/4 - \rho^{-2}}$ is not an algebraic integer \textup{(\texttt{Time.Astar\_not\_isIntegral})}.
-\end{theorem}
-
-\begin{proof}
-Three steps; the point of the route is that no Galois machinery is needed --- only the integral closedness of $\mathbb{Z}$ and one degree count.
-
-\emph{Step 1: $s = \sqrt{2\rho}$ is an algebraic integer.} From $\rho^3 = \rho + 1$ we get $s^6 = (2\rho)^3 = 8\rho^3 = 8\rho + 8 = 4s^2 + 8$, so $s$ is a root of the monic integer polynomial $X^6 - 4X^2 - 8$ \textup{(\texttt{Time.sqrt\_two\_mul\_isIntegral})}.
-
-\emph{Step 2: reduction to the radicand.} Suppose $A^{*}$ were an algebraic integer. Then $\sqrt{3/4 - \rho^{-2}} = s - A^{*}$ would be a difference of algebraic integers, hence an algebraic integer, and so would be its square
-\[
-v \;=\; \tfrac{3}{4} - \rho^{-2} \;=\; \rho^2 - \rho - \tfrac{1}{4},
-\]
-where the second expression uses $\rho^{-2} = -\rho^2 + \rho + 1$, itself a consequence of $\rho^{-1} = \rho^2 - 1$ and the defining equation.
-
-\emph{Step 3: $v$ is not an algebraic integer} \textup{(\texttt{Time.radicand\_not\_isIntegral})}. Clearly $v \in \mathbb{Q}(\rho)$; conversely $\rho = (3 - 4v)/(4v + 1)$, the denominator $4v + 1 = 4\rho(\rho - 1)$ being nonzero, so $\mathbb{Q}(v) = \mathbb{Q}(\rho)$ and $v$ has degree $3$ over $\mathbb{Q}$. A direct computation from $\rho^3 = \rho + 1$ shows that $v$ is a root of the monic cubic
-\[
-X^3 - \tfrac{5}{4} X^2 + \tfrac{35}{16} X - \tfrac{23}{64},
-\]
-which by the degree count is its minimal polynomial over $\mathbb{Q}$. If $v$ were integral over $\mathbb{Z}$, then, $\mathbb{Z}$ being integrally closed, its minimal polynomial over $\mathbb{Q}$ would have integer coefficients; the coefficient $-5/4$ of $X^2$ is not an integer. This contradiction completes the proof.
-\end{proof}
-
-\begin{theorem}[no monomial meets either threshold]\label{thm:no-identity}
-For all $a, b \in \mathbb{Z}$,
-\[
-\rho^a Q^b \neq r_{\mathrm{in}}
-\qquad \text{and} \qquad
-\rho^a Q^b \neq A^{*}
-\]
-\textup{(\texttt{Time.rin\_ne\_coupling\_zmonomial}, \texttt{Time.Astar\_ne\_coupling\_zmonomial})}.
-\end{theorem}
-
-\begin{proof}
-By Proposition~\ref{prop:unit-monomials} every $\rho^a Q^b$ is an algebraic integer; by Proposition~\ref{prop:rin-not-integral} and Theorem~\ref{thm:astar-not-integral} neither threshold is. An algebraic integer cannot equal a number that is not one.
-\end{proof}
-
-\begin{remark}[the precise sense of ``untunable'']\label{rem:untunable}
-Theorems~\ref{thm:chain-strict} and~\ref{thm:no-identity} together say the following. The chain $\kappa < r_{\mathrm{in}} < \chi < A^{*}$ is strict at the exponents at which the model presents it, and it cannot be made to collapse at any others: equality between a monomial $\rho^a Q^b$ and a threshold fails at every pair $(a,b) \in \mathbb{Z}^2$. The separation is thus a dichotomy of arithmetic type --- unit monomials on one side, non-integers on the other --- rather than an inequality won by a numerical margin, and it is stable under every integer retuning of the exponents; the chain cannot collapse into an algebraic coincidence. Two sober qualifications are in order. First, the theorem forbids equality, not proximity: nothing here bounds how closely monomials may approach the thresholds. Second, the formalized statements concern the monomials $\rho^a Q^b$; the same dichotomy in fact excludes every element of the ring $\mathbb{Z}[\rho, Q]$, since that ring consists of algebraic integers, but this wider statement is classical and immediate rather than formalized in the accompanying repository.
+Theorems~\ref{thm:balanced} and~\ref{thm:aperiodic} are the forward half of the classical characterization of Sturmian words. By a theorem of Morse and Hedlund \cite{morsehedlund1940} (see also \cite[Ch.~2]{lothaire2002}), an infinite binary word is Sturmian --- equivalently, a mechanical word $n \mapsto \lfloor (n+1)\beta + x \rfloor - \lfloor n\beta + x \rfloor$ of irrational slope $\beta$ and some intercept $x$; equivalently, a word of factor complexity $n + 1$ --- if and only if it is aperiodic and balanced. Thus for irrational $0 < \beta < 1$, Theorems~\ref{thm:twovalued}, \ref{thm:balanced} and~\ref{thm:aperiodic} say precisely that the tick word is Sturmian; and conversely, by Morse--Hedlund, \emph{every} aperiodic balanced binary word arises mechanically from an irrational slope. That converse is classical and is cited here, not formalized: the repository proves the four properties of $m$ directly from the floor bracket and contains no part of the Morse--Hedlund equivalence. Formalizing the converse is listed among the open items in Section~\ref{sec:frontier}. Sturmian words are also one-dimensional model sets in the sense of aperiodic order \cite{baakegrimm2013}, the point of view taken up when we turn to diffraction.
 \end{remark}
 
 \section{The spectral picture: quasicrystalline diffraction (computed)}
@@ -693,27 +640,30 @@ $p = m + n\beta$ with $n \neq 0$. Those positions are \emph{forbidden} to any
 periodic point set of that period.
 
 The computation (slope $\beta = 0.4367860016$; any irrational slope exhibits
-the same phenomenon) shows the mechanical word doing what no periodic set can:
+the same phenomenon)\footnote{This is the slope $\beta$ of Remark~\ref{rem:beta}.} shows the mechanical word doing what no periodic set can:
 at $N = 200000$ it has sharp peaks throughout the incommensurate module ---
 $S \approx 27543$ at $p = \beta$, $S \approx 175028$ at $p = 1 + \beta$,
 $S \approx 114558$ at $p = 2 + 2\beta$ --- exactly where the crystal is
 identically zero, while the gas never exceeds $2.9$ at any sampled position.
+(The peaks at $p = 1 + \beta$ and $p = 2 + 2\beta$ are those of the integer gap
+lattice, which every sequence of gaps $1$ and $2$ shares, and grow on the scale
+of $N$ for that reason; the peak at $p = \beta$ is the word's own.)
 The hallmark of a genuine Bragg peak is intensity growing in proportion to
 $N$, whereas a diffuse spectrum stays $O(1)$. At the crystal-forbidden
-position $p = 1 + \beta$ the computed values are:
+position $p = \beta$ the computed values are:
 \begin{center}
 \begin{tabular}{rrrr}
 \hline
 $N$ & crystal & word & gas \\
 \hline
-$25000$  & $0.0$ & $4759$   & $0.40$ \\
-$100000$ & $0.0$ & $25457$  & $0.28$ \\
-$400000$ & $0.0$ & $229115$ & $1.07$ \\
+$25000$  & $0.0$ & $3059$   & $1.18$ \\
+$100000$ & $0.0$ & $12478$  & $0.06$ \\
+$400000$ & $0.0$ & $53114$  & $0.33$ \\
 \hline
 \end{tabular}
 \end{center}
-The word's peak grows on the scale of $N$ itself, the gas stays $O(1)$, and
-the crystal has nothing there. Figure~\ref{fig:diffraction} shows the full
+The word's peak grows in proportion to $N$ ($S/N \approx 0.12$--$0.13$), the
+gas stays $O(1)$, and the crystal has nothing there. Figure~\ref{fig:diffraction} shows the full
 comparison.
 
 \begin{figure}[t]
@@ -727,7 +677,7 @@ $x_n = n/\beta$ --- peaks at integer $p$ only. Middle: the mechanical word
 $m(n) = \lfloor (n+1)\beta \rfloor - \lfloor n\beta \rfloor$ laid out as
 positions --- sharp peaks at incommensurate positions $m + n\beta$, forbidden
 to the crystal and absent in the gas; the inset shows the intensity of the
-peak at $p = 1 + \beta$ growing in proportion to $N$ (a genuine Bragg peak)
+peak at $p = \beta$ growing in proportion to $N$ (a genuine Bragg peak)
 while the gas stays $O(1)$. Bottom: the Poisson set --- flat, no peaks. Every
 number here is a finite-$N$ computation from the \texttt{diffraction/} folder;
 the pure-point statement it illustrates is a cited theorem
@@ -763,10 +713,594 @@ is deterministic (seed $0$) except for the Poisson comparison set, whose flat
 spectrum is seed-independent.
 \end{remark}
 
+\section{The slowest settling clock on three letters}
+\label{sec:unique}
+
+Siegel's theorem says that $\rho$ is the smallest Pisot number. This section asks the same
+question of substitutions, and answers it in the kernel on alphabets of at most three
+letters: which rule grows a word at the slowest rate that still settles?
+
+A \emph{substitution} on an alphabet $A$ sends each letter to a finite word over $A$; its
+\emph{incidence matrix} has $(i,j)$ entry the number of occurrences of the letter $i$ in the
+image of $j$, and its \emph{mirror} reverses every image. The Padovan substitution
+$s \colon a \mapsto b$, $b \mapsto c$, $c \mapsto ab$ of Section~\ref{sec:chirality} has the
+incidence matrix $M$ of Section~\ref{sec:cost}, with characteristic polynomial
+$x^3 - x - 1$; its mirror $\tilde s$ differs only in $c \mapsto ba$. A real eigenvalue
+$\theta > 1$ of an incidence matrix is an inflation factor of the substitution (for the Perron
+eigenvalue, the factor by which iteration asymptotically lengthens words), and when $\theta$ is
+a Pisot number its remaining conjugates contract and its powers settle onto the integers
+(Section~\ref{sec:boundary}, Remark~\ref{rem:boundary-powers}). We call such a $\theta$ a
+\emph{settling rate} of the substitution, and a substitution attaining the least settling rate
+a \emph{slowest settling clock}.
+
+\begin{theorem}[the slowest settling clock]\label{thm:unique}
+Let $\sigma$ be a substitution on $k \le 3$ letters, and let $\theta > 1$ be a real eigenvalue
+of its incidence matrix that is a Pisot number: every root of the minimal polynomial of
+$\theta$ other than $\theta$ lies strictly inside the unit circle. Then $\rho \le \theta$; and
+$\theta = \rho$ if and only if, after renaming the letters, $\sigma$ is $s$ or $\tilde s$
+\textup{(\texttt{ArithmeticOfTime.padovan\_minimal\_unique})}. The equivalence holds for every
+real eigenvalue $\theta$ of the incidence matrix, with no Pisot hypothesis
+\textup{(\texttt{ArithmeticOfTime.padovan\_eigenvalue\_unique})}. Neither primitivity nor the
+unit property is assumed.
+\end{theorem}
+
+\begin{proof}[Proof sketch]
+Kernel-verified, in three steps.
+\emph{The bound.} An eigenvalue of an integer $k \times k$ matrix is an algebraic integer of
+degree at most $k \le 3$. A Pisot number equals the Mahler measure of its minimal polynomial
+(\texttt{Time.Clock.mahler\_eq\_of\_pisot}), and the least Mahler measures above $1$ in
+degrees $2$ and $3$, from the registered entry \cite{palomar-mahler}, are at least $\rho$; in
+degree $1$, $\theta$ is an integer at least $2$. This is Siegel's theorem restricted to degree
+at most $3$ (\texttt{ArithmeticOfTime.pisot\_ge\_plastic}).
+\emph{The matrix.} If $\theta = \rho$, the characteristic polynomial of the incidence matrix,
+monic of degree $k \le 3$ with integer coefficients, is divisible by $x^3 - x - 1$, so $k = 3$
+and it equals $x^3 - x - 1$. A $3 \times 3$ matrix over $\mathbb{N}$ with that characteristic
+polynomial is $M$ after one simultaneous permutation of its rows and columns
+(\texttt{ArithmeticOfTime.padovan\_matrix\_unique}): the trace $0$ forces a zero diagonal, the
+coefficient of $x$ leaves exactly one $2$-cycle, and the determinant $1$ leaves exactly one
+$3$-cycle.
+\emph{The substitution.} A matrix fixes each image as a multiset of letters. Two images of
+$M$ are single letters; the third contains one $a$ and one $b$, in one of two orders. The
+converse holds because $s$ and $\tilde s$ both have the matrix $M$.
+\end{proof}
+
+\begin{theorem}[both minimal rules are chiral]\label{thm:ruleschiral}
+Under $s$, the word $ca$ is a factor of $S^{[5]}[a]$, and $ac$ is a factor of no iterate from any
+seed; under $\tilde s$, $ac$ is a factor of the fifth iterate from $a$, and $ca$ is a factor of no
+iterate from any seed \textup{(\texttt{ArithmeticOfTime.padovan\_rules\_chiral})}.
+\end{theorem}
+
+\begin{proof}
+Kernel-verified. The statement for $s$ is Theorem~\ref{thm:chirality}; the statement for
+$\tilde s$ follows from it because every iterate of $\tilde s$ from a one-letter seed is the
+reversal of the corresponding iterate of $s$ (Proposition~\ref{prop:twosubs}).
+\end{proof}
+
+Read together, the two theorems say this. On at most three letters the slowest settling clock
+is forced up to mirror image: its rate is $\rho$, and it is realized by exactly two rules, $s$
+and $\tilde s$. Both are chiral, so no slowest settling clock on at most three letters reads the
+same backwards; in that sense the arrow is forced. Which way it points is not: $s$ and
+$\tilde s$ have the same matrix, the same rate and the same decay, and differ only in the order
+of the two letters in the image of $c$. That order is the one free bit, counted in
+Section~\ref{sec:cost}. The open boundary is alphabets of more than three letters. There the
+bound $\rho \le \theta$ still holds, by Siegel's theorem in general (cited), but uniqueness
+fails at once: adjoining a fourth letter $d \mapsto d$ to $s$ keeps $\rho$ as an eigenvalue.
+Whether every substitution whose incidence matrix carries only $\rho$'s own spectrum
+(characteristic polynomial $x^m(x^3 - x - 1)$) is chiral is not decided here
+(Section~\ref{sec:frontier}).
+
+The bound is not new: it is Siegel's theorem \cite{siegel1944}, which holds in every degree,
+and only its restriction to degree at most $3$ is proved here. That the substitution with the
+fewest letters associated with the smallest Pisot number is unique up to reversal and
+relabelling was stated without proof by Mercat \cite{mercat2020}, whose substitutions carry no
+primitivity or non-erasing condition. What the kernel adds is a proof of the classification,
+over every substitution on at most three letters and every real eigenvalue of its matrix,
+and the chirality of both minimal rules.
+
+\section{The settled word is handed: chirality of the Padovan language}
+\label{sec:chirality}
+
+The tick word of Section~\ref{sec:word} is binary. The settled structure of the cubic has a
+richer, three-letter description: the \emph{Padovan substitution}
+\[
+  s \colon a \mapsto b, \qquad b \mapsto c, \qquad c \mapsto ab,
+\]
+whose incidence matrix has characteristic polynomial $x^{3} - x - 1$ (the fact is not used in
+the proofs of this section; it is load-bearing in Sections~\ref{sec:unique} and~\ref{sec:cost}). Iterating $s$ from a single letter grows the settled
+word of the cubic place. This section certifies, in the kernel, that the resulting factor
+language is \emph{chiral}: it reads differently backwards, by theorem rather than by
+inspection of finitely many cases. The results of its first part are in \texttt{Chirality.lean}
+(namespace \texttt{Time.Padovan}); later parts name their modules where they occur.
+
+\begin{theorem}[the invariant]\label{thm:invariant}
+In every iterate $S^{[n+1]}[x]$ --- any seed letter $x$, any $n$ --- every occurrence of $a$
+is immediately followed by $b$ \textup{(\texttt{Time.Padovan.every\_a\_followed\_by\_b})}.
+\end{theorem}
+
+The engine is one observation: $a$ is produced only inside the block $s(c) = ab$, where $b$
+follows it within the block, and no block ends in $a$, so concatenation creates no violation
+(\texttt{good\_append}, \texttt{good\_S}, \texttt{good\_iter}). Two consequences follow
+without enumeration.
+
+\begin{theorem}[chirality witness pair]\label{thm:chirality}
+The word $ca$ is a factor of an iterate \textup{(}it occurs in $S^{[5]}[a]$;
+\texttt{Time.Padovan.ca\_factor}\textup{)}, while $ac$ is a factor of \emph{no} iterate from
+\emph{any} seed \textup{(\texttt{Time.Padovan.ac\_not\_factor})}. Hence the factor language
+is not closed under reversal \textup{(\texttt{Time.Padovan.chirality})}.
+\end{theorem}
+
+\begin{theorem}[no long palindromes]\label{thm:nopalindrome}
+No iterate $S^{[n]}[x]$, from any seed $x$ and including $n = 0$, has a palindromic factor of
+length $\ge 4$ \textup{(\texttt{Time.Padovan.no\_long\_palindromic\_factor} for seed $a$;
+\texttt{ArithmeticOfTime.padovan\_no\_long\_palindrome} for every seed)}.
+\end{theorem}
+
+The proof of Theorem~\ref{thm:nopalindrome} runs through an explicit finite certificate:
+every factor of length $\le 5$ of every iterate lies in a $57$-word list \texttt{F5}
+(\texttt{Time.Padovan.factors\_complete}, via the window lemma
+\texttt{Time.Padovan.infix\_window}: a factor of $S(w)$ of length $L$ is contained in the
+image of a factor of $w$ of length $\le L$, because blocks are nonempty), and \texttt{F5}
+contains no palindrome of length $4$ or $5$ (\texttt{F5\_no\_palindrome}, by
+\texttt{decide}); a palindrome of length $\ge 4$ contains a palindromic factor of length $4$
+or $5$ (\texttt{palindrome\_has\_small\_core}). The short palindromic factors that do occur
+can be read off the same certificate; they are exactly $a$, $b$, $c$, $bb$, $cc$, $aba$, $bab$,
+$bcb$, $cbc$. Completeness is proved for seed $a$; the invariant, the $ac$-avoidance and the
+exclusion of long palindromes cover every seed (the last because every iterate from seed $b$
+or $c$ is a later iterate from seed $a$). We claim the kernel verification and the explicit
+certificate; the phenomenon type --- substitution languages that fail reversal-closure ---
+is known, with published examples \cite[Ex.~2]{baakeroberts2018} \cite[Ex.~5.3]{balkova2010},
+and palindrome \emph{finiteness} follows in one line from non-reversal-closure for uniformly
+recurrent words by a published criterion \cite[Thm.~3.2]{balkova2010}. Reflection asymmetry
+for this substitution's tiling space was found independently, by a different method
+(asymptotic composants), in G\"ahler \cite{gahler2026}; the prior study of this
+substitution's Rauzy fractal records that the substitution and its reversal have the same
+Rauzy fractal \cite{mercat2020}. What is claimed as
+new here is the machine-checked proof and the certificate, not the phenomenon.
+
+We emphasize the scope: these are statements about the factor \emph{language}. Whether the
+associated subshift admits a \emph{reversor} --- a homeomorphism conjugating the shift to
+its inverse, the reversing-symmetry question of \cite{baakeroberts2018} --- is a strictly
+stronger, conjugacy-level question, and language chirality alone does not decide it (there
+are reversible shifts with non-reversal-closed languages \cite[Ex.~2]{baakeroberts2018}).
+No conjugacy-level claim is made in this repository.
+
+\subsection{The marked origin of the tick word}
+\label{sec:origin}
+
+Returning to the binary tick word, extend it to integer indices:
+$sZ_\beta(n) = \lfloor (n+1)\beta \rfloor - \lfloor n\beta \rfloor$ for $n \in \mathbb{Z}$
+(\texttt{Time.sZ} in \texttt{OriginDefect.lean}; \texttt{Time.sZ\_natCast} ties it to
+\texttt{Time.m}). The word then satisfies an exact reflection identity about the origin,
+\[
+  sZ_\beta(-n-1) \;=\; sZ_\beta(n),
+\]
+valid whenever $n\beta$ and $(n+1)\beta$ are not integers
+(\texttt{Time.sZ\_reflect}; for irrational $\beta$ this is every $n \notin \{0,-1\}$,
+\texttt{Time.sZ\_reflect\_irrational}; an unconditional form via ceilings is
+\texttt{Time.sZ\_reflect\_eq\_ceil}). At the origin itself --- the unique lattice hit
+$0 \cdot \beta \in \mathbb{Z}$ --- the word carries a computable defect:
+\[
+  (sZ_\beta(-1),\, sZ_\beta(0)) = (1, 0) \qquad \text{for } 0 < \beta < 1
+\]
+(\texttt{Time.origin\_defect}). The reflection identity is the finitary, kernel-checked
+face of a structure known at the level of symbolic dynamics: for irrational slope, the two
+two-sided sequences at intercept zero form the distinguished asymptotic pair of the Sturmian
+system, each member palindromic away from the marked positions, and reversal of the marked
+orbit lands on the other member of the pair \cite[Lemma~4.1]{barbieri2021}; that such pairs
+characterize the Sturmian sequences is Theorem~A of
+Barbieri--Labb\'e--Starosta \cite{barbieri2021}, proved there for all irrational slopes;
+hull-level reversibility of Sturmian shifts is Theorem~2 of \cite{baakeroberts2018}. Our
+statements are elementary and self-contained; the citations locate them in the published
+theory. The origin --- and with it the handedness of the \emph{marked} orbit, against the
+achirality of its hull --- is where the model's asymmetry of time resides (see
+ Section~\ref{sec:intro}).
+
+\subsection{The exact orientation threshold}
+\label{sec:threshold}
+
+Theorem~\ref{thm:nopalindrome} says that a long factor is never its own reversal. A
+stronger statement is true: the reversal of a long factor is not anywhere in the language.
+Reading such a word backwards produces a word that the substitution never makes. Call a
+finite word $u$ over $\{a, b, c\}$ \emph{admissible} if it is a factor of $S^{[n]}[a]$ for
+some $n$.
+
+\begin{theorem}[exact orientation threshold]\label{thm:threshold}
+\leavevmode
+\begin{enumerate}
+\item[(a)] The palindrome $aba$ is admissible: $S^{[8]}[a] = cababbc$
+\textup{(\texttt{PDT.Padovan.iterate\_eight},
+\texttt{PDT.Padovan.length\_three\_orientation\_ambiguity})}.
+\item[(b)] If $u$ is admissible and has length at least $4$, then the reversal of $u$ is not
+admissible \textup{(\texttt{PDT.Padovan.reversal\_forbidden\_of\_four\_le})}.
+\end{enumerate}
+Hence $4$ is the least length from which every admissible word fixes the orientation
+\textup{(\texttt{PDT.Padovan.exact\_orientation\_threshold\_four})}.
+\end{theorem}
+
+\begin{proof}
+Kernel-verified. Part (a) is a direct computation. For (b), by the certificate behind
+Theorem~\ref{thm:nopalindrome} every admissible word of length at most $5$ lies in the list
+\texttt{F5}, and a finite decision shows that no word of length $4$ in \texttt{F5} has its
+reversal in \texttt{F5} \textup{(\texttt{PDT.Padovan.F5\_no\_reversal\_pair\_length\_four},
+by \texttt{decide})}. If $u$ and its reversal were both admissible, then the first four
+letters $t$ of $u$ would be admissible, and so would the reversal of $t$, which is the last
+four letters of the reversal of $u$. Both would lie in \texttt{F5}, a contradiction.
+\end{proof}
+
+The two statements should be kept apart. Theorem~\ref{thm:nopalindrome} is the weak one: a
+long window is not symmetric. Theorem~\ref{thm:threshold} is the strong one: a long window
+tells the direction, because its mirror image never occurs. Below length $4$ there are
+exactly thirteen admissible words whose reversals are also admissible --- $a$, $b$, $c$;
+$ab$, $ba$, $bb$, $bc$, $cb$, $cc$; $aba$, $bab$, $bcb$, $cbc$ --- nine palindromes and two
+mirror pairs (computed from the certificate). These are the only windows that cannot tell
+the direction. In the best case two letters suffice: the window $ca$ fixes the direction,
+because $ac$ is never admissible (Theorem~\ref{thm:chirality}). So every window of four
+letters decides, and some windows of two already do. The unit throughout is the
+\emph{letter}: in the geometric history of Section~\ref{sec:lorentz} the three letters are
+steps of different lengths, so these are counts of letters, not durations.
+
+A threshold of four is known in a different setting. For stationary binary sequences, the
+statistics of words shorter than four letters are automatically symmetric under reversal, so
+word-based measures of irreversibility cannot detect anything below length four
+\cite{arola2023}. Theorem~\ref{thm:threshold} is a different kind of statement --- exact
+rather than statistical, and about which words of a ternary language exist rather than how
+often --- but in that vocabulary the Padovan language is maximally irreversible from length
+four on.
+
+\subsection{Two handednesses, one arrow}
+\label{sec:twohands}
+
+The paper now has two handed objects, and they live at different levels. The Padovan
+\emph{language} is chiral: $ac$ is absent while $ca$ occurs (Theorem~\ref{thm:chirality}).
+The binary tick word is chiral in a subtler way: its language is closed under reversal, as
+the language of every Sturmian word is \cite{lothaire2002}, so its hull is achiral; but its
+\emph{marked} orbit, the one through the origin defect of Section~\ref{sec:origin}, is not
+\cite{barbieri2021}. At the distinguished slope $\beta$ of Remark~\ref{rem:beta} the
+irrationality this needs is kernel-verified (\texttt{Time.beta\_irrational};
+Remark~\ref{rem:irrational-hyp}); that $0 < \beta < 1$ is computed.  The identification of
+Section~\ref{sec:intro} uses both: the arrow is the handedness of the marked orbit, and the
+past is read off the handedness theorems of the Padovan language --- the direction in which
+the settled word is the substitution's own language rather than its mirror's.{} Nothing in this paper identifies a letter of the Padovan word with a tick of
+the tick word, and we never call one a tick.
+
+\section{What the arrow costs: a forced rate and one bit}
+\label{sec:cost}
+
+Sections~\ref{sec:settling} and~\ref{sec:chirality} found two different things in the cubic
+arithmetic: a contraction at an exact rate, which is the same forward and backward, and a
+handedness, which is not. This section shows that both come from the same three-letter rule,
+and counts what the handedness costs.
+
+\subsection{The rate is forced}
+
+The incidence matrix of $s$, whose $(i,j)$ entry counts the letter $i$ in $s(j)$, is
+\[
+  M \;=\; \begin{pmatrix} 0 & 0 & 1 \\ 1 & 0 & 1 \\ 0 & 1 & 0 \end{pmatrix}
+  \qquad (\text{rows and columns } a, b, c),
+\]
+and it is exactly the matrix of the tick $(a, b, c) \mapsto (c,\ a + c,\ b)$ of
+Section~\ref{sec:settling}. Its characteristic polynomial is $x^3 - x - 1$ and its
+determinant is $1$. The determinant is the product of the eigenvalues,
+$\rho \cdot z \cdot \bar z = \rho \lVert z \rVert^2 = 1$, which is
+Theorem~\ref{thm:contraction}, kernel-verified for every root pair. So the decay rate of the
+non-Perron modes,
+\[
+  -\log \lVert z \rVert \;=\; \tfrac12 \log \rho \;=\; 0.1405997871\ldots,
+\]
+is fixed by the same matrix that fixes the inflation factor $\rho$
+(for every real $\rho > 0$ and complex $\sigma \ne 0$ with $\rho \lVert \sigma \rVert^2 = 1$:
+\texttt{PDT.ArrowRate.rate\_eq\_half\_log}, \texttt{PDT.ArrowRate.log\_norm\_eq\_neg\_half\_log}). Scale and rate are the dominant and
+subdominant eigenvalues of one matrix, tied together by its determinant; neither is an
+independent input.
+
+The rate is a magnitude, not a direction. Since $\rho^{-1} = \rho^2 - 1$, the inverse of the
+tick is again an integer matrix of determinant $1$, and running the tick backwards exchanges
+expansion and contraction without changing the total: the topological entropy forward,
+$\log \rho$, equals the topological entropy backward, $2 \cdot \tfrac12 \log \rho$.
+
+\subsection{The direction costs one bit}
+
+\begin{proposition}[the two substitutions of the Padovan matrix]\label{prop:twosubs}
+The substitutions on $\{a, b, c\}$ with incidence matrix $M$ are exactly $s$ and
+\[
+  \tilde s \colon a \mapsto b, \qquad b \mapsto c, \qquad c \mapsto ba .
+\]
+For every $n$ and every seed $x$, the iterate $\tilde S^{[n]}[x]$ is the reversal of
+$S^{[n]}[x]$ \textup{(\texttt{PdtMirror.iterate\_mir\_seed})}. Consequently the factor
+language of $\tilde s$ is the reversal of that of $s$: under $\tilde s$, $ac$ occurs and $ca$
+never does.
+\end{proposition}
+
+\begin{proof}
+A matrix fixes each image as a multiset of letters. Here $s(a)$ and $s(b)$ are single
+letters, and $s(c)$ contains one $a$ and one $b$, in one of two orders. For the second
+statement, $\tilde s$ is obtained from $s$ by reversing every image; that reversing every
+image reverses every iterate from a one-letter seed is a kernel-verified lemma about
+arbitrary substitutions on arbitrary alphabets.
+\end{proof}
+
+The two substitutions have the same matrix, hence the same inflation factor $\rho$ and the
+same rate $\tfrac12 \log \rho$. They differ only in direction. Everything except the direction
+is paid for by the matrix; the direction costs exactly one bit, the order of the two letters
+in $s(c)$. That bit is a handedness. Any criterion that treats a word and its reversal alike
+gives $s$ and $\tilde s$ the same verdict, so no mirror-symmetric principle can choose
+between them. Notice also that reversing the substitution leaves the matrix, and therefore
+the tick, unchanged, while reversing the tick replaces $\rho$ by $\rho^{-1}$. Word reversal
+and tick inversion are different involutions, which is why the direction lives in the word
+and not in the tick.
+
+The enumeration is not new. Mercat observed that, up to reversal and relabelling, there is a
+unique substitution with the fewest letters associated with the smallest Pisot number
+\cite{mercat2020}; up to relabelling, $s$ and $\tilde s$ are that substitution and its
+reversal. Theorem~\ref{thm:unique} proves the classification in the kernel for every
+substitution on at most three letters. What this
+section adds is the reading: the arrow costs one bit. One bit is very little beside an
+improbable initial state of the whole universe. It is not zero, and whether anything forces
+it is open (Section~\ref{sec:frontier}). So one three-letter rule supplies the scale $\rho$,
+the rate $\tfrac12 \log \rho$, and the handedness.
+
+\section{The substitution for $\rho Q$: twelve letters, chiral}
+\label{sec:rhoQ}
+
+The cubic and the quartic meet in the product $\rho Q = 1.6171416\ldots$, which generates the
+degree-$12$ compositum $\mathbb{Q}(\rho, Q) = \mathbb{Q}(\rho Q)$ (registered:
+\texttt{PlasticThreshold.ruler\_linearDisjoint}, \texttt{PlasticThreshold.ruler\_conjugates\_card};
+\cite{palomar-compositum}). Does the handedness of Section~\ref{sec:chirality} survive at this
+scale? It does, with no input beyond the two founding substitutions.
+
+\subsection{Construction and minimal size}
+
+The quartic has its own substitution, $t \colon 1 \mapsto 2$, $2 \mapsto 3$, $3 \mapsto 4$,
+$4 \mapsto 12$, whose incidence matrix has characteristic polynomial $x^4 - x - 1$ (direct
+computation). Writing $p, q, r$ for $a, b, c$, the \emph{row-major tensor} $s \otimes t$ acts on
+the twelve letters $\{p, q, r\} \times \{1, 2, 3, 4\}$ by sending the pair $(x, i)$ to the
+word $s(x) \times t(i)$ read in row-major order:
+\[
+\begin{array}{llll}
+p1 \mapsto q2, & p2 \mapsto q3, & p3 \mapsto q4, & p4 \mapsto q1\,q2, \\
+q1 \mapsto r2, & q2 \mapsto r3, & q3 \mapsto r4, & q4 \mapsto r1\,r2, \\
+r1 \mapsto p2\,q2, & r2 \mapsto p3\,q3, & r3 \mapsto p4\,q4, & r4 \mapsto p1\,p2\,q1\,q2 .
+\end{array}
+\]
+We write $s_{\rho Q}$ for this substitution (\texttt{PdtRhoQ.s}).
+
+\begin{theorem}[characteristic polynomial]\label{thm:rhoQcharpoly}
+The incidence matrix of $s_{\rho Q}$ has characteristic polynomial
+\[
+  P(x) \;=\; x^{12} - 3x^{9} - 2x^{8} + 2x^{6} - x^{5} - 3x^{4} - x^{3} + x - 1
+\]
+\textup{(\texttt{PdtCharpolyTensor.substitution\_charpoly}; for the Kronecker product of the
+two founding matrices, \texttt{PdtCharpolyTensor.charpoly\_tensor})}. The polynomial $P$ is
+irreducible and is the minimal polynomial of $\rho Q$ \textup{(registered:
+\texttt{PlasticThreshold.product\_annihilator\_iff}; \texttt{PDT.RulerMinpoly.ruler\_minpoly},
+\texttt{PDT.RulerMinpoly.rulerPoly\_irreducible} in the same build)}.
+\end{theorem}
+
+The formal statement is about the substitution itself: the incidence matrix is computed by
+counting letters in the twelve image words, identified with the Kronecker product of the
+cubic and quartic matrices (\texttt{PdtCharpolyTensor.inc\_eq\_tensor}), and its
+characteristic polynomial is identified with $P$.
+
+\begin{corollary}[least size]\label{cor:leastsize}
+Every square integer matrix having $\rho Q$ as an eigenvalue has size at least $12$; the
+substitution $s_{\rho Q}$ attains this bound.
+\end{corollary}
+
+\begin{proof}
+The characteristic polynomial of such a matrix is a monic integer polynomial vanishing at
+$\rho Q$, so it is divisible by the minimal polynomial $P$, of degree $12$.
+\end{proof}
+
+Primitivity is computed, not kernel-verified (the tenth power of the incidence matrix is
+entrywise positive). Dominance is not merely computed: by Theorem~\ref{thm:rhoQcharpoly} the
+eigenvalues are the conjugates of $\rho Q$, and every conjugate other than $\rho Q$ has smaller
+modulus (registered: \texttt{PlasticThreshold.ruler\_house}), so $\rho Q$ is the Perron
+eigenvalue.
+
+The construction is Lind's: that products of Perron numbers are realized by products of
+shifts is \cite[Thm.~2]{lind1983}, \cite[\S6]{lind1984}.\footnote{For Perron numbers
+$\alpha, \beta$ one has $\mathbb{Q}(\alpha\beta) = \mathbb{Q}(\alpha)\mathbb{Q}(\beta)$
+\cite[Prop.~5]{lind1984}; coprimality of the degrees alone does not suffice, since
+$\sqrt[3]{2}\cdot e^{2\pi i/12}$ is a root of $x^6+4$, cf.\ \cite{virbalas2023}. The degree of
+$\rho Q$ is registered directly, by the irreducibility of $P$.} That a Perron number of degree
+$d$ is realized by a nonnegative integer matrix of size $d$ is not automatic: Perron numbers of
+negative trace need larger matrices \cite[p.~289]{lind1984}, and there are cubic Perron
+numbers whose least realizing size is arbitrarily large \cite[Cor.~1.2]{yazdi2021}.
+Determining that least size in general is a named open problem: the minimum size problem of
+Boyle and Lind \cite{boylelind2002}, stated for substitutions as Question~1 of Bertrand-Mathis
+and Nguema Ndong \cite{bertrandmathis2021}, whose Example~1 is the plastic number realized by
+the matrix $M$ of Section~\ref{sec:cost}. For $\rho Q$ the bound is attained, by
+Corollary~\ref{cor:leastsize}; we claim nothing about the general question.
+
+The quasicrystalline order of Section~\ref{sec:spectral} belongs to the $\rho$ side. The
+product $\rho Q$ is not a Pisot number: five of its conjugates, $\rho Q$ included, lie outside
+the unit circle (registered: \texttt{PlasticThreshold.ruler\_conjugate\_census}). By
+Solomyak's theorem \cite{solomyak1997}, \cite[Thm.~2.15]{solomyak2007}, a one-dimensional
+self-similar tiling of a primitive substitution is weakly mixing exactly when its expansion
+factor is not Pisot, so the tiling system of $s_{\rho Q}$ (primitivity computed) is weakly
+mixing; since the pure-point part of its diffraction is carried by its dynamical eigenvalues
+\cite{dworkin1993,baakelenz2004}, the diffraction has no nontrivial pure-point part.
+
+\subsection{It is chiral}
+
+\begin{theorem}[chirality of the $\rho Q$ substitution]\label{thm:rhoQchiral}
+Write $S_{\rho Q}$ for the letterwise extension of $s_{\rho Q}$.
+\begin{enumerate}
+\item[(a)] The word $q2\,p1$ is a factor of $S_{\rho Q}^{[9]}[p3]$
+\textup{(\texttt{PdtRhoQ.q2p1\_factor})}.
+\item[(b)] In every iterate $S_{\rho Q}^{[n+1]}[x]$, from every seed $x$, every $p1$ is
+immediately followed by $p2$ \textup{(\texttt{PdtRhoQ.every\_p1\_followed\_by\_p2})}.
+\item[(c)] Hence for every letter $y \ne p2$, the word $p1\,y$ is a factor of no iterate
+from any seed \textup{(\texttt{PdtRhoQ.p1\_pair\_not\_factor})}; in particular the factor
+language is not closed under reversal \textup{(\texttt{PdtRhoQ.rhoQ\_chirality})}.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+Kernel-verified, by the argument of Theorem~\ref{thm:invariant}, of which the formal proof
+is a port: $p1$ occurs in exactly one image, $s_{\rho Q}(r4) = p1\,p2\,q1\,q2$, at its start,
+and no image ends in $p1$, so every $p1$ in a concatenation of images is followed, inside the
+same image, by $p2$.
+\end{proof}
+
+Six of the forbidden words $p1\,y$ have reversals that do occur, namely those with
+$y \in \{q2, q3, q4, r2, r3, r4\}$. For $q2, q3, q4, r2$ the occurrence is kernel-verified
+(\texttt{PdtRhoQ.q2p1\_factor}, \texttt{PdtRhoQ.q3p1\_factor}, \texttt{PdtRhoQ.q4p1\_factor},
+\texttt{PdtRhoQ.r2p1\_factor}); for $r3$ and $r4$ the shortest witnesses have $315$ and $128$
+letters and are computed. The full picture is computed. On a stabilized prefix of
+$2{,}506{,}218$ letters, the proportion of factors whose reversal is absent is $0$,
+$41.77$, $89.19$ and $100$ percent at lengths $1$, $2$, $3$, $4$; and $33$ of the $79$
+two-letter factors are one-way. As for the Padovan word, every window of four letters
+decides the direction.
+
+The handedness is not an artifact of the order chosen within the images. The incidence
+matrix fixes each image only as a multiset, and $768$ substitutions realize it. All $768$ are
+chiral (computed).
+
+\subsection{Where the handedness comes from}
+
+Each founding substitution has a chiral language: the cubic's by Theorem~\ref{thm:chirality},
+the quartic's by computation (its two-letter factors $31$ and $41$ occur, while $13$ and $14$
+do not). How the twelve-letter handedness divides between the two is open: the count depends
+on the order of letters within the images. Nor is inheritance automatic: the tensor of the
+Fibonacci substitution $a \mapsto ab$, $b \mapsto a$ with itself is chiral although the
+Fibonacci language is closed under reversal (computed). What does hold in general is the
+theorem below. And the orientation of the twelve-letter object is still a choice between
+mirror realizations, exactly as in Section~\ref{sec:cost}: what costs nothing further is the
+\emph{existence} of a handedness, not its direction.
+
+\subsection{Mirror equivariance}
+
+For a substitution $\sigma$, write $\overline{\sigma}$ for the substitution with every image
+reversed, and $\sigma \otimes \tau$ for the row-major tensor product.
+
+\begin{theorem}[mirror equivariance of the tensor]\label{thm:mirror}
+Let $\sigma$ and $\tau$ be substitutions on arbitrary alphabets $A$ and $B$. For every $n$ and
+every seed $z \in A \times B$, the $n$-th iterate of
+$\overline{\sigma} \otimes \overline{\tau}$ from $z$ is the reversal of the $n$-th iterate of
+$\sigma \otimes \tau$ from $z$ \textup{(\texttt{PdtMirror.iterate\_tens\_mir})}. If every image
+of $\sigma$ and of $\tau$ is a palindrome, then every iterate of $\sigma \otimes \tau$ is a
+palindrome and its factor set is closed under reversal
+\textup{(\texttt{PdtMirror.palindromic\_iterate}, \texttt{PdtMirror.palindromic\_reversal\_closed})}.
+\end{theorem}
+
+Kernel-verified, with no finiteness, decidability or primitivity hypothesis. In words: a
+tensor product cannot create handedness out of mirror-symmetric rules, and reversing both
+factors reverses the product. It holds for every pair of substitutions on every pair of
+alphabets and covers the row-major product only; we assert no novelty for it.
+
+\subsection{One clock, two ticks}
+
+\begin{remark}[the joint clock]\label{rem:jointclock}
+On the compositum $L = \mathbb{Q}(\rho) \otimes_{\mathbb{Q}} \mathbb{Q}(Q)$, multiplication
+by $\rho Q$ has no invariant rational subspace other than $0$ and $L$
+(\texttt{PDT.JointClock.no\_proper\_jointTick\_invariant\_submodule}); yet the cubic and
+quartic ticks, multiplication by $\rho$ and by $Q$, are explicit rational polynomials in it
+(\texttt{PDT.JointClock.joint\_clock\_decomposition},
+\texttt{PDT.JointClock.recover\_cubic\_tick}, \texttt{PDT.JointClock.recover\_quartic\_tick}).
+By contrast, no nonzero additive map carries the cubic tick on $\mathbb{Z}^3$ into the quartic
+tick on $\mathbb{Z}^4$ (\texttt{PDT.CubicQuarticBridge.no\_cubic\_quartic\_tick\_intertwiner}).
+At the level of sequences, the termwise product of a sequence obeying
+$u_{n+3} = u_{n+1} + u_n$ with one obeying $v_{n+4} = v_{n+1} + v_n$ obeys the recurrence with
+characteristic polynomial $P$ (registered: \texttt{PlasticThreshold.product\_recurrence\_charpoly}).
+So $\rho Q$ is one rationally indivisible clock that carries both ticks inside it.
+\end{remark}
+
+\section{A chiral history in Lorentzian signature}
+\label{sec:lorentz}
+
+Everything in this section is kernel-verified in the registered entry
+PALOMAR-2026-09-04-000004 \cite{palomar-cph}, which draws on the registered repository of this
+paper. We state the results and refer there for the proofs.
+
+\subsection{The stream}
+
+The iterates $S^{[n]}[a]$ are not nested, but every third one is: $U_n = S^{[3n]}[a]$ is a
+prefix of $U_{n+1}$, and together the $U_n$ define one infinite word
+$\ell_0 \ell_1 \ell_2 \cdots$ (\texttt{PDT.PadovanStream.U\_eq\_prefix}). Every finite block
+of it occurs in a genuine iterate; $\ell_6 \ell_7 = ca$; and $ac$ occurs nowhere
+(\texttt{ChiralPadovanHistories.admissible\_stream}; \texttt{PDT.PadovanStream.block\_factor},
+\texttt{PDT.PadovanStream.letters\_ca\_at\_six}, \texttt{PDT.PadovanStream.letters\_no\_ac}).
+
+\subsection{The geometry}
+
+Let $V = \mathbb{R}^4$ carry the quadratic form $q$ with Gram matrix
+\[
+  G \;=\; \begin{pmatrix} 4 & 0 & 0 & 3 \\ 0 & 0 & 3 & 4 \\ 0 & 3 & 4 & 0 \\ 3 & 4 & 0 & 3 \end{pmatrix},
+\]
+the trace form of $\mathbb{Q}[x]/(x^4 - x - 1)$ in the power basis
+(\texttt{ChiralPadovanHistories.trace\_gram\_link}), of signature $(3,1)$
+(Remark~\ref{rem:signatures}). The vector $u_0 = (0, 4, -3, 0)$, that is $4Q - 3Q^2$, has
+$q(u_0) = -36 < 0$, and its orthogonal complement is a positive-definite three-dimensional
+rest space (\texttt{ChiralPadovanHistories.rest\_space}). We call the timelike cone containing
+$u_0$ the \emph{future}, and an observer \emph{future-directed} if it lies in it. The map
+\[
+  B(t, w) \;=\; \bigl(\operatorname{Re} w/2,\ 4t,\ \operatorname{Im} w/2 - 3t,\ 0\bigr),
+  \qquad t \in \mathbb{R},\ w \in \mathbb{C},
+\]
+satisfies $q(B(t,w)) = \lVert w \rVert^2 - 36 t^2$, and the clock of $u_0$ reads $t$ on it.
+
+\subsection{The history}
+
+Fix $\rho$ and a non-real root $z$ of $x^3 - x - 1$. Give the three letters the steps
+\[
+  v_a = B(1, 1), \qquad v_b = B(\rho, z), \qquad v_c = B(\rho^2, z^2),
+\]
+and let $H_n$ be the sum of the steps of the first $n$ letters of the stream. The weights
+$(1, \rho, \rho^2)$ are not a choice: normalized letter weights compatible with the
+inflation, in the sense that each letter's weight times $r$ is the total weight of its image,
+exist exactly when $r^3 = r + 1$, and are then $(1, r, r^2)$
+(\texttt{ChiralPadovanHistories.normalized\_inflation\_iff}). This is the registered link from
+the substitution to $\rho$.
+
+\begin{theorem}[a chiral timelike history]\label{thm:history}
+There are $r > 1$ and a non-real $z$ with $r^3 = r + 1$ and $z^3 = z + 1$ such that:
+\begin{enumerate}
+\item[(a)] every step $H_{n+1} - H_n$ is future timelike;
+\item[(b)] $H$ is injective and chronological: $H_n - H_m$ is future timelike whenever $m < n$;
+\item[(c)] for \emph{every} future-directed observer $u$, the clock of $u$ strictly increases
+along $H$;
+\item[(d)] the steps at positions $6$ and $7$ are those of $c$ and $a$, and a step of $a$ is
+never followed by a step of $c$;
+\item[(e)] the first two steps are not collinear.
+\end{enumerate}
+\textup{(\texttt{ChiralPadovanHistories.exists\_chiral\_timelike\_history}; the step code is
+injective and carries the chirality, \texttt{ChiralPadovanHistories.faithful\_chiral\_code}.)}
+Parts (a)--(c) hold for every $r > 1$ and every non-real root $z$ of $x^3 - x - 1$
+\textup{(\texttt{PDT.PadovanRealization.\{future\_increments, chronological,
+injective\_history, every\_future\_observer\}})}.
+\end{theorem}
+
+So every future-directed observer reads the history in the same order. The direction is in the
+order, not in the endpoints: reversing a word leaves the endpoint of its history unchanged
+and merely reverses the list of steps (\texttt{ChiralPadovanHistories.reversal\_information}).
+Endpoint sums are abelian data, and abelian data cannot see the arrow. On the clock of $u_0$
+the three steps have lengths $1$, $\rho$ and $\rho^2$; the letters are not equal units of time.
+
+The arithmetic of Section~\ref{sec:settling} reappears along the history. Writing $X_n$ and
+$W_n$ for the real and complex coordinates of $H_n$ --- the sums of the weights $1, r, r^2$
+and of $1, z, z^2$ over the first $n$ letters --- distinct positions satisfy
+\[
+  \lvert X_n - X_m \rvert \cdot \lVert W_n - W_m \rVert^2 \;\ge\; 1 \qquad (m \ne n)
+\]
+for every sequence of letters (\texttt{ChiralPadovanHistories.history\_separation}), the
+analogue of Theorem~\ref{thm:meyer}; and for $0<\varepsilon\le 1$, the history comes within
+$\varepsilon$ of its starting transverse position only after clock time at least
+$\varepsilon^{-2}$, and does so by clock time $\rho^3\varepsilon^{-2}$
+(\texttt{ChiralPadovanHistories.return\_clock\_bounds}).
+
+\subsection{What the observers agree on}
+
+The observer $u_0$ and the embedding $B$ are choices; part (c) does not depend on the
+observer. That different observers disagree about which events are simultaneous is ordinary
+relativity \cite{zeeman1964}, \cite[Ch.~6]{hawkingellis1973}; what
+Theorem~\ref{thm:history}(c) adds is that, for this history, all of them agree on the order:
+the split described in the introduction.
+
 \section{Necessity: what is forced, what is cited, what is open}
 \label{sec:frontier}
 
-The kernel-verified results of this paper are sufficiency results. Section~\ref{sec:word} proves that the word $m(n) = \lfloor (n+1)\beta \rfloor - \lfloor n\beta \rfloor$ meets all four demands set out in the introduction: it is two-valued (\texttt{Time.m\_mem}), its frequency of ones converges to $\beta$ (\texttt{Time.density\_tendsto}), it has no period when $\beta$ is irrational (\texttt{Time.aperiodic}), and any two windows of equal length carry one-counts differing by at most one (\texttt{Time.balanced}). Section~\ref{sec:boundary} proves that the two defining polynomials sit on opposite sides of the unit circle. A \emph{necessity} statement --- the four demands force this structure and no other --- requires converses, and the converses are classical theorems that we cite but have not formalized. This section states the three classical characterizations that frame the necessity question, records exactly how far the kernel-verified material reaches into each, and estimates what a formalization of the remainder would cost. Nothing in the earlier sections depends on the unformalized converses; they mark the frontier.
+The kernel-verified results of this paper are sufficiency results. Sections~\ref{sec:settling}, \ref{sec:word} and~\ref{sec:chirality} together meet the four demands set out in the introduction; in particular, Section~\ref{sec:word} proves that the word $m(n) = \lfloor (n+1)\beta \rfloor - \lfloor n\beta \rfloor$ meets demands (iii) and (iv): it is two-valued (\texttt{Time.m\_mem}), its frequency of ones converges to $\beta$ (\texttt{Time.density\_tendsto}), it has no period when $\beta$ is irrational (\texttt{Time.aperiodic}), and any two windows of equal length carry one-counts differing by at most one (\texttt{Time.balanced}). Section~\ref{sec:boundary} proves that the two defining polynomials sit on opposite sides of the unit circle. A \emph{necessity} statement --- the four demands force this structure and no other --- requires converses, and the converses are classical theorems that we cite but have not formalized. This section states the three classical characterizations that frame the necessity question, records exactly how far the kernel-verified material reaches into each, and estimates what a formalization of the remainder would cost. Nothing in the earlier sections depends on the unformalized converses; they mark the frontier.
 
 \subsection{The Pisot boundary}
 
@@ -775,7 +1309,7 @@ The kernel-verified results of this paper are sufficiency results. Section~\ref{
 Let $\theta > 1$ be a real algebraic integer. Then $\operatorname{dist}(\theta^n, \mathbb{Z}) \to 0$ as $n \to \infty$ if and only if every Galois conjugate $\theta' \neq \theta$ of $\theta$ satisfies $|\theta'| < 1$. Such $\theta$ are the Pisot numbers \cite{bertin1992}.
 \end{theorem}
 
-Section~\ref{sec:boundary} kernel-verifies the concrete instance of the conjugate condition for the two polynomials of this paper: every non-real root $z$ of $x^3 - x - 1$ satisfies $\lVert z \rVert < 1$ (\texttt{Time.cubic\_conj\_norm\_lt\_one}), every non-real root $w$ of $x^4 - x - 1$ satisfies $\lVert w \rVert > 1$ (\texttt{Time.quartic\_conj\_norm\_gt\_one}), and the conjunction is packaged as a dichotomy (\texttt{Time.pisot\_boundary\_dichotomy}). Since $x^3 - x - 1$ has exactly one real root, the non-real pair exhausts the conjugates of $\rho$, so $\rho$ meets Pisot's criterion; for $Q$, a single conjugate of modulus greater than one already disqualifies it. What is \emph{not} formalized is Theorem~\ref{thm:pisot} itself, in either direction: Mathlib v4.31.0 contains no Pisot--Vijayaraghavan theory at all --- not even the definition of a Pisot number --- so the passage from the kernel-verified conjugate positions to the settling statement $\operatorname{dist}(\rho^n, \mathbb{Z}) \to 0$ is cited, not formalized. (The forward direction for the single number $\rho$ is elementary --- the power sum $\rho^n + z^n + \bar{z}^n$ is a rational integer satisfying $t_{n+3} = t_{n+1} + t_n$, and the conjugate terms decay geometrically --- and would be a natural first extension of Section~\ref{sec:boundary}; it too is currently unformalized.)
+Section~\ref{sec:boundary} kernel-verifies the concrete instance of the conjugate condition for the two polynomials of this paper: every non-real root $z$ of $x^3 - x - 1$ satisfies $\lVert z \rVert < 1$ (\texttt{Time.cubic\_conj\_norm\_lt\_one}), every non-real root $w$ of $x^4 - x - 1$ satisfies $\lVert w \rVert > 1$ (\texttt{Time.quartic\_conj\_norm\_gt\_one}), and the conjunction is packaged as a dichotomy (\texttt{Time.pisot\_boundary\_dichotomy}). Since $x^3 - x - 1$ has exactly one real root, the non-real pair exhausts the conjugates of $\rho$, so $\rho$ meets Pisot's criterion; for $Q$, a single conjugate of modulus greater than one already disqualifies it. What is \emph{not} formalized is Theorem~\ref{thm:pisot} itself, in either direction: Mathlib, at the commit pinned in Section~\ref{sec:formalization}, contains no Pisot--Vijayaraghavan theory at all --- not even the definition of a Pisot number --- so the passage from the kernel-verified conjugate positions to the settling statement $\operatorname{dist}(\rho^n, \mathbb{Z}) \to 0$ is cited, not formalized. (The forward direction for the single number $\rho$ is elementary --- the power sum $\rho^n + z^n + \bar{z}^n$ is a rational integer satisfying $t_{n+3} = t_{n+1} + t_n$, and the conjugate terms decay geometrically --- and would be a natural first extension of Section~\ref{sec:boundary}; it too is currently unformalized.)
 
 \subsection{The Sturmian characterization}
 
@@ -799,11 +1333,11 @@ The low end of the estimate covers the three lemmas over a minimal interface; th
 The smallest Pisot number is the real root $\rho \approx 1.324718$ of $x^3 - x - 1$ \cite{siegel1944}.
 \end{theorem}
 
-This is the statement that upgrades ``$\rho$ qualifies'' to ``$\rho$ is extremal among all qualifying bases.'' It is not formalized, and it is out of reach without a prior development of general Pisot theory: Siegel's argument is not a computation on one polynomial but an argument over the entire class of Pisot numbers, via rational functions with bounded integer coefficients, so nothing like the two-polynomial reduction of Section~\ref{sec:boundary} applies. We do not attempt a line estimate.
+This is the statement that upgrades ``$\rho$ qualifies'' to ``$\rho$ is extremal among all qualifying bases.'' In general it is not formalized, and it is out of reach without a prior development of general Pisot theory: Siegel's argument is not a computation on one polynomial but an argument over the entire class of Pisot numbers, via rational functions with bounded integer coefficients, so nothing like the two-polynomial reduction of Section~\ref{sec:boundary} applies. We do not attempt a line estimate. Its restriction to degree at most $3$ is kernel-verified by a different route (\texttt{ArithmeticOfTime.pisot\_ge\_plastic}, Section~\ref{sec:unique}): a Pisot number is the Mahler measure of its minimal polynomial, and the least Mahler measures are registered in degrees $2$, $3$ and $4$. That route proceeds degree by degree and does not reach every degree.
 
 \begin{remark}[State of the necessity chain]
 \label{rem:necessity-state}
-Kernel-verified: the exhibited word satisfies the four demands (Section~\ref{sec:word}), and the conjugates of the two polynomials lie on the stated sides of the unit circle (Section~\ref{sec:boundary}). Cited: the converse of Theorem~\ref{thm:morsehedlund} (the demands force a mechanical word of irrational slope), Theorem~\ref{thm:pisot} (settling is equivalent to the conjugate condition), and Theorem~\ref{thm:siegel} ($\rho$ is the least admissible base). Open, as formalizations: all three. No claim in this paper is stated above these labels.
+Kernel-verified: the four demands are met (Sections~\ref{sec:settling}, \ref{sec:word} and~\ref{sec:chirality}), and the conjugates of the two polynomials lie on the stated sides of the unit circle (Section~\ref{sec:boundary}). Cited: the converse of Theorem~\ref{thm:morsehedlund} (the demands force a mechanical word of irrational slope), Theorem~\ref{thm:pisot} (settling is equivalent to the conjugate condition), and Theorem~\ref{thm:siegel} ($\rho$ is the least admissible base), whose restriction to degree at most $3$ is kernel-verified (Section~\ref{sec:unique}). Open, as formalizations: all three, Siegel's beyond degree $3$. No claim in this paper is stated above these labels.
 \end{remark}
 
 We close with the natural formalization targets, in increasing order of difficulty, offered as an invitation: each is a well-posed statement whose meaning is already fixed by the definitions of this paper.
@@ -812,28 +1346,70 @@ We close with the natural formalization targets, in increasing order of difficul
 \item \emph{Frequency existence for balanced sequences.} Self-contained via \texttt{Analysis.Subadditive}; a few hundred lines.
 \item \emph{The full Sturmian converse} (Theorem~\ref{thm:morsehedlund}). The $1200$--$2500$ line project above; it would seed a combinatorics-on-words library for Mathlib, with the complexity characterization of Sturmian sequences ($p(n) = n+1$) as a natural milestone.
 \item \emph{Pisot's theorem} (Theorem~\ref{thm:pisot}). Requires conjugate embeddings and algebraic-integer machinery, parts of which Mathlib's number-field library already provides; substantial but with a marked trail.
-\item \emph{Siegel minimality} (Theorem~\ref{thm:siegel}). The summit: it presupposes the previous target together with a genuine theory of Pisot numbers.
+\item \emph{Siegel minimality in every degree} (Theorem~\ref{thm:siegel}). The summit: it presupposes the previous target together with a genuine theory of Pisot numbers. Degree at most $3$ is done (Section~\ref{sec:unique}).
 \end{enumerate}
 The first two are within reach of a newcomer to Mathlib; the third would be a real contribution to the library; the last two would formalize a distinguished chapter of twentieth-century number theory. Any of them would be welcome.
+
+Six further questions remain open.\nopagebreak
+\begin{enumerate}
+\item \emph{Does anything force the bit?} Section~\ref{sec:cost} shows that no mirror-symmetric criterion can choose between $s$ and $\tilde s$. Whether some other principle does is open.
+\item \emph{Primitivity of $s_{\rho Q}$ in the kernel.} It is computed (Section~\ref{sec:rhoQ}); Perron dominance already follows from kernel-verified statements.
+\item \emph{Alphabets of more than three letters.} Theorem~\ref{thm:unique} forces the rule, up to mirror image, on at most three letters. On larger alphabets the eigenvalue $\rho$ is realized by many substitutions. Every one we tested whose incidence matrix carries only $\rho$'s own spectrum (characteristic polynomial $x^m(x^3-x-1)$, equivalently every other eigenvalue inside the unit circle) is chiral: all $48$ on four letters and all $480$ on five. The achiral substitutions with Perron eigenvalue $\rho$ that we found carry a second expanding factor: $a \mapsto b$, $b \mapsto c$, $c \mapsto d$, $d \mapsto e$, $e \mapsto f$, $f \mapsto g$, $g \mapsto bcacb$ has characteristic polynomial $(x^3-x-1)(x^4+x^2+x+1)$ and palindromic images, so it realizes a different polynomial. Whether every substitution carrying $\rho$'s own spectrum is chiral, on every alphabet, is open.
+\item \emph{The split of the $\rho Q$ handedness.} How the one-way words of $s_{\rho Q}$ divide between the cubic and the quartic factor is open, and the computed split depends on the order of letters within the images.
+\item \emph{A reversor for the Padovan shift.} Whether the Padovan subshift is conjugate to its inverse is a conjugacy-level question that language chirality does not decide (Section~\ref{sec:chirality}).
+\item \emph{The thermodynamic arrow.} That the orientation arrow of this paper is the thermodynamic arrow is not claimed and is open.
+\end{enumerate}
+The arrow of this paper is the handedness of Sections~\ref{sec:chirality}--\ref{sec:lorentz}; what remains to be understood is how far that handedness reaches.
 
 \section{Formalization notes}
 \label{sec:formalization}
 
 The formal development accompanying this paper is available at
 \texttt{github.com/stalex444/arithmetic-of-time} (MIT license). It targets the
-toolchain \texttt{leanprover/lean4:v4.31.0} with Mathlib pinned at
-\texttt{v4.31.0} (recorded in \texttt{lean-toolchain} and
-\texttt{lake-manifest.json}), and \texttt{lake build} compiles the eight
-project modules in full: \texttt{Irreducibility}, \texttt{FieldNorm},
+toolchain \leanpinlong{} (recorded in \texttt{lean-toolchain} and
+\texttt{lake-manifest.json}), and \texttt{lake build} compiles the project
+modules in full: \texttt{Irreducibility}, \texttt{FieldNorm},
 \texttt{Settling}, \texttt{SettlingReplica} (an independent second
 formalization of \texttt{Settling}), \texttt{ConstantChain},
-\texttt{AlgebraicIntegers}, \texttt{MechanicalWord}, and
-\texttt{PisotBoundary}.
+\texttt{AlgebraicIntegers}, \texttt{MechanicalWord},
+\texttt{PisotBoundary}, \texttt{Chirality} and \texttt{OriginDefect}; the
+registry files \texttt{Challenge} and \texttt{Solution}; and the modules added
+for version~2, listed in Appendix~\ref{app:decls}, $44$ modules in all.
+
+Version~1 of the repository (commit \texttt{c48eb12}) is registered with the
+Palomar registry as PALOMAR-2026-08-19-000006 \cite{palomar-aot}. The registry
+compares three theorems, \texttt{ArithmeticOfTime.padovan\_a\_forces\_b},
+\texttt{ArithmeticOfTime.padovan\_chirality} and
+\texttt{ArithmeticOfTime.padovan\_no\_long\_palindrome}, over two compared
+definitions, \texttt{ArithmeticOfTime.s} and \texttt{ArithmeticOfTime.S}; the
+other modules are public in the repository but not compared. Version~2 of the
+repository consists of new commits to the same repository and is not a registry
+submission: the registered record stays at \texttt{c48eb12}, and the compared
+surface of version~2 (\texttt{comparator.json}, \texttt{Challenge.lean},
+\texttt{Solution.lean}) is the same three theorems over \texttt{s} and
+\texttt{S}, unchanged. The uniqueness results of Section~\ref{sec:unique} are
+registered separately, as PALOMAR-2026-10-18-000019 \cite{palomar-slowclock},
+which compares \texttt{ArithmeticOfTime.padovan\_minimal\_unique},
+\texttt{ArithmeticOfTime.padovan\_eigenvalue\_unique},
+\texttt{ArithmeticOfTime.padovan\_matrix\_unique},
+\texttt{ArithmeticOfTime.pisot\_ge\_plastic} and
+\texttt{ArithmeticOfTime.padovan\_rules\_chiral} over the definitions
+\texttt{ArithmeticOfTime.\{s, mir, inc, sub\}}; the same five statements, over the
+same definitions, are proved in this repository and not compared here. Every
+other result of version~2 is public in the repository and kernel-verified, but
+not compared. Appendix~\ref{app:decls} lists all of them. Results cited from sibling entries are
+kernel-verified there: \cite{palomar-cph} (Section~\ref{sec:lorentz}),
+\cite{palomar-compositum} (Section~\ref{sec:rhoQ}), \cite{palomar-trace}
+(Remark~\ref{rem:signatures}) and \cite{palomar-mahler}
+(Section~\ref{sec:boundary}); the results marked \emph{public} in
+Appendix~\ref{app:tiers} are public in \cite{pdtlean} but not registered.
 
 The development satisfies the following audit, which is what the label
 ``kernel-verified'' means throughout this paper:
 \begin{itemize}
-\item no \texttt{sorry} anywhere in the development;
+\item no \texttt{sorry} in any proof; the registry's statement file
+  \texttt{Challenge.lean} carries \texttt{sorry} placeholders by format, and
+  each is discharged in \texttt{Solution.lean};
 \item no \texttt{native\_decide}: every decidable fact is checked by the Lean
   kernel itself, never delegated to trusted compiled code;
 \item no custom axioms: for every theorem, \texttt{\#print axioms} reports a
@@ -848,23 +1424,277 @@ assumed. Every statement that requires $\beta$ irrational carries
 \texttt{Irrational}~$\beta$ as an explicit hypothesis (as in
 \texttt{Time.aperiodic}); no axiom asserts the irrationality of any particular
 real number. The formal theorems are therefore exactly as conditional as their
-statements in this paper.
+statements in this paper. For the distinguished slope the hypothesis is
+discharged by a theorem, \texttt{Time.beta\_irrational}, not by an axiom.
 
-The single non-formal component of the repository is the
+The non-formal component of the repository is the
 \texttt{diffraction/} folder of Section~\ref{sec:spectral}, which is clearly
-marked as computation; no Lean proof depends on anything in it. Statements
+marked as computation. The finite computations labelled \emph{computed} in
+Sections~\ref{sec:chirality} and~\ref{sec:rhoQ} are described where they occur;
+no Lean proof depends on any of them. Statements
 labelled ``classical'' or ``cited'' --- for instance Siegel's theorem that
 $\rho$ is the smallest Pisot number \cite{siegel1944}, and the pure-point
 diffraction of regular model sets \cite{hof1995, schlottmann2000} --- are
 literature theorems and are not formalized here.
 
+\appendix
 
-\begin{thebibliography}{10}
+\section{Tiers}
+\label{app:tiers}
+
+Every claim of the paper carries one of six tiers: \textbf{T0}, kernel-verified;
+\textbf{T1}, a cited theorem of the literature; \textbf{T2}, an explicit computation
+or elementary deduction not formalized; \textbf{T3}, sourced physics or philosophy;
+\textbf{T4}, the identification; \textbf{T5}, open. The ``artifact'' column says
+where a T0 result lives: \emph{reg} = a compared statement of a registered entry;
+\emph{closure} = in the build closure of a registered entry, not compared;
+\emph{repo} = public in this paper's version-1 repository, and carried unchanged in
+version~2; \emph{v2} = public in the version-2 repository, not compared;
+\emph{public} = public, not registered (Appendix~\ref{app:decls} lists the names).
+
+{\small
+\begin{longtable}{p{0.50\textwidth}p{0.07\textwidth}p{0.30\textwidth}}
+\hline
+claim & tier & artifact / source \\
+\hline
+\endhead
+Sections~\ref{sec:setup}--\ref{sec:word}: every theorem so labelled & T0 & repo (\texttt{c48eb12}) \\
+Proposition~\ref{prop:boundary-bookkeeping}(ii)--(iii) & T2 & proved in prose \\
+Siegel (in every degree), Pisot, Morse--Hedlund, model-set diffraction & T1 & cited \\
+Diffraction companion (Section~\ref{sec:spectral}) & T2 & repo, \texttt{diffraction/} \\
+Certification soundness (Remark~\ref{rem:certification}) & T0 & repo \\
+Norm conservation by the tick (\texttt{PDT.NormFloor.N\_tick}) & T0 & v2 \\
+Rate forced, general form (\texttt{PDT.ArrowRate.*}) & T0 & v2 (\texttt{rate\_eq\_half\_log}); instance in repo \\
+Least Mahler measure in degrees 3 and 4 & T0 & reg \cite{palomar-mahler} \\
+Distinguished slope $\beta$: digits; $0 < \beta < 1$ & T2 & computed \\
+Irrationality of $\beta$ (\texttt{Time.beta\_irrational}) & T0 & v2 \\
+Taking the tick word at slope $\beta$ as the clock & T4 & identification \\
+Siegel's bound in degree at most $3$ (\texttt{pisot\_ge\_plastic}) & T0 & reg \cite{palomar-slowclock}; the theorem is \cite{siegel1944} \\
+Slowest settling clock on at most three letters: bound, uniqueness up to mirror image, matrix classification (Theorem~\ref{thm:unique}) & T0 & reg \cite{palomar-slowclock} \\
+Both minimal rules are chiral (Theorem~\ref{thm:ruleschiral}) & T0 & reg \cite{palomar-slowclock} \\
+Padovan invariant, chirality, no long palindromes, all seeds & T0 & reg \cite{palomar-aot} \\
+Inventory of short palindromes; the thirteen reversal-closed words & T2 & read off the certificate \\
+Exact orientation threshold $4$ (Theorem~\ref{thm:threshold}) & T0 & v2 \\
+Marked origin and its handedness (Section~\ref{sec:origin}) & T0 + T1 & repo; \cite{barbieri2021}; at slope $\beta$: irrationality T0 (v2), $0 < \beta < 1$ computed \\
+Exactly two substitutions share $M$ (Proposition~\ref{prop:twosubs}) & T2 & elementary; cf.\ \cite{mercat2020}; up to renaming, T0 (Theorem~\ref{thm:unique}) \\
+Mirror substitutions have reversed languages & T0 & v2 (\texttt{iterate\_mir\_seed}) \\
+Characteristic polynomial of $s_{\rho Q}$ & T0 & v2 \\
+Minimal polynomial and irreducibility of $\rho Q$; census; product recurrence & T0 & reg \cite{palomar-compositum} \\
+Least size $12$ (Corollary~\ref{cor:leastsize}) & T2 & standard algebra \\
+Primitivity of $s_{\rho Q}$ & T2 & computed \\
+Perron dominance of $s_{\rho Q}$ (Theorem~\ref{thm:rhoQcharpoly} with \texttt{ruler\_house}) & T0 & v2 + reg \cite{palomar-compositum} \\
+Chirality of $s_{\rho Q}$ (Theorem~\ref{thm:rhoQchiral}) & T0 & v2 \\
+Staircase $0/41.77/89.19/100$; $33$ of $79$; $768$ orderings & T2 & computed \\
+Quartic one-way pairs; Fibonacci tensor chiral & T2 & computed \\
+Split of the $\rho Q$ handedness & T5 & open \\
+Mirror equivariance of the tensor (Theorem~\ref{thm:mirror}) & T0 & v2 \\
+Joint clock: irreducible, recovers both ticks; no intertwiner & T0 & v2 \\
+Existence of the product construction; minimum size problem & T1 & \cite{lind1983,lind1984,boylelind2002,bertrandmathis2021,yazdi2021} \\
+Trace-form signatures $(2,1)$, $(3,1)$, $(7,5)$ & T0 & reg \cite{palomar-trace} \\
+Stream, geometry, chiral timelike history, observer agreement, separation & T0 & reg / closure \cite{palomar-cph} \\
+Multiplication by $Q$ is not timelike-preserving & T0 & public \cite{pdtlean} \\
+Raw ticks are not scalar Hamiltonian evolution & T0 & public \cite{pdtlean} \\
+Non-Pisot side: the $\rho Q$ tiling is weakly mixing, no pure-point diffraction & T1 + T2 & \cite{solomyak1997,solomyak2007,dworkin1993,baakelenz2004}; primitivity computed \\
+Simultaneity frame-dependent, timelike order invariant & T3 & \cite{zeeman1964,hawkingellis1973} \\
+Weak interaction, homochirality, $T$-violation facts & T3 & cited in Section~\ref{sec:intro} \\
+Past Hypothesis and block-universe literature & T3 & cited in Section~\ref{sec:intro} \\
+Time is this arithmetic (Section~\ref{sec:intro}) & T4 & identification \\
+Thermodynamic arrow; a reversor; forcing of the bit; chirality on more than three letters for $\rho$'s own spectrum & T5 & open \\
+\hline
+\end{longtable}
+}
+
+\emph{Riders on the identification.} The identification draws no laboratory prediction of
+its own; its clock and marked-orbit components are model-internal, and its exposed surface is
+the one it inherits from its components. The laws of the model are time-symmetric (the tick is
+a norm-preserving bijection with equal forward and backward topological entropy); the
+identification selects an object, it does not alter the laws. The residual input is a state
+selection --- the shape of the Past Hypothesis --- but the selected object is constructed, has
+no parameters, and is asymmetric by theorem. Word reversal and tick inversion are different
+involutions (Section~\ref{sec:cost}). No claim of this paper rests on agreement between the
+slope $\beta$ and other work in the author's programme.
+
+\emph{Riders on Sections~\ref{sec:rhoQ} and~\ref{sec:lorentz}.} The joint clock of
+Remark~\ref{rem:jointclock} is indivisible over $\mathbb{Q}$ only, not over $\mathbb{R}$ or
+$\mathbb{C}$, and the trace form of $L$ keeps signature $(7,5)$
+(Remark~\ref{rem:signatures}). Theorem~\ref{thm:history} is an existence and compatibility
+theorem, not a canonical selection: $u_0$, $B$, the normalization, the origin and the time
+orientation are explicit choices, and the image uses two spatial directions and time. Its
+geometry is the $(3,1)$ trace geometry of $\mathbb{Q}(Q)$, not that of $\mathbb{Q}(\rho Q)$,
+whose trace form has signature $(7,5)$. The substitution is not a Lorentz map: multiplication
+by $Q$ sends $u_0$, with $q(u_0) = -36$, to $Qu_0$ with $q(Qu_0) = 91$
+(\texttt{PDT.SignatureForcing.traceForm\_tW}, \texttt{PDT.TimeStepTrace.traceForm\_mul\_tW},
+\texttt{PDT.TimeStepTrace.timelike\_to\_spacelike},
+\texttt{PDT.TimeStepTrace.not\_preserves\_timelike}; public in \cite{pdtlean}, not
+registered). Neither tick carried by the joint clock is a Hamiltonian evolution in the raw:
+a complex multiplier of modulus different from $1$ is generated by no real scalar
+Hamiltonian, so neither the contracting cubic tick nor the expanding quartic tick is scalar
+Hermitian evolution
+(\texttt{PDT.HamiltonianBoundary.cubic\_quartic\_raw\_ticks\_not\_scalarHamiltonian}; public in
+\cite{pdtlean}, not registered). That boundary is a statement about one complex mode; it does
+not turn the opposite radial directions of the two ticks into an arrow of time.
+
+\section{Declarations}
+\label{app:decls}
+\begingroup\sloppy
+
+Every declaration name in this paper exists in the Lean sources of the commit cited for it:
+names of this paper's repository in its version-2 sources, which carry every version-1 module
+unchanged in content; names of a sibling entry or of \cite{pdtlean} at the commit given for it.
+
+\emph{Compared in this paper's registered entry} PALOMAR-2026-08-19-000006 \cite{palomar-aot}
+(\texttt{comparator.json}; the statements are in \texttt{Challenge.lean}, the proofs in
+\texttt{Solution.lean}; as registered at \texttt{c48eb12}, and unchanged in version~2). The
+compared definitions are \texttt{ArithmeticOfTime.\{s, S\}}: the Padovan substitution and its
+letterwise extension. The three theorems, in comparator order:
+\begin{enumerate}
+\item \texttt{ArithmeticOfTime.padovan\_a\_forces\_b}: in every positive iterate, from any seed,
+each $a$ is followed by $b$ (Theorem~\ref{thm:invariant}).
+\item \texttt{ArithmeticOfTime.padovan\_chirality}: $ca$ occurs and $ac$ occurs from no seed
+(Theorem~\ref{thm:chirality}).
+\item \texttt{ArithmeticOfTime.padovan\_no\_long\_palindrome}: no factor of length $\ge 4$ of any
+iterate from any seed is a palindrome (Theorem~\ref{thm:nopalindrome}).
+\end{enumerate}
+
+\emph{Compared in the registered entry} PALOMAR-2026-10-18-000019 \cite{palomar-slowclock}. The
+compared definitions are \texttt{ArithmeticOfTime.\{s, mir, inc, sub\}}: the Padovan
+substitution; the mirror, the incidence matrix and the letterwise application of a substitution
+on an arbitrary alphabet. The same five statements, over the same definitions, are proved in
+version~2 of this paper's repository (module \texttt{Supplement}) and are not compared there.
+The five theorems, in comparator order:
+\begin{enumerate}
+\item \texttt{ArithmeticOfTime.padovan\_minimal\_unique}: on $k \le 3$ letters a Pisot eigenvalue
+$\theta > 1$ satisfies $\rho \le \theta$, with equality exactly for $s$ and its mirror up to
+renaming (Theorem~\ref{thm:unique}).
+\item \texttt{ArithmeticOfTime.padovan\_eigenvalue\_unique}: the same equivalence for every real
+eigenvalue, with no Pisot hypothesis (Theorem~\ref{thm:unique}).
+\item \texttt{ArithmeticOfTime.padovan\_matrix\_unique}: a $3 \times 3$ matrix over $\mathbb{N}$
+with characteristic polynomial $x^3 - x - 1$ is $M$ up to one simultaneous permutation
+(Theorem~\ref{thm:unique}).
+\item \texttt{ArithmeticOfTime.pisot\_ge\_plastic}: Siegel's bound $\rho \le \theta$ for Pisot
+numbers of degree at most $3$ (Section~\ref{sec:unique}; not new \cite{siegel1944}).
+\item \texttt{ArithmeticOfTime.padovan\_rules\_chiral}: $s$ and its mirror are both chiral, in
+opposite directions (Theorem~\ref{thm:ruleschiral}).
+\end{enumerate}
+
+\emph{Proved in version~2 of this paper's repository, public, not compared} (module
+\texttt{Supplement}, over the definitions of the two compared lists above, with the further
+definitions \texttt{ArithmeticOfTime.\{tens, quart, rhoQSub, rhoQInc\}}: the row-major tensor on
+arbitrary alphabets, the quartic substitution, the twelve-letter substitution and its incidence
+matrix).
+\begin{itemize}
+\item \texttt{ArithmeticOfTime.padovan\_exact\_orientation\_threshold\_four}: some factor of
+length $3$ from seed $a$ is its own reversal, and a factor of length $\ge 4$ has its reversal
+in no iterate from any seed: the exact threshold $4$ (Theorem~\ref{thm:threshold}).
+\item \texttt{ArithmeticOfTime.iterate\_mir\_seed}: every iterate of the mirror of any substitution,
+from a one-letter seed, is the reversal of the corresponding iterate
+(Proposition~\ref{prop:twosubs}).
+\item \texttt{ArithmeticOfTime.iterate\_tens\_mir}: mirroring both factors of a row-major tensor
+reverses every iterate of the product (Theorem~\ref{thm:mirror}).
+\item \texttt{ArithmeticOfTime.single\_mirrors\_reverse}: the two single mirrors of a tensor give
+mutually reversed iterates (the companion of Theorem~\ref{thm:mirror}).
+\item \texttt{ArithmeticOfTime.padovan\_length\_three\_orientation\_ambiguity} and
+\texttt{ArithmeticOfTime.padovan\_reversal\_forbidden\_of\_four\_le}: the two halves of the
+threshold theorem above (Theorem~\ref{thm:threshold}(a), (b)).
+\item \texttt{ArithmeticOfTime.rate\_eq\_half\_log}: $\rho \lVert \sigma \rVert^2 = 1$ gives
+$-\log \lVert \sigma \rVert = \tfrac12 \log \rho$ (Section~\ref{sec:cost}).
+\item \texttt{ArithmeticOfTime.rhoQ\_substitution\_charpoly}: the characteristic polynomial of the
+twelve-letter substitution is $P$ (Theorem~\ref{thm:rhoQcharpoly}).
+\item \texttt{ArithmeticOfTime.rhoQ\_chirality}: $q2\,p1$ occurs and $p1\,q2$ occurs from no seed
+(Theorem~\ref{thm:rhoQchiral}).
+\end{itemize}
+
+\emph{Compared in registered sibling entries.}
+\texttt{ChiralPadovanHistories.\{admissible\_stream, faithful\_chiral\_code,
+exists\_chiral\_timelike\_history, rest\_space, trace\_gram\_link, normalized\_inflation\_iff,
+reversal\_information, history\_separation, return\_clock\_bounds,
+quartic\_record\_obstruction\}} \cite{palomar-cph};
+\texttt{PlasticThreshold.\{ruler\_linearDisjoint, ruler\_conjugates\_card,
+product\_annihilator\_iff, product\_recurrence\_charpoly, ruler\_conjugate\_census,
+ruler\_house\}}
+\cite{palomar-compositum};
+\texttt{TraceForms.\{sigPos\_cubic, sigNeg\_cubic, sigPos\_quartic, sigNeg\_quartic,
+sigPos\_compositum, sigNeg\_compositum\}} \cite{palomar-trace};
+\texttt{MahlerWindow.\{cubic\_min, quartic\_min, quartic\_exact\}} \cite{palomar-mahler}.
+
+\emph{Public in sibling builds and in \cite{pdtlean}, not compared.}
+\texttt{PDT.RulerMinpoly.\{ruler\_minpoly, rulerPoly\_irreducible\}} in the build of
+\cite{palomar-compositum} (and carried in the version-2 repository);
+\texttt{PDT.PadovanStream.\{U\_eq\_prefix, block\_factor,
+letters\_ca\_at\_six, letters\_no\_ac\}} and \texttt{PDT.PadovanRealization.\{future\_increments,
+chronological, injective\_history, every\_future\_observer\}} in the build of
+\cite{palomar-cph}; \texttt{PDT.SignatureForcing.traceForm\_tW},
+\texttt{PDT.TimeStepTrace.\{traceForm\_mul\_tW, timelike\_to\_spacelike,
+not\_preserves\_timelike\}} and
+\texttt{PDT.HamiltonianBoundary.cubic\_quartic\_raw\_ticks\_not\_scalarHamiltonian} in
+\cite{pdtlean}.
+
+\emph{Public in this paper's repository, not compared.} All \texttt{Time.*} and
+\texttt{TimeReplica.*} names of Sections~\ref{sec:setup}--\ref{sec:chirality} other than those
+below, at \texttt{c48eb12} and in version~2. Carried in the version-2 repository (module:
+declarations):
+\begin{itemize}
+\item \texttt{SlowestClock}: \texttt{Time.Clock.\{slowest\_clock, clock\_unique, matrix\_unique,
+pisot\_ge\_rho, mahler\_eq\_of\_pisot\}}.
+\item \texttt{BetaIrrational}: \texttt{Time.\{beta\_irrational, normSq\_pow\_ne\_rho\_pow\}}.
+\item \texttt{PdtFourTickThreshold}: \texttt{PDT.Padovan.\{F5\_no\_reversal\_pair\_length\_four,
+reversal\_forbidden\_of\_four\_le, iterate\_eight, length\_three\_orientation\_ambiguity,
+exact\_orientation\_threshold\_four\}};
+with its dependency \texttt{PdtChirality} (the namespace-\texttt{PDT.Padovan} twin of
+\texttt{Chirality}).
+\item \texttt{PdtArrowRate}: \texttt{PDT.ArrowRate.\{log\_norm\_eq\_neg\_half\_log,
+rate\_eq\_half\_log\}}.
+\item \texttt{PdtNormFloor}: \texttt{PDT.NormFloor.N\_tick}.
+\item \texttt{PdtMirrorTensor}: \texttt{PdtMirror.\{iterate\_mir\_seed, iterate\_tens\_mir,
+palindromic\_iterate, palindromic\_reversal\_closed\}}.
+\item \texttt{PdtRhoQChirality}: \texttt{PdtRhoQ.\{s, every\_p1\_followed\_by\_p2,
+p1\_pair\_not\_factor, rhoQ\_chirality, q2p1\_factor, q3p1\_factor, q4p1\_factor,
+r2p1\_factor\}}.
+\item \texttt{PdtCharpolyTensor}: \texttt{PdtCharpolyTensor.\{charpoly\_tensor,
+substitution\_charpoly, inc\_eq\_tensor\}}.
+\item \texttt{PdtJointClock}, \texttt{PdtJointClockIrreducible}:
+\texttt{PDT.JointClock.\{joint\_clock\_decomposition, recover\_cubic\_tick,
+recover\_quartic\_tick, no\_proper\_jointTick\_invariant\_submodule\}}.
+\item \texttt{PdtCubicQuarticBridge}:
+\texttt{PDT.CubicQuarticBridge.no\_cubic\_quartic\_tick\_intertwiner}.
+\item \texttt{Sturmian}: the standalone restatement named in Section~\ref{sec:word}.
+\end{itemize}
+The repository also carries the supporting modules these import, among them the
+registered Mahler-measure modules of \cite{palomar-mahler}; its \texttt{README.md} lists all
+$44$ modules.
+\endgroup
+
+\section{Provenance}
+\label{app:provenance}
+
+Version~1 of this paper is dated 15 August 2026 and accompanies the repository at commit
+\texttt{c48eb12}, registered as PALOMAR-2026-08-19-000006. Version~2 adds
+Section~\ref{sec:unique}, Sections~\ref{sec:threshold}--\ref{sec:lorentz}, the new paragraphs of
+the introduction, and these appendices, and corrects the version-1 text where later results
+moved a fact; the principal changes are summarized in \texttt{paper/README.md} of the
+version-2 repository. The registered sibling entries cited are
+listed in the bibliography by identifier, version and commit. The reflection asymmetry of the
+Padovan tiling space is G\"ahler's \cite{gahler2026}; the bound $\rho \le \theta$ of
+Section~\ref{sec:unique} is Siegel's \cite{siegel1944}; the minimal substitution for $\rho$ is
+Mercat's \cite{mercat2020}; the product construction is Lind's \cite{lind1983,lind1984}; the
+marked-orbit characterization is Barbieri--Labb\'e--Starosta's \cite{barbieri2021}; the
+reversing-symmetry framework is Baake--Roberts--Yassawi's \cite{baakeroberts2018}.
+
+
+\begin{thebibliography}{99}
 
 \bibitem{aarts2001}
 J.~Aarts, R.~Fokkink, and G.~Kruijtzer,
 \emph{Morphic numbers},
 Nieuw Arch. Wiskd. (5) \textbf{2} (2001), 56--58.
+
+\bibitem{albert2000}
+D.~Z. Albert, \emph{Time and Chance}, Harvard University Press, Cambridge, MA, 2000.
+
+\bibitem{arola2023}
+L.~Arola-Fern\'andez and L.~Lacasa,
+\emph{Irreversibility of symbolic time series: a cautionary tale},
+Phys. Rev. E \textbf{108} (2023), 014201.
 
 \bibitem{baakegrimm2013}
 M.~Baake and U.~Grimm,
@@ -872,10 +1702,21 @@ M.~Baake and U.~Grimm,
 Encyclopedia of Mathematics and its Applications \textbf{149},
 Cambridge University Press, Cambridge, 2013.
 
+\bibitem{baakelenz2004}
+M.~Baake and D.~Lenz,
+\emph{Dynamical systems on translation bounded measures: pure point dynamical and diffraction
+spectra},
+Ergodic Theory Dynam. Systems \textbf{24} (2004), 1867--1893.
+
 \bibitem{baakeroberts2018}
 M.~Baake, J.~A.~G. Roberts, R.~Yassawi,
 \emph{Reversing and extended symmetries of shift spaces},
 Discrete Contin. Dyn. Syst. A \textbf{38} (2018), 835--866.
+
+\bibitem{babar2012}
+J.~P. Lees et al. (BABAR Collaboration),
+\emph{Observation of time-reversal violation in the $B^0$ meson system},
+Phys. Rev. Lett. \textbf{109} (2012), 211801.
 
 \bibitem{balkova2010}
 L.~Balkov\'a, E.~Pelantov\'a, \v{S}.~Starosta,
@@ -887,21 +1728,128 @@ S.~Barbieri, S.~Labb\'e, \v{S}.~Starosta,
 \emph{A characterization of Sturmian sequences by indistinguishable asymptotic pairs},
 European J. Combin. \textbf{95} (2021), 103318.
 
+\bibitem{barbour2014}
+J.~Barbour, T.~Koslowski, and F.~Mercati,
+\emph{Identification of a gravitational arrow of time},
+Phys. Rev. Lett. \textbf{113} (2014), 181101.
+
+\bibitem{barron1986}
+L.~D. Barron,
+\emph{True and false chirality and parity violation},
+Chem. Phys. Lett. \textbf{123} (1986), 423--427.
+
 \bibitem{bertin1992}
 M.-J. Bertin, A.~Decomps-Guilloux, M.~Grandet-Hugot,
 M.~Pathiaux-Delefosse, and J.-P. Schreiber,
 \emph{Pisot and Salem Numbers},
 Birkh\"auser, Basel, 1992.
 
+\bibitem{bertrandmathis2021}
+A.~Bertrand-Mathis and F.~Nguema Ndong,
+\emph{Perron numbers and positive matrices of minimal order},
+Integers \textbf{21} (2021), Paper No.~A50.
+
+\bibitem{blackmond2019}
+D.~G. Blackmond,
+\emph{The origin of biological homochirality},
+Cold Spring Harb. Perspect. Biol. \textbf{11} (2019), a032540.
+
+\bibitem{boylelind2002}
+M.~Boyle and D.~Lind,
+\emph{Small polynomial matrix presentations of nonnegative matrices},
+Linear Algebra Appl. \textbf{355} (2002), 49--70.
+
+\bibitem{callender2026}
+C.~Callender,
+\emph{Thermodynamic asymmetry in time},
+Stanford Encyclopedia of Philosophy (substantive revision 12 June 2026),
+\url{https://plato.stanford.edu/entries/time-thermo/}.
+
+\bibitem{carroll2010}
+S.~M. Carroll,
+\emph{From Eternity to Here: The Quest for the Ultimate Theory of Time},
+Dutton, New York, 2010.
+
+\bibitem{carrollchen2004}
+S.~M. Carroll and J.~Chen,
+\emph{Spontaneous inflation and the origin of the arrow of time},
+arXiv:hep-th/0410270 (2004).
+
+\bibitem{castagnino2003}
+M.~Castagnino, L.~Lara, and O.~Lombardi,
+\emph{The direction of time: from the global arrow to the local arrow},
+Internat. J. Theoret. Phys. \textbf{42} (2003), 2487--2504.
+
+\bibitem{christenson1964}
+J.~H. Christenson, J.~W. Cronin, V.~L. Fitch, and R.~Turlay,
+\emph{Evidence for the $2\pi$ decay of the $K_2^0$ meson},
+Phys. Rev. Lett. \textbf{13} (1964), 138--140.
+
+\bibitem{dworkin1993}
+S.~Dworkin,
+\emph{Spectral theory and X-ray diffraction},
+J. Math. Phys. \textbf{34} (1993), 2965--2967.
+
+\bibitem{earman2006}
+J.~Earman,
+\emph{The ``Past Hypothesis'': not even false},
+Stud. Hist. Philos. Modern Phys. \textbf{37} (2006), 399--430.
+
+\bibitem{einstein1955}
+A.~Einstein, letter to Vero Besso and Bice Rusconi, Princeton, 21 March 1955,
+in: P.~Speziali (ed.), \emph{Albert Einstein -- Michele Besso: Correspondance 1903--1955},
+Hermann, Paris, 1972, no.~211.
+
+\bibitem{feynmangellmann1958}
+R.~P. Feynman and M.~Gell-Mann,
+\emph{Theory of the Fermi interaction},
+Phys. Rev. \textbf{109} (1958), 193--198.
+
+\bibitem{frank1953}
+F.~C. Frank,
+\emph{On spontaneous asymmetric synthesis},
+Biochim. Biophys. Acta \textbf{11} (1953), 459--463.
+
 \bibitem{gahler2026}
 F.~G\"ahler,
 \emph{Dynamical invariants from asymptotic composants},
 arXiv:2602.18501 (2026).
 
+\bibitem{garwin1957}
+R.~L. Garwin, L.~M. Lederman, and M.~Weinrich,
+\emph{Observations of the failure of conservation of parity and charge conjugation in meson
+decays: the magnetic moment of the free muon},
+Phys. Rev. \textbf{105} (1957), 1415--1417.
+
+\bibitem{goldhaber1958}
+M.~Goldhaber, L.~Grodzins, and A.~W. Sunyar,
+\emph{Helicity of neutrinos},
+Phys. Rev. \textbf{109} (1958), 1015--1017.
+
+\bibitem{hawkingellis1973}
+S.~W. Hawking and G.~F.~R. Ellis,
+\emph{The Large Scale Structure of Space-Time},
+Cambridge University Press, Cambridge, 1973.
+
 \bibitem{hof1995}
 A.~Hof,
 \emph{On diffraction by aperiodic structures},
 Comm. Math. Phys. \textbf{169} (1995), 25--43.
+
+\bibitem{leeyang1956}
+T.~D. Lee and C.~N. Yang,
+\emph{Question of parity conservation in weak interactions},
+Phys. Rev. \textbf{104} (1956), 254--258.
+
+\bibitem{lind1983}
+D.~A. Lind,
+\emph{Entropies and factorizations of topological Markov shifts},
+Bull. Amer. Math. Soc. (N.S.) \textbf{9} (1983), 219--222.
+
+\bibitem{lind1984}
+D.~A. Lind,
+\emph{The entropies of topological Markov shifts and a related class of algebraic integers},
+Ergodic Theory Dynam. Systems \textbf{4} (1984), 283--300.
 
 \bibitem{lothaire2002}
 M.~Lothaire,
@@ -919,6 +1867,90 @@ M.~Morse and G.~A. Hedlund,
 \emph{Symbolic dynamics II. Sturmian trajectories},
 Amer. J. Math. \textbf{62} (1940), 1--42.
 
+\bibitem{palomar-aot}
+S.~Alexander,
+\emph{arithmetic-of-time},
+Palomar registry entry PALOMAR-2026-08-19-000006, version~1, registered 19 August 2026;
+repository \texttt{github.com/stalex444/arithmetic-of-time}, commit \texttt{c48eb12}.
+
+\bibitem{palomar-compositum}
+S.~Alexander,
+\emph{The compositum of the two Mahler minimizers: exact measure, conjugate census, house,
+and minimal product recurrence, with the Bedford--Kim plastic family and Lehmer's
+polynomial},
+Palomar registry entry PALOMAR-2026-09-01-000005, version~1, registered 1 September 2026;
+repository \texttt{github.com/stalex444/mahler-minimizer-compositum}, commit
+\texttt{d78ce16}.
+
+\bibitem{palomar-cph}
+S.~Alexander,
+\emph{Sharp arithmetic separation in chiral Padovan histories},
+Palomar registry entry PALOMAR-2026-09-04-000004, version~1, registered 4 September 2026;
+repository \texttt{github.com/stalex444/chiral-padovan-histories}, commit
+\texttt{14711e6}.
+
+\bibitem{palomar-mahler}
+S.~Alexander,
+\emph{mahler-measure-minima},
+Palomar registry entry PALOMAR-2026-08-31-000004, version~1, registered 31 August 2026;
+repository \texttt{github.com/stalex444/mahler-measure-minima}, commit \texttt{ca3df22}.
+
+\bibitem{palomar-slowclock}
+S.~Alexander,
+\emph{The Arithmetic of Time: the slowest settling clock on at most three letters is the
+Padovan substitution, unique up to mirror image, and both minimal rules are chiral},
+Palomar registry entry PALOMAR-2026-10-18-000019, version~1, registered 18 October 2026;
+repository \texttt{github.com/stalex444/arithmetic-of-time-slowest-clock}, commit
+\texttt{49eafba}.
+
+\bibitem{palomar-trace}
+S.~Alexander,
+\emph{The trace form of a tensor product of algebras and the signature product rule, with
+the trace forms of $\mathbb{Q}[x]/(x^3 - x - 1)$, $\mathbb{Q}[x]/(x^4 - x - 1)$ and their
+compositum as instances},
+Palomar registry entry PALOMAR-2026-09-02-000014, version~1, registered 2 September 2026,
+commit \texttt{9528df0};
+\url{https://palomar-registry.org/entry.html?id=PALOMAR-2026-09-02-000014&version=1}.
+
+\bibitem{pdtlean}
+S.~Alexander,
+\emph{pdt-lean}, repository \texttt{github.com/stalex444/pdt-lean}, commit \texttt{34f7b0a}
+(modules \texttt{PdtTimeStepTrace} and \texttt{PdtHamiltonianBoundary}, which are not part of
+the registered versions of PALOMAR-2026-08-19-000007, and \texttt{PdtSignatureForcing}),
+\url{https://github.com/stalex444/pdt-lean}.
+
+\bibitem{penrose1979}
+R.~Penrose,
+\emph{Singularities and time-asymmetry},
+in: General Relativity: An Einstein Centenary Survey (S.~W. Hawking and W.~Israel, eds.),
+Cambridge University Press, Cambridge, 1979, 581--638.
+
+\bibitem{price1996}
+H.~Price,
+\emph{Time's Arrow and Archimedes' Point: New Directions for the Physics of Time},
+Oxford University Press, New York, 1996.
+
+\bibitem{putnam1967}
+H.~Putnam,
+\emph{Time and physical geometry},
+J. Philos. \textbf{64} (1967), 240--247.
+
+\bibitem{rietdijk1966}
+C.~W. Rietdijk,
+\emph{A rigorous proof of determinism derived from the special theory of relativity},
+Philos. Sci. \textbf{33} (1966), 341--344.
+
+\bibitem{sallembien2022}
+Q.~Sallembien, L.~Bouteiller, J.~Crassous, and M.~Raynal,
+\emph{Possible chemical and physical scenarios towards biological homochirality},
+Chem. Soc. Rev. \textbf{51} (2022), 3436--3476.
+
+\bibitem{savitt2021}
+S.~Savitt,
+\emph{Being and becoming in modern physics},
+Stanford Encyclopedia of Philosophy (substantive revision 6 October 2021),
+\url{https://plato.stanford.edu/entries/spacetime-bebecome/}.
+
 \bibitem{schlottmann2000}
 M.~Schlottmann,
 \emph{Generalized model sets and dynamical systems},
@@ -931,6 +1963,53 @@ Amer. Math. Soc., Providence, RI, 2000, 143--159.
 C.~L. Siegel,
 \emph{Algebraic integers whose conjugates lie in the unit circle},
 Duke Math. J. \textbf{11} (1944), 597--602.
+
+\bibitem{soai1995}
+K.~Soai, T.~Shibata, H.~Morioka, and K.~Choji,
+\emph{Asymmetric autocatalysis and amplification of enantiomeric excess of a chiral molecule},
+Nature \textbf{378} (1995), 767--768.
+
+\bibitem{solomyak1997}
+B.~Solomyak,
+\emph{Dynamics of self-similar tilings},
+Ergodic Theory Dynam. Systems \textbf{17} (1997), 695--738;
+Corrections, ibid. \textbf{19} (1999), 1685.
+
+\bibitem{solomyak2007}
+B.~Solomyak,
+\emph{Eigenfunctions for substitution tiling systems},
+in: Probability and Number Theory --- Kanazawa 2005,
+Adv. Stud. Pure Math. \textbf{49}, Math. Soc. Japan, Tokyo, 2007, 433--454.
+
+\bibitem{stein1968}
+H.~Stein,
+\emph{On Einstein--Minkowski space--time},
+J. Philos. \textbf{65} (1968), 5--23.
+
+\bibitem{sudarshanmarshak1958}
+E.~C.~G. Sudarshan and R.~E. Marshak,
+\emph{Chirality invariance and the universal Fermi interaction},
+Phys. Rev. \textbf{109} (1958), 1860--1862.
+
+\bibitem{virbalas2023}
+P.~Virbalas,
+\emph{Degree of the product of two algebraic numbers one of which is of prime degree},
+Mathematics \textbf{11} (2023), 1485.
+
+\bibitem{wu1957}
+C.~S. Wu, E.~Ambler, R.~W. Hayward, D.~D. Hoppes, and R.~P. Hudson,
+\emph{Experimental test of parity conservation in beta decay},
+Phys. Rev. \textbf{105} (1957), 1413--1415.
+
+\bibitem{yazdi2021}
+M.~Yazdi,
+\emph{Lower bound for the Perron--Frobenius degrees of Perron numbers},
+Ergodic Theory Dynam. Systems \textbf{41} (2021), 1264--1280.
+
+\bibitem{zeeman1964}
+E.~C. Zeeman,
+\emph{Causality implies the Lorentz group},
+J. Math. Phys. \textbf{5} (1964), 490--493.
 
 \end{thebibliography}
 

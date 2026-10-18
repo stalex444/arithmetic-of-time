@@ -1,4 +1,7 @@
-import MechanicalWord
+module
+public import MechanicalWord
+
+@[expose] public section
 
 /-!
 # OriginDefect — the ℤ-indexed mechanical word: reflection identity and the origin defect

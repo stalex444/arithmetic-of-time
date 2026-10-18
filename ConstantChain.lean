@@ -1,4 +1,7 @@
-import Mathlib
+module
+public import Mathlib
+
+@[expose] public section
 
 /-!
 # ConstantChain — the coupling chain κ < r_in < χ < A* and the fixed-arm tick

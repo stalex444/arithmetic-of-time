@@ -20,8 +20,11 @@ compared:
 | **mechanical word** | **sharp Bragg peaks at the incommensurate module `m + nβ`** — positions forbidden to any periodic crystal and absent in the gas |
 | Poisson gas | flat floor, no peaks |
 
-The intensity of the crystal-forbidden peak (at `1 + β`) grows **∝ N** — the
-defining mark of a genuine Bragg peak — while the gas stays `O(1)`.
+The intensity of the word's own crystal-forbidden peak (at `β`) grows **∝ N** —
+the defining mark of a genuine Bragg peak — while the gas stays `O(1)`. (The
+larger values at `1 + β` and `2 + 2β` are peaks of the integer gap lattice,
+shared by every sequence of gaps `1` and `2`; they are not specific to the
+word, so the scaling is measured at `β`.)
 
 So the properties proved in the Lean development — aperiodic
 (`Time.aperiodic`) yet balanced (`Time.balanced`) — are, spectrally,

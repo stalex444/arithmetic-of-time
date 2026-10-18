@@ -19,8 +19,8 @@ Sc = np.array([S(xc, 2*np.pi*beta*p)/N for p in pos])
 Sq = np.array([S(xq, 2*np.pi*beta*p)/N for p in pos])
 Sg = np.array([S(xg, 2*np.pi*beta*p)/N for p in pos])
 
-# N-scaling at the crystal-forbidden incommensurate peak 1 + beta
-kb = 2*np.pi*beta*(1+beta)
+# N-scaling at the word's own crystal-forbidden peak p = beta
+kb = 2*np.pi*beta*beta
 Ns = [10000, 30000, 100000, 300000, 1000000]
 qN, gN = [], []
 for Nn in Ns:
@@ -53,9 +53,9 @@ ins = axm.inset_axes([0.50, 0.50, 0.36, 0.44])
 ins.loglog(Ns, qN, 'o-', color="#d1552a", ms=3.5, lw=1.3, label="word")
 ins.loglog(Ns, gN, 's-', color="#8a8a8a", ms=3, lw=1.0, label="gas")
 ins.loglog(Ns, [qN[0]*n/Ns[0] for n in Ns], '--', color="#999", lw=0.9)
-ins.set_title(r"peak at $1{+}\beta$ vs $N$", fontsize=7.5, pad=2)
-ins.tick_params(labelsize=6.5); ins.legend(fontsize=6, loc='upper left', frameon=False)
-ins.text(0.5, 0.05, r"$\propto N$ = Bragg", transform=ins.transAxes, fontsize=6,
+ins.set_title(r"peak at $\beta$ vs $N$", fontsize=7.5, pad=2)
+ins.tick_params(labelsize=6.5); ins.legend(fontsize=6, loc='center left', bbox_to_anchor=(0.0, 0.38), frameon=False)
+ins.text(0.75, 0.38, r"$\propto N$ = Bragg", transform=ins.transAxes, fontsize=6,
          color="#666", ha='center')
 
 fig.suptitle("Diffraction of the mechanical word: quasicrystalline order",

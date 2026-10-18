@@ -1,4 +1,7 @@
-import Irreducibility
+module
+public import Irreducibility
+
+@[expose] public section
 
 /-!
 # Settling — an exact contraction rate and a Meyer separation on ℤ[ρ]

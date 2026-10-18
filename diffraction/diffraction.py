@@ -10,8 +10,8 @@ sets at identical density beta:
 
 The mechanical word shows sharp Bragg peaks at the incommensurate module
 m + n*beta — positions forbidden to any periodic crystal and absent in the
-gas — and the intensity of the crystal-forbidden peak grows proportionally
-to N (a genuine Bragg peak; the gas stays O(1)).
+gas — and the intensity of its crystal-forbidden peak at p = beta grows
+proportionally to N (a genuine Bragg peak; the gas stays O(1)).
 
 This is computation, not proof. The underlying fact — a mechanical word is a
 cut-and-project (regular model) set, and regular model sets have pure-point
@@ -61,10 +61,10 @@ if __name__ == "__main__":
         tag = "integer" if abs(p - round(p)) < 1e-6 else "INCOMMENSURATE"
         print(f"{p:>11.4f} | {c:>9.0f} | {q:>9.0f} | {g:>6.2f} | {tag}")
 
-    # N-scaling at the strongest crystal-forbidden (incommensurate) peak
-    inc = sorted([(q, p) for p, c, q, g in rows if abs(p - round(p)) > 1e-6],
-                 reverse=True)
-    _, pbest = inc[0]
+    # N-scaling at the word's own crystal-forbidden peak p = beta.  (The larger
+    # values at p = 1 + beta and 2 + 2*beta are peaks of the integer gap lattice,
+    # shared by every sequence of gaps 1 and 2; they are not specific to the word.)
+    pbest = round(beta, 6)
     kb = 2 * np.pi * beta * pbest
     print(f"\nN-scaling at k/u = {pbest:.4f} (a peak the crystal cannot have):")
     print(f"{'N':>8} | {'crystal':>8} | {'word':>10} | {'gas':>6}")

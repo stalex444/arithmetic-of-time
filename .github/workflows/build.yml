@@ -22,7 +22,7 @@ jobs:
         uses: actions/checkout@v4
 
       # elan at the pinned toolchain (lean-toolchain), prebuilt Mathlib cache,
-      # then `lake build` of all ten modules — the kernel check.
+      # then `lake build` of all 44 modules — the kernel check.
       - name: Build Lean project
         uses: leanprover/lean-action@v1
         with:

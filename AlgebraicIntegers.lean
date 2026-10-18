@@ -1,7 +1,10 @@
-import Mathlib
-import ConstantChain
-import FieldNorm
-import Irreducibility
+module
+public import Mathlib
+public import ConstantChain
+public import FieldNorm
+public import Irreducibility
+
+@[expose] public section
 
 /-!
 # AlgebraicIntegers — no monomial `ρᵃQᵇ` equals a threshold constant

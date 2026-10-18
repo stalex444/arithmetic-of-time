@@ -1,4 +1,7 @@
-import Chirality
+module
+public import Chirality
+
+@[expose] public section
 
 /-!
 # Solution: proved versions of the Challenge declarations

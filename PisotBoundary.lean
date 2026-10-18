@@ -1,4 +1,7 @@
-import Mathlib
+module
+public import Mathlib
+
+@[expose] public section
 
 /-!
 # The Pisot boundary: the cubic settles, the quartic spirals

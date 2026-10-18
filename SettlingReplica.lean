@@ -1,5 +1,8 @@
-import Mathlib
-import Irreducibility
+module
+public import Mathlib
+public import Irreducibility
+
+@[expose] public section
 
 /-!
 # SettlingReplica — an independent second formalization of `Settling`

@@ -23,9 +23,22 @@ import sys
 
 os.chdir(os.path.dirname(os.path.abspath(__file__)) + "/..")
 
-MODULES = ["Irreducibility", "FieldNorm", "Settling", "SettlingReplica",
-           "ConstantChain", "AlgebraicIntegers", "MechanicalWord",
-           "PisotBoundary", "Chirality", "OriginDefect"]
+# Every module except Challenge (which states the compared theorems with
+# `sorry`, by the registry's challenge format); Solution is included.
+MODULES = ["Solution", "Irreducibility", "FieldNorm", "Settling",
+           "SettlingReplica", "ConstantChain", "AlgebraicIntegers",
+           "MechanicalWord", "PisotBoundary", "Chirality", "OriginDefect",
+           "PdtIrreducible", "PdtSalemFamily", "PdtPisotBoundary",
+           "PdtRulerMinpoly", "PdtChirality", "PdtFourTickThreshold",
+           "PdtArrowRate", "PdtCommitment", "PdtNormFloor", "PdtMirrorTensor",
+           "PdtRhoQChirality", "PdtCharpolyTensor", "PdtSignature",
+           "PdtSignatureRho", "PdtTraceLink", "PdtTraceSignature",
+           "PdtTraceCompositum", "PdtJointClock", "PdtJointClockIrreducible",
+           "PdtRecordBoundary", "PdtQuarticSeparation",
+           "PdtQuarticWindowDynamics", "PdtCubicQuarticBridge", "Sturmian",
+           "BetaIrrational", "PdtMahler", "PdtMahlerBox", "PdtMahlerMain",
+           "PdtMahlerTheta", "PdtMahlerWindow", "SlowestClock",
+           "Supplement"]
 ALLOWED = {"propext", "Classical.choice", "Quot.sound"}
 
 DECL = re.compile(
@@ -36,12 +49,42 @@ NS_END = re.compile(r"^\s*end\s+([A-Za-z_][A-Za-z0-9_'.]*)")
 BANNED_SRC = re.compile(r"^\s*(axiom\s|.*\bnative_decide\b|.*\bsorry\b)")
 
 
+def blank_comments(text):
+    """Replace the contents of comments (nested block comments and line
+    comments) by spaces, keeping newlines, so that prose in a docstring that
+    happens to begin with the word `theorem` is not parsed as a declaration."""
+    out, i, depth, n = [], 0, 0, len(text)
+    while i < n:
+        if text.startswith("/-", i):
+            depth += 1
+            out.append("  ")
+            i += 2
+        elif depth and text.startswith("-/", i):
+            depth -= 1
+            out.append("  ")
+            i += 2
+        elif depth:
+            out.append("\n" if text[i] == "\n" else " ")
+            i += 1
+        elif text.startswith("--", i):
+            j = text.find("\n", i)
+            j = n if j < 0 else j
+            out.append(" " * (j - i))
+            i = j
+        else:
+            out.append(text[i])
+            i += 1
+    return "".join(out)
+
+
 def decls_of(path):
     stack, names, private = [], [], set()
-    for ln in open(path, encoding="utf-8"):
+    raw = open(path, encoding="utf-8").read()
+    for ln in raw.split("\n"):
         if BANNED_SRC.match(ln) and "-- audit-ok" not in ln:
             print(f"BANNED CONSTRUCT in {path}: {ln.strip()[:100]}")
             sys.exit(1)
+    for ln in blank_comments(raw).split("\n"):
         m = NS.match(ln)
         if m:
             stack.append(m.group(1))
@@ -87,7 +130,9 @@ def main():
 
     checked = bad = 0
     for line in out.split("\n"):
-        m = re.match(r"'([^']+)' (depends on axioms: \[([^\]]*)\]|does not depend on any axioms)", line)
+        # names may contain primes (`foo'`), so the name group is greedy and
+        # the line is anchored at both ends
+        m = re.match(r"^'(.+)' (depends on axioms: \[([^\]]*)\]|does not depend on any axioms)$", line.strip())
         if not m:
             continue
         checked += 1

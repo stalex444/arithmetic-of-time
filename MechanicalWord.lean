@@ -1,4 +1,7 @@
-import Mathlib
+module
+public import Mathlib
+
+@[expose] public section
 
 /-!
 # MechanicalWord — a mechanical (Sturmian) word is aperiodic but not random

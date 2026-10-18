@@ -1,4 +1,11 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/mathlib-initiative/formalization.yaml/main/schema/formalization.schema.json
+# Version 2 of the repository registered as PALOMAR-2026-08-19-000006. The
+# registered record stays pinned to revision
+# c48eb12817dd1d7ff3dc4d92306c7a4f249e6d7d and compares three theorems.
+# Version 2 is new commits to the same repository, not a registry
+# submission; its compared surface (comparator.json, Challenge.lean,
+# Solution.lean) is those three statements over s and S, unchanged, on
+# Lean 4.35.0-rc2 / Mathlib 065356127b1d with module-system headers.
 version: "v0.4"
 
 project:
@@ -18,7 +25,20 @@ project:
     length ≥ 4 of any iterate from any seed (including the zeroth iterate) is
     a palindrome, via a complete length-≤5 window certificate for the seed a
     together with the index shift S [0] = [1], S [1] = [2], which exhibits
-    every seed's iterate as a seed-a iterate.
+    every seed's iterate as a seed-a iterate. These are the three compared
+    statements of the registered record (PALOMAR-2026-08-19-000006 at
+    revision c48eb12), unchanged in this revision. The uniqueness results
+    proved in this repository (Supplement.lean: padovan_minimal_unique,
+    padovan_eigenvalue_unique, padovan_matrix_unique, pisot_ge_plastic,
+    padovan_rules_chiral) are registered separately as
+    PALOMAR-2026-10-18-000019 (stalex444/arithmetic-of-time-slowest-clock,
+    revision 49eafbab4af8899b2a66469697bf74683a88ce87), which compares them
+    over s, mir, inc and sub. Everything else in this repository is public
+    and kernel-checked but not compared: among it the exact orientation
+    threshold (padovan_exact_orientation_threshold_four), the irrationality
+    of the distinguished slope (Time.beta_irrational), mirror identities for
+    arbitrary substitutions, a rate identity, and the characteristic
+    polynomial and chirality of a twelve-letter substitution for ρQ.
   authors:
     - "Stephanie Alexander"
   license: "MIT"
@@ -26,26 +46,83 @@ project:
     - "Stephanie Alexander"
 
 classification:
-  arxiv: ["math.CO", "math.DS"]
-  msc2020: ["68R15", "37B10"]
+  # math.CO / math.DS / 68R15 / 37B10 as registered at c48eb12.
+  # physics.hist-ph and 00A79 because the narrative (README, Scope) states
+  # the physical application: that physical time is this arithmetic, stated
+  # there as an identification, not as a theorem. No compared statement is a
+  # physical claim. (math.NT and 11R06, added for the Pisot statements when
+  # they were on this surface, are dropped with them; those statements are
+  # compared in PALOMAR-2026-10-18-000019.)
+  arxiv: ["math.CO", "math.DS", "physics.hist-ph"]
+  msc2020: ["68R15", "37B10", "00A79"]
 
 sources:
-  - title: "Algebraic Combinatorics on Words"
+  - title: "Algebraic integers whose conjugates lie in the unit circle"
     authors:
-      - "M. Lothaire"
-    id: "Cambridge University Press, 2002. ISBN 978-0521812207"
-    type: "book"
-    location: "https://doi.org/10.1017/CBO9781107326019"
-    relationship: "background"
+      - "Carl Ludwig Siegel"
+    id: "Duke Mathematical Journal 11 (1944), 597-602"
+    type: "article"
+    location: "https://doi.org/10.1215/S0012-7094-44-01152-X"
+    relationship: "independently-proves"
+    note: >-
+      Siegel proved that the real root ρ of x³ − x − 1 is the smallest
+      Pisot number, in every degree. The module theorem pisot_ge_plastic
+      (Supplement.lean, not compared here; compared in
+      PALOMAR-2026-10-18-000019) is the restriction of that theorem to Pisot
+      numbers of degree at most 3, proved by a different route: a Pisot
+      number equals the Mahler measure of its minimal polynomial, and the
+      registered minimal Mahler measures in degrees 2 and 3
+      (PALOMAR-2026-08-31-000004) bound that measure below by the golden
+      ratio and by ρ. The result is not new; only its kernel check is. The
+      bound ρ ≤ θ of padovan_minimal_unique is this statement applied to an
+      eigenvalue.
     license: "unknown"
     author_endorsement: "n/a"
+  - title: "Rauzy Fractal of the Smallest Substitution Associated with the Smallest Pisot Number"
+    authors:
+      - "Paul Mercat"
+    id: "Experimental Mathematics 29 (2020), 163-182"
+    type: "article"
+    location: "https://doi.org/10.1080/10586458.2018.1446063"
+    relationship: "independently-proves"
+    note: >-
+      Mercat observed that, up to reversal and relabelling, there is a
+      unique substitution with the fewest letters associated with the
+      smallest Pisot number. The uniqueness half of the module theorems
+      padovan_minimal_unique and padovan_eigenvalue_unique (Supplement.lean,
+      not compared here; compared in PALOMAR-2026-10-18-000019) covers that
+      observation for substitutions on at most three letters; it is proved
+      independently, by classifying the 3 × 3 natural matrices with
+      characteristic polynomial x³ − x − 1 (padovan_matrix_unique) and the
+      substitutions with such a matrix, with no primitivity or unit
+      hypothesis.
+    license: "unknown"
+    author_endorsement: "not-contacted"
+  - title: "Entropies and factorizations of topological Markov shifts"
+    authors:
+      - "Douglas A. Lind"
+    id: "Bulletin of the American Mathematical Society (N.S.) 9 (1983), 219-222"
+    type: "article"
+    location: "https://doi.org/10.1090/S0273-0979-1983-15162-5"
+    relationship: "background"
+    note: >-
+      Theorem 2 relates direct-product factorizations of a Markov shift
+      to factorizations of its spectral radius into Perron numbers.
+      Background for a module theorem, not compared:
+      rhoQ_substitution_charpoly (Supplement.lean) computes the integer
+      characteristic polynomial of the row-major tensor of the Padovan and
+      quartic substitutions, the minimal polynomial of ρQ; the tensor is
+      the direct-product construction (cf. Lind, Theorem 2). The general
+      product lemma is not claimed or formalized.
+    license: "unknown"
+    author_endorsement: "not-contacted"
   - title: "Dynamical Invariants from Asymptotic Composants"
     authors:
       - "Franz Gähler"
     id: "arXiv:2602.18501"
     type: "article"
     location: "https://arxiv.org/abs/2602.18501"
-    relationship: "adapts"
+    relationship: "background"
     note: >-
       Gähler establishes the reflection asymmetry of plastic-number
       substitution tiling spaces computationally; the Padovan rule appears,
@@ -56,21 +133,192 @@ sources:
       window certificate.
     license: "unknown"
     author_endorsement: "not-contacted"
+  - title: "Algebraic Combinatorics on Words"
+    authors:
+      - "M. Lothaire"
+    id: "Cambridge University Press, 2002. ISBN 978-0521812207"
+    type: "book"
+    location: "https://doi.org/10.1017/CBO9781107326019"
+    relationship: "background"
+    license: "unknown"
+    author_endorsement: "n/a"
+  - title: "Sturmian jungle (or garden?) on multiliteral alphabets"
+    authors:
+      - "Ľubomíra Balková"
+      - "Edita Pelantová"
+      - "Štěpán Starosta"
+    id: "RAIRO Theoretical Informatics and Applications 44 (2010), 443-470"
+    type: "article"
+    location: "https://doi.org/10.1051/ita/2011002"
+    relationship: "background"
+    note: >-
+      Context for compared statements 2 and 3 (and for the module
+      theorems on the orientation threshold, the mirror rule and the
+      twelve-letter substitution):
+      substitution languages that are not closed under reversal are known
+      (Example 5.3), and for uniformly recurrent words finitely many
+      palindromes follows from non-closure under reversal (Theorem 3.2). What is claimed here is
+      the kernel check and the explicit certificates, not the phenomenon.
+    license: "unknown"
+    author_endorsement: "not-contacted"
+  - title: "Reversing and extended symmetries of shift spaces"
+    authors:
+      - "Michael Baake"
+      - "John A. G. Roberts"
+      - "Reem Yassawi"
+    id: "Discrete and Continuous Dynamical Systems A 38 (2018), 835-866"
+    type: "article"
+    location: "https://doi.org/10.3934/dcds.2018036"
+    relationship: "background"
+    note: >-
+      Published examples of substitution languages not closed under
+      reversal (Example 2), and the distinction between language chirality
+      and the existence of a reversor for the shift. The compared
+      statements are about factor languages of iterates only; no
+      reversor statement is made.
+    license: "unknown"
+    author_endorsement: "not-contacted"
+  - title: "A characterization of Sturmian sequences by indistinguishable asymptotic pairs"
+    authors:
+      - "Sebastián Barbieri"
+      - "Sébastien Labbé"
+      - "Štěpán Starosta"
+    id: "European Journal of Combinatorics 95 (2021), 103318"
+    type: "article"
+    location: "https://doi.org/10.1016/j.ejc.2021.103318"
+    relationship: "background"
+    note: >-
+      Context for the marked origin of the mechanical word
+      (OriginDefect.lean, a module theorem, not compared): the two
+      one-sided words at intercept zero form the distinguished asymptotic
+      pair of a Sturmian system, characterized there for all irrational
+      slopes. The module's statements are elementary and self-contained.
+    license: "unknown"
+    author_endorsement: "not-contacted"
 
-related_formalizations: []
+related_formalizations:
+  - id: "Registered entry PALOMAR-2026-08-19-000006, version 1 (stalex444/arithmetic-of-time, registered revision c48eb12817dd1d7ff3dc4d92306c7a4f249e6d7d)"
+    relationship: "other"
+    note: >-
+      THE REGISTERED RECORD OF THIS REPOSITORY. This revision is version 2
+      of the same repository, new commits with no registry submission; the
+      registered record stays pinned to c48eb12. Its compared surface is
+      unchanged: comparator.json is that revision's file, and
+      Challenge.lean and Solution.lean are that revision's files apart from
+      the module-system header (module / public import / @[expose] public
+      section) the current toolchain requires. The ten version-1 proof
+      modules are identical to the registered revision apart from the same
+      header, except for one proof repair in Irreducibility
+      (quartic_irred_zmod2, linear case: simp no longer closes the goal at
+      the new toolchain; the simp call drops neg_add_cancel and zero_mul
+      and is followed by `exact mul_eq_zero_of_left (neg_add_cancel a) _`),
+      statement unchanged. Everything else in this repository is new in
+      version 2, public and not compared.
+  - id: "Registered entry PALOMAR-2026-10-18-000019 (stalex444/arithmetic-of-time-slowest-clock, registered revision 49eafbab4af8899b2a66469697bf74683a88ce87)"
+    relationship: "other"
+    note: >-
+      SEPARATELY REGISTERED COMPANION. Its five compared statements,
+      padovan_minimal_unique, padovan_eigenvalue_unique,
+      padovan_matrix_unique, pisot_ge_plastic and padovan_rules_chiral,
+      over the definitions s, mir, inc and sub, are stated and proved here
+      in Supplement.lean with the same statements over the same
+      definitions, and are not compared here. The proof module
+      SlowestClock is the same file in both repositories.
+  - id: "Registered entry PALOMAR-2026-08-31-000004 (stalex444/mahler-measure-minima, registered revision ca3df22ba91ce60e5199aee4a0c35a6ca8ee559d)"
+    relationship: "other"
+    note: >-
+      PROOF-MODULE REUSE, NOT COMPARED CONTENT. The minimal Mahler
+      measures in degrees 2 and 3 (quadratic_mahler_min',
+      cubic_mahler_min') are the engine of the module theorem
+      pisot_ge_plastic and hence of the bound in padovan_minimal_unique
+      (Supplement.lean, not compared here). The five modules PdtMahler,
+      PdtMahlerBox, PdtMahlerMain, PdtMahlerTheta and PdtMahlerWindow are
+      that revision's files with every statement and proof unchanged:
+      PdtMahlerBox differs from it only in the module-system header; the
+      other four differ in the header and in docstrings (module
+      docstrings, and in PdtMahlerMain the docstring of
+      quartic_mahler_min), from which internal cross-references of the
+      author's working notes were removed. None of that entry's statements is re-compared here.
+  - id: "Registered entry PALOMAR-2026-09-04-000004 (stalex444/chiral-padovan-histories, registered revision 14711e6cffdc74669d15f808d4aec8cbb373d71f)"
+    relationship: "other"
+    note: >-
+      CONTEXT. That entry's compared statements concern the infinite
+      Padovan prefix path, its arithmetic record windows and a chiral
+      timelike history in the quartic trace geometry, and it draws on the
+      version-1 repository of this entry. No statement of it is
+      re-compared here; the supporting modules here on trace forms and
+      record windows (PdtSignature, PdtTraceLink, PdtRecordBoundary and
+      others) serve the companion paper and are not compared.
+  - id: "Registered entry PALOMAR-2026-09-01-000005, version 1 (stalex444/mahler-minimizer-compositum, registered revision d78ce1610608cf4a90d5580c267110c96d2f9af5)"
+    relationship: "other"
+    note: >-
+      CONTEXT. That entry compares the minimal polynomial of ρQ and the
+      Bedford-Kim plastic family. Copies of the corresponding modules
+      (PdtRulerMinpoly, PdtSalemFamily) are supporting modules here; no
+      compared statement here uses them, and the module theorem
+      rhoQ_substitution_charpoly (Supplement.lean, not compared) states
+      only the integer characteristic polynomial.
+  - id: "https://github.com/stalex444/pdt-lean (parent development; pinned reference revision: commit 34f7b0a8238c3260d73086d2a7e1f7d086f897d7)"
+    relationship: "other"
+    note: >-
+      The public project this entry belongs to. This repository is the
+      complete, self-contained proof development for the compared
+      statements, with no imports from the parent. The modules
+      PdtCommitment, PdtIrreducible, PdtPisotBoundary, PdtSignature,
+      PdtSignatureRho, PdtTraceLink, PdtTraceSignature, PdtTraceCompositum
+      and the five PdtMahler modules also appear in the parent at the
+      pinned revision; SlowestClock (the same file) and a version of
+      PdtMirrorTensor also appear in PALOMAR-2026-10-18-000019; this
+      repository's Supplement, BetaIrrational, PdtFourTickThreshold,
+      PdtArrowRate, PdtRhoQChirality and PdtCharpolyTensor appear first here.
+  - id: "https://github.com/leanprover-community/mathlib4 (List.IsInfix, List.Palindrome, Nat.iterate; in the module theorems also Polynomial.mahlerMeasure, minpoly, Polynomial.aroots, Matrix.charpoly, Matrix.kronecker, Irrational)"
+    relationship: "builds-on"
+    note: >-
+      The compared statements use Mathlib and core Lean vocabulary plus two
+      short definitions in Challenge.lean (s and S), each a one-line list
+      construction stated in full there and repeated verbatim in
+      Solution.lean; they are this entry's. Mathlib contains no Pisot
+      theory at the pin (the word does not occur in its sources), so
+      Siegel's theorem is not in Mathlib.
 
 status:
   scope: >-
-    Formalized: the Padovan chirality package on the Fin 3 alphabet — the
-    a-forces-b successor invariant (every positive iterate, every seed), the
-    ca/ac chirality (ca a factor of an iterate; ac a factor of no iterate
-    from any seed), and palindrome-freeness for factors of length ≥ 4 (every
-    seed, every iterate, including the zeroth). All compared statements are
-    at the iterate-factor level: they quantify over factors of the words
-    S^[n] [x], not over an abstract subshift or tiling space. Not formalized:
-    tiling-space-level or subshift-level statements of the reflection
-    asymmetry; primitivity of the substitution; any spectral or
-    diffraction-theoretic consequence.
+    Formalized and compared: the three statements of the registered record,
+    in comparator order, over S w = (w.map s).flatten for the Padovan rule s
+    on Fin 3; "u is a factor of w" is u <:+: w (List.IsInfix).
+    (1) padovan_a_forces_b: for all n, x, i, if
+    (S^[n+1] [x])[i]? = some 0 then (S^[n+1] [x])[i+1]? = some 1.
+    (2) padovan_chirality: for all n, x, [2, 0] is a factor of S^[5] [0]
+    and [0, 2] is not a factor of S^[n] [x]. (3)
+    padovan_no_long_palindrome: if u is a factor of S^[n] [x] and
+    4 ≤ u.length then u is not a palindrome. All three are at the
+    iterate-factor level: they quantify over factors of the words
+    S^[n] [x], not over an abstract subshift or tiling space. Proved in
+    the repository, not compared (Supplement.lean, namespace
+    ArithmeticOfTime, with the definitions mir σ x = (σ x).reverse,
+    inc σ i j = count of i in σ j as an integer matrix, sub σ w =
+    (w.map σ).flatten and the row-major tensor tens):
+    padovan_minimal_unique, padovan_eigenvalue_unique,
+    padovan_matrix_unique, pisot_ge_plastic and padovan_rules_chiral (the
+    compared statements of PALOMAR-2026-10-18-000019, same statements over
+    the same definitions s, mir, inc, sub);
+    padovan_exact_orientation_threshold_four with its two halves
+    padovan_length_three_orientation_ambiguity and
+    padovan_reversal_forbidden_of_four_le; iterate_mir_seed,
+    iterate_tens_mir, single_mirrors_reverse (mirror identities for
+    arbitrary substitutions and their row-major tensors);
+    rate_eq_half_log (ρ · normSq σ = 1 gives −log ‖σ‖ = (1/2) log ρ);
+    rhoQ_substitution_charpoly and rhoQ_chirality (the integer
+    characteristic polynomial and a chirality witness pair of the
+    twelve-letter tensor of the Padovan and quartic substitutions); and
+    Time.beta_irrational (BetaIrrational.lean), the irrationality of
+    β = log ‖w‖ / ((1/2) log ρ) for a non-real root w of x⁴ − x − 1. Not
+    formalized: Siegel's theorem in degree above 3; Lind's general
+    product construction; primitivity of the Padovan or twelve-letter
+    substitution; any subshift-, tiling-space- or reversor-level
+    statement; any spectral or diffraction-theoretic consequence (the
+    diffraction/ folder is computation). No compared statement is a
+    physical claim.
   sorry_count: 0
   sorry_in_definitions: 0
   axioms: []
@@ -81,11 +329,12 @@ automation:
       models: ["Anthropic Claude (Opus/Sonnet-class, 2026)"]
       framework: "Claude Code"
       tool_setup: >-
-        AI-assisted proof drafting, refactoring, and error-loop iteration in
-        Claude Code against lake build; a CI axiom audit
-        (scripts/check_axioms.py, one #print axioms per declaration) runs on
-        every push and fails on any axiom outside the standard three, any
-        sorry, or any native_decide.
+        AI-assisted proof drafting, porting, refactoring, and error-loop
+        iteration in Claude Code against lake build; a CI axiom audit
+        (scripts/check_axioms.py, one #print axioms per theorem and lemma
+        of every module except Challenge) runs on every push and fails on
+        any axiom outside the standard three, any sorry, or any
+        native_decide.
       cost:
         wall_time: "several weeks of part-time sessions across the development"
         spend_usd: "subscription-based"
@@ -116,10 +365,34 @@ automation:
 
 fidelity:
   divergences: >-
-    None known. The compared statements are at the iterate-factor level (they
+    (a) The compared statements are at the iterate-factor level (they
     quantify over factors of the concrete words S^[n] [x], not over an
-    abstract subshift or tiling space), and every prose claim in this entry
-    is stated at exactly that level.
+    abstract subshift or tiling space), and every prose claim in this
+    entry about them is stated at exactly that level. (b) Two definitions
+    appear on the compared surface (s, S), each a one-line construction,
+    identical in Challenge.lean and Solution.lean. (c) Module provenance:
+    Challenge.lean, Solution.lean and the ten version-1 modules are
+    identical to the registered revision c48eb12 apart from the
+    module-system header, except Irreducibility's one proof repair in
+    quartic_irred_zmod2 (statement unchanged); the five PdtMahler* modules
+    have every statement and proof byte-identical to
+    PALOMAR-2026-08-31-000004 at ca3df22 apart from the module header,
+    and four of them carry docstring edits that remove internal
+    cross-references; the other Pdt* modules carry docstring edits of the
+    same kind, statements and proofs unchanged. (d) The module theorem
+    pisot_ge_plastic is Siegel's theorem restricted to degree at most 3,
+    proved through the registered minimal Mahler measures of
+    PALOMAR-2026-08-31-000004 (a Pisot number equals the Mahler measure of
+    its minimal polynomial, Time.Clock.mahler_eq_of_pisot), not by
+    Siegel's argument; the result is classical. The twelve-letter
+    characteristic polynomial is one instance of the direct-product
+    construction (cf. Lind, Bull. AMS 9 (1983), Theorem 2); the general
+    lemma is not claimed; the identification of the polynomial as the
+    minimal polynomial of ρQ is proved in the repository
+    (PdtRulerMinpoly), and primitivity is not proved. (e) The physical
+    reading in the README's Scope section is an identification, stated
+    there as one; it is not a theorem and no compared statement asserts
+    it.
 
 review:
   status: "self-assessed"

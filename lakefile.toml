@@ -1,10 +1,10 @@
-name = "ArithmeticOfTime"
-defaultTargets = ["Challenge", "Solution", "Irreducibility", "FieldNorm", "Settling", "SettlingReplica", "ConstantChain", "AlgebraicIntegers", "MechanicalWord", "PisotBoundary", "Chirality", "OriginDefect"]
+name = "arithmetic_of_time"
+defaultTargets = ["Challenge", "Solution", "Irreducibility", "FieldNorm", "Settling", "SettlingReplica", "ConstantChain", "AlgebraicIntegers", "MechanicalWord", "PisotBoundary", "Chirality", "OriginDefect", "PdtIrreducible", "PdtSalemFamily", "PdtPisotBoundary", "PdtRulerMinpoly", "PdtChirality", "PdtFourTickThreshold", "PdtArrowRate", "PdtCommitment", "PdtNormFloor", "PdtMirrorTensor", "PdtRhoQChirality", "PdtCharpolyTensor", "PdtSignature", "PdtSignatureRho", "PdtTraceLink", "PdtTraceSignature", "PdtTraceCompositum", "PdtJointClock", "PdtJointClockIrreducible", "PdtRecordBoundary", "PdtQuarticSeparation", "PdtQuarticWindowDynamics", "PdtCubicQuarticBridge", "Sturmian", "BetaIrrational", "PdtMahler", "PdtMahlerBox", "PdtMahlerMain", "PdtMahlerTheta", "PdtMahlerWindow", "SlowestClock", "Supplement"]
 
 [[require]]
 name = "mathlib"
 git = "https://github.com/leanprover-community/mathlib4.git"
-rev = "v4.31.0"
+rev = "065356127b1dc0016f66b7283ce0ce2c4055aa55"
 
 [[lean_lib]]
 name = "Irreducibility"
@@ -37,7 +37,103 @@ name = "Chirality"
 name = "OriginDefect"
 
 [[lean_lib]]
+name = "PdtIrreducible"
+
+[[lean_lib]]
+name = "PdtSalemFamily"
+
+[[lean_lib]]
+name = "PdtPisotBoundary"
+
+[[lean_lib]]
+name = "PdtRulerMinpoly"
+
+[[lean_lib]]
+name = "PdtChirality"
+
+[[lean_lib]]
+name = "PdtFourTickThreshold"
+
+[[lean_lib]]
+name = "PdtArrowRate"
+
+[[lean_lib]]
+name = "PdtCommitment"
+
+[[lean_lib]]
+name = "PdtNormFloor"
+
+[[lean_lib]]
+name = "PdtMirrorTensor"
+
+[[lean_lib]]
+name = "PdtRhoQChirality"
+
+[[lean_lib]]
+name = "PdtCharpolyTensor"
+
+[[lean_lib]]
+name = "PdtSignature"
+
+[[lean_lib]]
+name = "PdtSignatureRho"
+
+[[lean_lib]]
+name = "PdtTraceLink"
+
+[[lean_lib]]
+name = "PdtTraceSignature"
+
+[[lean_lib]]
+name = "PdtTraceCompositum"
+
+[[lean_lib]]
+name = "PdtJointClock"
+
+[[lean_lib]]
+name = "PdtJointClockIrreducible"
+
+[[lean_lib]]
+name = "PdtRecordBoundary"
+
+[[lean_lib]]
+name = "PdtQuarticSeparation"
+
+[[lean_lib]]
+name = "PdtQuarticWindowDynamics"
+
+[[lean_lib]]
+name = "PdtCubicQuarticBridge"
+
+[[lean_lib]]
+name = "Sturmian"
+
+[[lean_lib]]
 name = "Challenge"
 
 [[lean_lib]]
 name = "Solution"
+
+[[lean_lib]]
+name = "BetaIrrational"
+
+[[lean_lib]]
+name = "PdtMahler"
+
+[[lean_lib]]
+name = "PdtMahlerBox"
+
+[[lean_lib]]
+name = "PdtMahlerMain"
+
+[[lean_lib]]
+name = "PdtMahlerTheta"
+
+[[lean_lib]]
+name = "PdtMahlerWindow"
+
+[[lean_lib]]
+name = "SlowestClock"
+
+[[lean_lib]]
+name = "Supplement"
