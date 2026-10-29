@@ -19,7 +19,8 @@ three statements at `c48eb12`: `ArithmeticOfTime.padovan_a_forces_b`,
 `ArithmeticOfTime.padovan_chirality` and
 `ArithmeticOfTime.padovan_no_long_palindrome`, over the definitions
 `ArithmeticOfTime.s` and `ArithmeticOfTime.S`. Version 2 is new commits to this
-repository, not a registry submission, and its compared surface
+repository, submitted to the registry as version 2 of the same entry (same
+repository, same `comparator.json`), and its compared surface
 (`comparator.json`, `Challenge.lean`, `Solution.lean`) is the same three
 statements, unchanged. The uniqueness results of item 1 below are registered
 separately, as PALOMAR-2026-10-18-000019

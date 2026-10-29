@@ -201,8 +201,8 @@ related_formalizations:
     relationship: "other"
     note: >-
       THE REGISTERED RECORD OF THIS REPOSITORY. This revision is version 2
-      of the same repository, new commits with no registry submission; the
-      registered record stays pinned to c48eb12. Its compared surface is
+      of the same repository, new commits submitted as version 2 of the same
+      entry; the version-1 record stays pinned to c48eb12. Its compared surface is
       unchanged: comparator.json is that revision's file, and
       Challenge.lean and Solution.lean are that revision's files apart from
       the module-system header (module / public import / @[expose] public
