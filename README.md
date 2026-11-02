@@ -10,8 +10,7 @@ against Mathlib — with clearly-marked exceptions: the numerical companion in
 [`diffraction/`](./diffraction), two computations labelled where they occur,
 the cited results, and the identification stated in **Scope**. The
 repository's claim is stated in **Scope**, and it is an identity, not an
-analogy: this arithmetic is not proposed as a model of time. It is proposed
-as what time is.
+analogy.
 
 This is version 2 of the repository. Version 1, commit `c48eb12`, is
 registered as PALOMAR-2026-08-19-000006, and the registered record compares

@@ -273,6 +273,13 @@ Submission as version 2 (2026-10-29), text only, no .lean change: .github/workfl
   related_formalizations note on version 1) now say that version 2 is submitted as version 2 of the same
   entry, where they said it was not a registry submission; their rows below are updated.
 
+Text fix (2026-11-01), no .lean change, at the PI's direction ("It is a model of time"; "Yes, push both"):
+  README.md opening paragraph: the clause "this arithmetic is not proposed as a model of time. It is proposed
+  as what time is." removed (it contradicted the paper, which presents the arithmetic as a model of time and
+  states the identification); formalization.yaml header comment: "not a registry submission" corrected to
+  "submitted as version 2 of the same entry", matching the related_formalizations note already fixed on
+  2026-10-29. Their rows below are updated.
+
 FILES (sha256, lines); BUILD.txt itself excluded:
   d0fd2a5be94435acc8f7d950d40136786ba79ef2f2c0ed349eebf701d8800246     41  .github/workflows/build.yml
   41aaa65a000d5e74ac388932d71b6930a2d96e63c69c3ea8980ef307d7980fb8     24  .github/workflows/palomar-preflight.yml
@@ -316,7 +323,7 @@ FILES (sha256, lines); BUILD.txt itself excluded:
   9ba79aa27593043911b3d498ef550ab13923fca5a605ad2b85d26499dd65e2e4    317  PdtTraceLink.lean
   fa0bfcccd7e6b55fc9a3b91594db3afd5b99124d7963cd8dc16c97b331bdc54a    220  PdtTraceSignature.lean
   24b90d9bf3b69d961e8fa038ecd61a9e28f3a0d248e12889c1d4873b3cce26e2    139  PisotBoundary.lean
-  0b8168e554d863a6f493340d5b9205c1694465aa77c76d21d8629a6a2dac993a    328  README.md
+  50d31bb9ed69b6f2538f365dafdc7fa3692412c00fc610260c49164df3e1774b    327  README.md
   9984a27730f4a6067131a8d69388f8163f7fa45502dac4006a7c162351329893    425  Settling.lean
   1ef5d6349342edf0f48f051e0ab0a78b4141ae5ba8254b31697c578b47e3c641    511  SettlingReplica.lean
   0e1715b111d4fa138c9a755e69584f511b8ffa0e1f2a08d2035607335d32011d    402  SlowestClock.lean
@@ -328,7 +335,7 @@ FILES (sha256, lines); BUILD.txt itself excluded:
   8e40a561ebb9fdfcd811e9928b2b34789c3c29f6571ae222d338a9e23736582f     74  diffraction/diffraction.py
   20e4e8f03622de0bdffa1b4b2ddc02cb9a6c41119c85ad39ac3d96f51510d016    571  diffraction/figure.png
   dc4b7fa0f079965d410c2138bb588e8dc9dcbefb4f64942b183a61b11aea4430     75  diffraction/make_figure.py
-  fe66494b38e0461661e0873ade524585e4942a91cd4ddca657e3d46866a8dec0    432  formalization.yaml
+  2e7ce325010402b3f9bed58e885153008116dcd1f1a26bfeec653210c8e5788a    432  formalization.yaml
   4004b6b0daee50ad9e5304f5b2051aec16cea9380c928d8a8308e9f494759c1b    117  lake-manifest.json
   7b2932fdb6234081b87b2c407d6ccfe5bc0f213655c195c4a95ab651b65dfbf9    139  lakefile.toml
   8dc8d6f560141069d9073e370611716ef77ada0da8ffa37e2149f44b2e63ac7a      1  lean-toolchain

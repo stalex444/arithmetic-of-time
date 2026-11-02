@@ -2,8 +2,8 @@
 # Version 2 of the repository registered as PALOMAR-2026-08-19-000006. The
 # registered record stays pinned to revision
 # c48eb12817dd1d7ff3dc4d92306c7a4f249e6d7d and compares three theorems.
-# Version 2 is new commits to the same repository, not a registry
-# submission; its compared surface (comparator.json, Challenge.lean,
+# Version 2 is new commits to the same repository, submitted as version 2 of
+# the same entry; its compared surface (comparator.json, Challenge.lean,
 # Solution.lean) is those three statements over s and S, unchanged, on
 # Lean 4.35.0-rc2 / Mathlib 065356127b1d with module-system headers.
 version: "v0.4"
